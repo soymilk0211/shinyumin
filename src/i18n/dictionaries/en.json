@@ -1,0 +1,67 @@
+{
+  "site": {
+    "name": "SHIN-YU-MIN",
+    "nameFull": "SHIN-YU-MIN Co., Ltd.",
+    "tagline": "Yuchi, Sun Moon Lake · Family Tea Makers",
+    "description": "A family tea factory in Dayan Village, Yuchi Township, Nantou — the heart of the Sun Moon Lake black tea region. Best known for Ruby Black Tea (Taiwan Tea No. 18)."
+  },
+
+  "nav": {
+    "home": "Home",
+    "products": "Teas",
+    "story": "Our Story",
+    "cart": "Cart",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+
+  "home": {
+    "heroTitle": "We are in Yuchi",
+    "heroBody": "Dayan Village, Yuchi Township, Nantou — the heart of the Sun Moon Lake black tea region. This is not a sourcing choice; it is where our family has lived and made tea for generations.",
+    "heroPrimary": "See our teas",
+    "heroSecondary": "Our story",
+
+    "originTitle": "From leaf to tin, all under our own roof",
+    "originBody": "Plucking, withering, rolling, oxidation, drying — every step happens in our own factory in Dayan Village, tended by hand. We do not make many teas, but each one is made properly.",
+
+    "categoriesTitle": "Our Teas",
+    "categoriesNote": "Product content is still being prepared; real data arrives in step 3."
+  },
+
+  "pages": {
+    "teasNote": "The tea list arrives in step 3, connected to the database — every tea and its available packaging.",
+    "storyNote": "Our story arrives in step 3: Yuchi, Dayan Village, and how our family makes tea.",
+    "cartNote": "The cart arrives in step 3; checkout and payment follow in step 4."
+  },
+
+  "categories": {
+    "blackTea": "Black Tea",
+    "oolongTea": "Oolong Tea",
+    "greenTea": "Green Tea"
+  },
+
+  "footer": {
+    "contactTitle": "Contact",
+    "taxId": "Tax ID",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "wholesaleTitle": "Wholesale",
+    "wholesaleBody": "For bulk orders, please call us. We will quote and arrange delivery separately.",
+    "emailHint": "Click to reveal email",
+    "rights": "All rights reserved"
+  },
+
+  "common": {
+    "toggleTheme": "Toggle light and dark mode",
+    "switchLanguage": "Switch language",
+    "comingSoon": "Coming soon",
+    "imagePending": "Photo coming soon"
+  },
+
+  "notFound": {
+    "title": "Page not found",
+    "body": "This address may have changed, or a few characters may be missing.",
+    "backHome": "Back to home"
+  }
+}
