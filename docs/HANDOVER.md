@@ -212,10 +212,11 @@ order_items
 | 商標圖檔 | 🟡 | 第 2 步（先用佔位符） |
 | 商品照片 | 🟡 | 第 3 步（先用佔位符）。**圖片放 `/public/images/`，不放資料庫** |
 | 完整商品清單 | 🟡 | 第 3 步。已知有綠茶、烏龍、紅茶（紅玉、阿薩姆）；禮盒規劃中 |
-| Supabase project | ✅ 已完成 | organization `shinyumin`（Free）、project ref **`eggabnafyigvkwdryytg`**、Compute NANO、狀態 Healthy。**Region 尚未經業主確認** —— 第 1 步開始前請先問清楚；若非 Singapore / Tokyo，且資料庫仍為空，建議直接重建（region 無法變更） |
+| Supabase project | ✅ 已完成 | organization `shinyumin`（Free）、project **`shinyumin-web`**、ref **`pemiinvmlwbotmzzszpz`**、URL `https://pemiinvmlwbotmzzszpz.supabase.co`、Region **Singapore**。（初版誤建於 Mumbai，ref `eggabnafyigvkwdryytg`，已重建；若該專案仍在，請提醒業主刪除） |
+| Supabase 資料庫密碼 | 🟡 | 業主使用系統產生的高強度密碼但**未保存**。**不影響第 1 步** —— 建表請用 Dashboard 的 SQL Editor（不需要密碼）。若日後需要 Supabase CLI 或 `psql` 直連，請先引導業主至 Settings → Database → Reset database password 重設並妥善保存 |
 | Supabase 金鑰 | 🟡 | 第 1 步。需業主自 Settings → API 取得 `anon` 與 `service_role`，寫入 `.env.local`。**取得前不要嘗試連線** |
-| Resend 帳號 | 🟢 需引導 | 第 4 步 |
-| 業主 Gmail 位址確認 | 🟢 | 第 4 步 |
+| Resend 帳號 | ✅ 已完成 | 帳號 `tim78937`。**尚未驗證任何網域** —— 目前只能以 `onboarding@resend.dev` 寄信，且**只能寄到帳號本人的信箱** `tim78937@gmail.com`（寄給其他人會回 403）。因此第 4 步的寄信流程**可以先開發並測試**（收件人設為業主 Gmail），只有「寄給真實顧客」才需要網域 |
+| 業主 Gmail | ✅ 已確認 | `tim78937@gmail.com` —— 訂單存檔信的收件人 |
 
 ---
 
