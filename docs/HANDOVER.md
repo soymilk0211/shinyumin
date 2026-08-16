@@ -189,6 +189,17 @@ order_items
 
 7. **Cowork 排程只在 app 開啟時執行。** 業主表示電腦不會關機，可接受。
 
+8. **必須啟用 RLS（Row Level Security），這是 Supabase 最常見的重大疏失。** 預設建立的資料表若未啟用 RLS，任何拿到 `anon` 金鑰的人（該金鑰會出現在瀏覽器端，等同公開）就能讀寫全部資料 —— 包含 `orders` 裡的顧客姓名、電話、地址。要求：
+   - **所有資料表一律啟用 RLS。**
+   - `categories` / `products` / `variants`：只開放 `anon` **讀取**（且僅限 `is_published` / 未下架者），**不得寫入**。
+   - `orders` / `order_items`：`anon` **完全不得讀取或寫入**。所有讀寫一律走伺服器端、使用 `service_role` 金鑰。
+   - 顧客送出訂單是經由 Next.js 的 API route（伺服器端），**不是**瀏覽器直接寫資料庫。
+
+9. **金鑰處理規則。** 專案網址（`https://<ref>.supabase.co`）不是機密，它會出現在每一個瀏覽器請求裡。但：
+   - `anon` 金鑰：可出現在前端，但必須搭配 RLS 才安全。
+   - **`service_role` 金鑰：最高權限，繞過所有 RLS。只能存在於伺服器端環境變數，絕不可進入 GitHub、絕不可出現在任何 `NEXT_PUBLIC_*` 變數、絕不可貼進對話。**
+   - 確認 `.env.local` 已被 `.gitignore` 涵蓋，並提供 `.env.example` 範本（只有欄位名稱、沒有值）。
+
 8. **Airtable 已評估並否決。** 免費方案僅 **1,000 次 API 呼叫／月**（不是每秒限速，是每月總量），做網站撐不到一天；且介面**沒有繁體中文**（僅英／法／德／西）。這是改用 Supabase 的主因，不要再提議改回去。
 
 ---
@@ -201,7 +212,8 @@ order_items
 | 商標圖檔 | 🟡 | 第 2 步（先用佔位符） |
 | 商品照片 | 🟡 | 第 3 步（先用佔位符）。**圖片放 `/public/images/`，不放資料庫** |
 | 完整商品清單 | 🟡 | 第 3 步。已知有綠茶、烏龍、紅茶（紅玉、阿薩姆）；禮盒規劃中 |
-| Supabase **project** | 🟢 需引導 | 第 1 步。organization 已建好（名稱 `shinyumin`、Free 方案），**尚未建 project**。建立時 **Region 必須選 Singapore / Southeast Asia**（離台灣最近，且 region 建立後無法變更） |
+| Supabase project | ✅ 已完成 | organization `shinyumin`（Free）、project ref **`eggabnafyigvkwdryytg`**、Compute NANO、狀態 Healthy。**Region 尚未經業主確認** —— 第 1 步開始前請先問清楚；若非 Singapore / Tokyo，且資料庫仍為空，建議直接重建（region 無法變更） |
+| Supabase 金鑰 | 🟡 | 第 1 步。需業主自 Settings → API 取得 `anon` 與 `service_role`，寫入 `.env.local`。**取得前不要嘗試連線** |
 | Resend 帳號 | 🟢 需引導 | 第 4 步 |
 | 業主 Gmail 位址確認 | 🟢 | 第 4 步 |
 
