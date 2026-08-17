@@ -113,7 +113,9 @@ h3 {
   /* 壓在內容之上、但低於選單列（z-50）與日後任何浮動 UI */
   z-index: 10;
 
-  opacity: 0.9;
+  /* 淡。這是裝飾，不該跟內容搶注意力 —— 想再淡或再濃就改這兩行 */
+  opacity: 0.5;
+  filter: saturate(0.85);
 }
 
 /* 手機縮小約四成，免得佔掉半個畫面 */
@@ -122,14 +124,14 @@ h3 {
     width: 46vw;
     right: -12vw;
     bottom: -12vw;
-    opacity: 0.8;
+    opacity: 0.45;
   }
 }
 
-/* 深色模式壓低飽和度與亮度，才不會在炭焙黑上刺眼 */
+/* 深色模式再淡一階，在炭焙黑上才不會浮起來 */
 .dark .tea-dial {
-  opacity: 0.55;
-  filter: saturate(0.75) brightness(0.9);
+  opacity: 0.3;
+  filter: saturate(0.7) brightness(0.9);
 }
 
 .tea-dial__spin {

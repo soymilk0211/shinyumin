@@ -48,12 +48,24 @@ export default async function ProductPage({
       </ArrowLink>
 
       <div className="mt-12 sm:mt-16 sm:flex sm:items-start sm:gap-14">
-        {/* 圖 */}
+        {/* 圖。上面是商品（罐裝），下面是茶乾特寫 ——
+            買茶的人真正想看的是葉子長什麼樣子 */}
         <div className="sm:sticky sm:top-28 sm:w-[44%]">
           <ImagePlaceholder
             ratio="aspect-[4/5]"
             label={dict.common.imagePending}
           />
+
+          <div className="mt-4 flex items-start gap-4">
+            <span className="vertical label mt-1 shrink-0 text-ink-faint">
+              {dict.product.dryLeaf}
+            </span>
+            <ImagePlaceholder
+              ratio="aspect-[4/3]"
+              className="flex-1"
+              label={dict.common.imagePending}
+            />
+          </div>
         </div>
 
         {/* 內容 */}

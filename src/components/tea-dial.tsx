@@ -25,11 +25,16 @@ import { useEffect, useState } from "react";
  * 之後把照片放進 /public/images/decor/（檔名不變）就會自動換成實拍照。
  */
 
-/** 三種茶湯。顏色是照片到位之前的替身，也是照片載入失敗時的底色。 */
+/**
+ * 三種茶湯。顏色是照片到位之前的替身，也是照片載入失敗時的底色。
+ *
+ * 刻意調得淡 —— 這是裝飾，不該跟內容搶注意力。
+ * 整體的濃淡另外由 globals.css 的 opacity 控制，改那裡最快。
+ */
 const TONES = [
-  { key: "green", file: "tea-green.png", color: "#8a9a5b" },
-  { key: "oolong", file: "tea-oolong.png", color: "#c08a3e" },
-  { key: "black", file: "tea-black.png", color: "#8b3a2a" },
+  { key: "green", file: "tea-green.png", color: "#b9c497" },
+  { key: "oolong", file: "tea-oolong.png", color: "#dcb383" },
+  { key: "black", file: "tea-black.png", color: "#c48770" },
 ] as const;
 
 export type TeaTone = (typeof TONES)[number]["key"];
