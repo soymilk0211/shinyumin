@@ -72,6 +72,14 @@ YM-20260817-0001
 
 兩個都是很長一串英數字。**先不要貼進我們的對話** —— 等一下直接貼進 Vercel。
 
+> ⚠️ **不要拿錯：Channel ID 不是我們要的東西。**
+> Basic settings 那一頁上，`Channel ID` 與 `Channel secret` 長得很像、又排在一起，
+> 但**只有 Channel secret 用得到**。
+>
+> 另外 **Channel access token 不在這一頁** —— 它在上面的 **Messaging API** 分頁，
+> 要捲到最底下，而且第一次要自己按 **Issue** 才會生出來。
+> 在 Basic settings 找不到它是正常的。
+
 ### ② 把三個設定填進 Vercel
 
 到 [Vercel 的專案設定](https://vercel.com/) → 您的專案 →
