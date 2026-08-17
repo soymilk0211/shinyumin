@@ -38,71 +38,82 @@ export function SiteHeader({
   ];
 
   function isActive(href: string) {
-    return href === `/${locale}` ? pathname === href : pathname.startsWith(href);
+    return href === `/${locale}`
+      ? pathname === href
+      : pathname.startsWith(href);
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-page/90 backdrop-blur-sm">
-      <div className="flex items-center justify-between gap-6 px-6 py-5 sm:px-10">
-        {/* 商標。深色底要換一版：書法字的深紅在炭焙黑上看不見 */}
-        <Link
-          href={`/${locale}`}
-          aria-label={dict.site.nameFull}
-          className="transition-opacity hover:opacity-75"
-        >
-          <BrandLogo alt={dict.site.nameFull} className="h-8 w-auto sm:h-10" />
-        </Link>
-
-        <div className="flex items-center gap-6 sm:gap-10">
-          <nav className="hidden md:block">
-            <ul className="label flex items-center gap-9">
-              {links.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className={
-                      isActive(link.href)
-                        ? "text-brand"
-                        : "text-ink-soft transition-colors hover:text-brand"
-                    }
-                  >
-                    {link.label}
-                    {link.cart && <CartBadge />}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div className="flex items-center gap-5">
-            <LocaleSwitcher
-              current={locale}
-              label={dict.common.switchLanguage}
+    <>
+      <header className="sticky top-0 z-50 border-b border-line bg-page/90 backdrop-blur-sm">
+        <div className="flex items-center justify-between gap-6 px-6 py-5 sm:px-10">
+          {/* 商標。深色底要換一版：書法字的深紅在炭焙黑上看不見 */}
+          <Link
+            href={`/${locale}`}
+            aria-label={dict.site.nameFull}
+            className="transition-opacity hover:opacity-75"
+          >
+            <BrandLogo
+              alt={dict.site.nameFull}
+              className="h-8 w-auto sm:h-10"
             />
-            <ThemeToggle label={dict.common.toggleTheme} />
+          </Link>
 
-            <button
-              type="button"
-              onClick={() => setMenuOpen(true)}
-              aria-label={dict.nav.openMenu}
-              className="text-ink-soft transition-colors hover:text-brand md:hidden"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                className="h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1"
-                aria-hidden="true"
+          <div className="flex items-center gap-6 sm:gap-10">
+            <nav className="hidden md:block">
+              <ul className="label flex items-center gap-9">
+                {links.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className={
+                        isActive(link.href)
+                          ? "text-brand"
+                          : "text-ink-soft transition-colors hover:text-brand"
+                      }
+                    >
+                      {link.label}
+                      {link.cart && <CartBadge />}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            <div className="flex items-center gap-5">
+              <LocaleSwitcher
+                current={locale}
+                label={dict.common.switchLanguage}
+              />
+              <ThemeToggle label={dict.common.toggleTheme} />
+
+              <button
+                type="button"
+                onClick={() => setMenuOpen(true)}
+                aria-label={dict.nav.openMenu}
+                className="text-ink-soft transition-colors hover:text-brand md:hidden"
               >
-                <path d="M3 8h18M3 16h18" />
-              </svg>
-            </button>
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  aria-hidden="true"
+                >
+                  <path d="M3 8h18M3 16h18" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* 手機版：蓋滿整個畫面的選單 */}
+      {/* 手機版：蓋滿整個畫面的選單。
+          【必須放在 header 外面】—— 選單列有毛玻璃效果（backdrop-blur），
+          而 CSS 規定：帶有 filter／backdrop-filter 的元素會成為它子孫裡
+          position: fixed 的定位基準。放在裡面的話，這個「全螢幕」選單
+          實際上只會有選單列那麼高（72px），四個連結就會擠成一團。 */}
       {menuOpen && (
         <div className="fixed inset-0 z-50 flex flex-col bg-page md:hidden">
           <div className="flex items-center justify-between px-6 py-5">
@@ -126,16 +137,19 @@ export function SiteHeader({
             </button>
           </div>
 
-          {/* 四個連結拉開間距，讓每一個都有自己的呼吸空間 ——
-              手機上擠成一團會顯得廉價 */}
-          <nav className="flex flex-1 flex-col justify-center px-6 pb-16">
-            <ul>
+          {/* 四個連結【平均分攤整個畫面高度】，不是擠在中間一小塊。
+              每一列自己撐開，點擊區域也跟著變大，手機上好按很多。 */}
+          <nav className="flex flex-1 flex-col px-6 pb-10">
+            <ul className="flex flex-1 flex-col">
               {links.map((link, index) => (
-                <li key={link.href} className="border-t border-line last:border-b">
+                <li
+                  key={link.href}
+                  className="flex flex-1 border-t border-line last:border-b"
+                >
                   <Link
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className="flex items-baseline gap-7 py-8"
+                    className="flex flex-1 items-center gap-7"
                   >
                     <span className="label w-6 shrink-0 text-ink-faint">
                       {String(index + 1).padStart(2, "0")}
@@ -155,6 +169,6 @@ export function SiteHeader({
           </nav>
         </div>
       )}
-    </header>
+    </>
   );
 }
