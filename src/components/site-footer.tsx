@@ -1,5 +1,5 @@
 import { BrandLogo } from "@/components/brand-logo";
-import { ObfuscatedEmail } from "@/components/obfuscated-email";
+import { ObfuscatedContact } from "@/components/obfuscated-contact";
 import type { Dictionary } from "@/i18n/dictionaries";
 
 /**
@@ -8,8 +8,10 @@ import type { Dictionary } from "@/i18n/dictionaries";
  * 排成書末版權頁（colophon）的樣子：巨大的品牌名壓在左下角當底，
  * 聯絡資訊用細線分隔、小字排在右側，不做成三等分的欄位。
  *
- * 這裡**只放公司對外公開的市話與信箱**，不放任何個人手機號碼
- * （見 HANDOVER 的隱私規則）。信箱經過防爬蟲處理。
+ * 電話與信箱都經過防爬蟲處理，原始碼裡不會出現完整號碼。
+ *
+ * 電話是老闆本人的手機，【經本人同意】公開 —— 這推翻了 HANDOVER 第 1 節
+ * 原本「個人手機不上網站」的規則，見 CONTEXT.md 的隱私規則。
  * 批發第一版不上線，所以只寫「大量訂購請電洽」。
  */
 export function SiteFooter({ dict }: { dict: Dictionary }) {
@@ -20,10 +22,7 @@ export function SiteFooter({ dict }: { dict: Dictionary }) {
       <div className="flex flex-col gap-16 sm:flex-row sm:justify-between sm:gap-20">
         {/* 左：商標當作版面的重量 */}
         <div className="shrink-0">
-          <BrandLogo
-            alt={dict.site.nameFull}
-            className="h-16 w-auto sm:h-20"
-          />
+          <BrandLogo alt={dict.site.nameFull} className="h-16 w-auto sm:h-20" />
           {/* 頁尾用公司全名，不是簡稱 —— 這裡是網站上最正式的一塊 */}
           <div className="mt-7 font-display text-2xl tracking-[0.12em] text-ink sm:text-3xl">
             {dict.site.nameFull}
@@ -40,21 +39,17 @@ export function SiteFooter({ dict }: { dict: Dictionary }) {
               <dt className="w-16 shrink-0 text-ink-faint">
                 {dict.footer.address}
               </dt>
-              <dd className="text-ink">
-                南投縣魚池鄉大雁村山楂腳巷 10-20 號
-              </dd>
+              <dd className="text-ink">南投縣魚池鄉大雁村山楂腳巷 10-20 號</dd>
             </div>
             <div className="flex gap-6 border-t border-line py-3.5">
               <dt className="w-16 shrink-0 text-ink-faint">
                 {dict.footer.phone}
               </dt>
               <dd>
-                <a
-                  href="tel:+886492896602"
-                  className="link-rule text-brand transition-colors hover:text-brand-strong"
-                >
-                  049-2896602
-                </a>
+                <ObfuscatedContact
+                  kind="phone"
+                  revealLabel={dict.footer.phoneHint}
+                />
               </dd>
             </div>
             <div className="flex gap-6 border-t border-line py-3.5">
@@ -62,7 +57,10 @@ export function SiteFooter({ dict }: { dict: Dictionary }) {
                 {dict.footer.email}
               </dt>
               <dd>
-                <ObfuscatedEmail revealLabel={dict.footer.emailHint} />
+                <ObfuscatedContact
+                  kind="email"
+                  revealLabel={dict.footer.emailHint}
+                />
               </dd>
             </div>
             <div className="flex gap-6 border-t border-line py-3.5">
