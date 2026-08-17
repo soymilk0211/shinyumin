@@ -224,22 +224,19 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       >
         <span className="label text-brand">{home.moreLabel}</span>
 
-        {/* 寬度收住，否則在大螢幕上箭頭會被推到很遠，跟文字看起來不像同一個東西 */}
-        <ul className="mt-12 max-w-4xl sm:mt-16">
+        {/* 兩塊一樣大的區塊，箭頭緊跟在字後面。
+            用 1px 的間隙露出底色當作分隔線，不另外畫框 —— 線是「縫」，不是「框」。 */}
+        <ul className="reveal mt-12 grid gap-px border-y border-line bg-line sm:mt-16 sm:grid-cols-2">
           {[
             { href: `/${locale}/teas`, text: dict.teas.title },
             { href: `/${locale}/story`, text: dict.story.title },
-          ].map((item, index) => (
-            <li
-              key={item.href}
-              className="reveal border-t border-line last:border-b"
-              style={{ marginLeft: index === 1 ? "12%" : undefined }}
-            >
+          ].map((item) => (
+            <li key={item.href} className="bg-page">
               <Link
                 href={item.href}
-                className="group flex items-center justify-between gap-8 py-10 sm:py-14"
+                className="group flex h-full items-center gap-6 px-2 py-16 sm:px-6 sm:py-24"
               >
-                <span className="font-display text-[clamp(2rem,6vw,4.5rem)] leading-none text-ink transition-colors group-hover:text-brand">
+                <span className="font-display text-[clamp(1.9rem,5vw,3.5rem)] leading-none text-ink transition-colors group-hover:text-brand">
                   {item.text}
                 </span>
                 <svg
