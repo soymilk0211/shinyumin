@@ -49,12 +49,25 @@ export async function generateMetadata({
   if (!isLocale(locale)) return {};
 
   const dict = getDictionary(locale);
+
+  // 正式開站之前，先請搜尋引擎不要收錄。
+  //
+  // 現在照片都還是佔位符、文案也還沒定稿，這種狀態被 Google 抓進去，
+  // 之後就算改好了，搜尋結果也可能還顯示舊的、不完整的內容一段時間。
+  //
+  // 要開放收錄時，把 Vercel 的環境變數 NEXT_PUBLIC_ALLOW_INDEXING 設成 true
+  // 就好 —— 不需要改程式、不需要重新部署程式碼。
+  const allowIndexing = process.env.NEXT_PUBLIC_ALLOW_INDEXING === "true";
+
   return {
     title: {
       default: `${dict.site.nameFull}｜${dict.site.tagline}`,
       template: `%s｜${dict.site.name}`,
     },
     description: dict.site.description,
+    robots: allowIndexing
+      ? undefined
+      : { index: false, follow: false, nocache: true },
   };
 }
 
