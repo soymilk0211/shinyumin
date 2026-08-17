@@ -130,12 +130,24 @@ export function isLineConfigured(): boolean {
  * 通知失敗就是失敗，訂單不受影響，錯誤留在伺服器記錄裡。
  */
 export async function notifyNewOrder(order: OrderNotification): Promise<void> {
+  await pushText(buildOrderMessage(order), `訂單 ${order.orderNumber}`);
+}
+
+/**
+ * 推一則純文字到群組。
+ *
+ * 【永遠不會丟出例外。】呼叫端不需要 try/catch ——
+ * 推播失敗就是失敗，訂單與報表都不受影響，錯誤留在伺服器記錄裡。
+ *
+ * `what` 只是出錯時記錄用的說明，不會出現在訊息裡。
+ */
+export async function pushText(text: string, what: string): Promise<void> {
   const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
   const groupId = process.env.LINE_GROUP_ID;
 
   if (!token || !groupId) {
     console.warn(
-      `LINE 通知略過（尚未設定 LINE_CHANNEL_ACCESS_TOKEN 或 LINE_GROUP_ID）：${order.orderNumber}`,
+      `LINE 推播略過（尚未設定 LINE_CHANNEL_ACCESS_TOKEN 或 LINE_GROUP_ID）：${what}`,
     );
     return;
   }
@@ -149,7 +161,7 @@ export async function notifyNewOrder(order: OrderNotification): Promise<void> {
       },
       body: JSON.stringify({
         to: groupId,
-        messages: [{ type: "text", text: buildOrderMessage(order) }],
+        messages: [{ type: "text", text }],
       }),
       // LINE 掛掉時不要無限等待
       signal: AbortSignal.timeout(8000),
@@ -157,11 +169,11 @@ export async function notifyNewOrder(order: OrderNotification): Promise<void> {
 
     if (!response.ok) {
       console.error(
-        `LINE 通知失敗（訂單 ${order.orderNumber}）：HTTP ${response.status} ${await response.text()}`,
+        `LINE 推播失敗（${what}）：HTTP ${response.status} ${await response.text()}`,
       );
     }
   } catch (error) {
-    console.error(`LINE 通知失敗（訂單 ${order.orderNumber}）：`, error);
+    console.error(`LINE 推播失敗（${what}）：`, error);
   }
 }
 
