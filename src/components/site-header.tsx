@@ -126,20 +126,22 @@ export function SiteHeader({
             </button>
           </div>
 
-          <nav className="flex flex-1 flex-col justify-center px-6 pb-24">
+          {/* 四個連結拉開間距，讓每一個都有自己的呼吸空間 ——
+              手機上擠成一團會顯得廉價 */}
+          <nav className="flex flex-1 flex-col justify-center px-6 pb-16">
             <ul>
               {links.map((link, index) => (
                 <li key={link.href} className="border-t border-line last:border-b">
                   <Link
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className="flex items-baseline gap-5 py-5"
+                    className="flex items-baseline gap-7 py-8"
                   >
                     <span className="label w-6 shrink-0 text-ink-faint">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <span
-                      className={`font-display text-2xl ${
+                      className={`font-display text-[1.75rem] ${
                         isActive(link.href) ? "text-brand" : "text-ink"
                       }`}
                     >
