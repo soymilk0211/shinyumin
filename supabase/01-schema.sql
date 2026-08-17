@@ -108,13 +108,19 @@ create table if not exists public.orders (
   shipping_fee_twd  integer not null check (shipping_fee_twd >= 0),
   total_twd         integer not null check (total_twd >= 0),
 
-  -- 付款。第一版只有 ATM 轉帳，顧客回填末五碼、業主人工對帳。
-  -- 「建立訂單」與「付款」刻意拆開，未來要接綠界等金流不需重寫。
-  payment_method    text not null default 'atm'
-                    check (payment_method in ('atm')),
+  -- 付款方式（老闆訪談確認）：
+  --   transfer = 匯款      帳號【不公開在網站上】，訂單成立後由店家電話告知
+  --   cod      = 貨到付款
+  -- 「建立訂單」與「付款」刻意拆開，未來要接信用卡金流不需重寫結帳。
+  --
+  -- 註：這張表最早建立時只認得 'atm'（原規格的 ATM 轉帳 + 回填末五碼）。
+  -- 已經建好資料表的專案請改跑 03-payment-methods.sql 來更新。
+  payment_method    text not null
+                    check (payment_method in ('transfer', 'cod')),
   payment_status    text not null default 'unpaid'
                     check (payment_status in ('unpaid', 'paid')),
-  transfer_last5    text check (transfer_last5 ~ '^[0-9]{5}$'),   -- 轉帳末五碼
+  -- 已停用。原規格的「顧客回填轉帳末五碼」流程已作廢，欄位保留不刪。
+  transfer_last5    text check (transfer_last5 ~ '^[0-9]{5}$'),
 
   -- 訂單狀態：
   --   pending_payment = 待付款

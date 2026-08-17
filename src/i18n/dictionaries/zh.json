@@ -82,8 +82,90 @@
     "shippingNote": "運費與應付總額會在結帳時由系統計算。本島滿 NT$ 2,000 免運，離島不適用。",
     "priceNote": "價格以結帳當下的售價為準。",
     "checkout": "前往結帳",
-    "checkoutSoon": "結帳功能第 4 步開放",
     "unavailable": "這個規格已經下架，請先移除"
+  },
+
+  "checkout": {
+    "title": "結帳",
+    "backToCart": "回購物車",
+    "empty": "購物車是空的，還沒有東西可以結帳。",
+    "browse": "去看看茶品",
+
+    "summaryTitle": "訂單內容",
+    "subtotal": "商品合計",
+    "shippingFee": "運費",
+    "total": "應付總額",
+    "free": "免運",
+    "quantityUnit": "件",
+
+    "contactTitle": "收件資料",
+    "name": "收件人姓名",
+    "phone": "手機或電話",
+    "email": "電子信箱",
+    "emailHint": "訂單確認信會寄到這個信箱。",
+    "address": "收件地址",
+    "addressHint": "請填完整地址（含郵遞區號）。只寄台灣本島與離島，不寄國外，也不做超商取貨。",
+
+    "shippingTitle": "出貨方式",
+    "shippingTcat": "黑貓宅急便",
+    "shippingPost": "郵局",
+    "shippingPostOutlying": "離島郵局",
+    "shippingOutlyingHint": "澎湖・金門・馬祖",
+    "freeShippingNote": "本島滿 NT$ 2,000 免運。離島不適用免運。",
+
+    "paymentTitle": "付款方式",
+    "paymentTransfer": "匯款",
+    "paymentCod": "貨到付款",
+    "paymentNote": "訂單送出後，我們會在兩個工作天內與您電話聯絡，確認訂單並告知匯款帳號。為了安全，匯款帳號不會顯示在網站上。",
+
+    "invoiceTitle": "發票",
+    "taxId": "統一編號",
+    "invoiceTitleField": "發票抬頭",
+    "invoiceNote": "需要公司發票才需要填。發票由我們另行開立寄出。",
+
+    "noteTitle": "備註",
+    "notePlaceholder": "有什麼想讓我們知道的，寫在這裡",
+
+    "optional": "（選填）",
+    "policyTitle": "出貨與退換貨",
+    "policy": [
+      "收到訂單後兩個工作天內出貨。週末與國定假日不出貨。常溫寄送。",
+      "只寄台灣本島與離島，不寄國外，也不做超商取貨。",
+      "茶葉屬食品，拆封後恕不接受退貨。",
+      "商品若有破損可退款退貨。請您在拆封時錄影，作為破損理賠的依據。",
+      "非商品瑕疵的退貨運費由買家負擔。地址填寫錯誤導致的問題由買家吸收。"
+    ],
+
+    "submit": "送出訂單",
+    "submitting": "訂單處理中",
+    "serviceHours": "客服時間 08:00–17:00",
+
+    "lineUnavailable": "這個品項已售完或下架",
+
+    "fieldRequired": "這一欄要填",
+    "fieldEmail": "電子信箱的格式看起來不對",
+    "fieldPhone": "電話號碼看起來不完整",
+    "fieldAddress": "請填寫完整地址",
+    "fieldTaxId": "統一編號是 8 位數字",
+
+    "errorInvalid": "有欄位還沒填好，請檢查上面標示的地方。",
+    "errorUnavailable": "購物車裡有品項剛剛售罄或已下架。請回購物車調整之後再送出一次。",
+    "errorRateLimited": "短時間內送出太多次了。請稍等幾分鐘再試，或直接來電。",
+    "errorServer": "系統忙碌中，這張訂單沒有送出。請稍後再試一次，或直接來電。",
+    "errorNetwork": "連線中斷，訂單沒有送出。請確認網路後再試一次。"
+  },
+
+  "orderDone": {
+    "title": "訂單已送出",
+    "lead": "謝謝您。我們已經收到這張訂單。",
+    "orderNumberLabel": "訂單編號",
+    "contactNote": "我們會在兩個工作天內與您電話聯絡，確認訂單內容並告知付款方式。",
+    "keepNote": "請記下上面的訂單編號。來電或詢問時報這組號碼最快。",
+    "shipNote": "出貨在確認付款之後兩個工作天內完成。週末與國定假日不出貨。",
+    "serviceHours": "客服時間 08:00–17:00",
+    "backHome": "回首頁",
+    "browse": "繼續看茶品",
+    "missing": "這個網址上沒有訂單編號。如果您剛剛送出過訂單，我們仍然收得到；有疑問請直接來電。"
   },
 
   "story": {

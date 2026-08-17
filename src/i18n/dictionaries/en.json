@@ -97,8 +97,90 @@
     "shippingNote": "Shipping and the amount due are calculated at checkout. Free shipping on orders over NT$ 2,000 within Taiwan's main island; outlying islands excluded.",
     "priceNote": "Prices are confirmed at checkout.",
     "checkout": "Go to checkout",
-    "checkoutSoon": "Checkout opens in step 4",
     "unavailable": "This packaging is no longer available — please remove it"
+  },
+
+  "checkout": {
+    "title": "Checkout",
+    "backToCart": "Back to cart",
+    "empty": "Your cart is empty, so there is nothing to check out yet.",
+    "browse": "Browse our teas",
+
+    "summaryTitle": "Your order",
+    "subtotal": "Items subtotal",
+    "shippingFee": "Shipping",
+    "total": "Amount due",
+    "free": "Free",
+    "quantityUnit": "×",
+
+    "contactTitle": "Delivery details",
+    "name": "Recipient name",
+    "phone": "Phone",
+    "email": "Email",
+    "emailHint": "Your order confirmation will be sent to this address.",
+    "address": "Delivery address",
+    "addressHint": "Please give the full address including postcode. We ship within Taiwan's main island and outlying islands only — no international shipping and no convenience-store pickup.",
+
+    "shippingTitle": "Delivery method",
+    "shippingTcat": "T-cat home delivery",
+    "shippingPost": "Post office",
+    "shippingPostOutlying": "Post office, outlying islands",
+    "shippingOutlyingHint": "Penghu · Kinmen · Matsu",
+    "freeShippingNote": "Free shipping on orders over NT$ 2,000 within the main island. Outlying islands excluded.",
+
+    "paymentTitle": "Payment",
+    "paymentTransfer": "Bank transfer",
+    "paymentCod": "Cash on delivery",
+    "paymentNote": "Once your order is placed we will call you within two working days to confirm it and give you our bank details. For safety, our account number is never shown on the website.",
+
+    "invoiceTitle": "Invoice",
+    "taxId": "Company tax ID",
+    "invoiceTitleField": "Invoice title",
+    "invoiceNote": "Only needed if you require a company invoice. We issue and send invoices separately.",
+
+    "noteTitle": "Notes",
+    "notePlaceholder": "Anything you would like us to know",
+
+    "optional": "(optional)",
+    "policyTitle": "Shipping and returns",
+    "policy": [
+      "Orders are dispatched within two working days. We do not ship on weekends or public holidays. Shipped at ambient temperature.",
+      "We ship within Taiwan's main island and outlying islands only — no international shipping and no convenience-store pickup.",
+      "Tea is a food product, so opened packages cannot be returned.",
+      "Damaged goods can be returned for a refund. Please film yourself opening the parcel — we need it to claim for damage.",
+      "Return postage for non-defective returns is paid by the buyer, as are problems caused by an incorrect address."
+    ],
+
+    "submit": "Place order",
+    "submitting": "Placing your order",
+    "serviceHours": "Customer service 08:00–17:00",
+
+    "lineUnavailable": "Sold out or withdrawn",
+
+    "fieldRequired": "This field is required",
+    "fieldEmail": "That email address does not look right",
+    "fieldPhone": "That phone number looks incomplete",
+    "fieldAddress": "Please give the full address",
+    "fieldTaxId": "A tax ID is 8 digits",
+
+    "errorInvalid": "Some fields still need attention — please check the ones marked above.",
+    "errorUnavailable": "An item in your cart has just sold out or been withdrawn. Please adjust your cart and try again.",
+    "errorRateLimited": "Too many attempts in a short time. Please wait a few minutes or call us.",
+    "errorServer": "Our system is busy and this order was not placed. Please try again shortly, or call us.",
+    "errorNetwork": "The connection dropped and the order was not placed. Please check your connection and try again."
+  },
+
+  "orderDone": {
+    "title": "Order placed",
+    "lead": "Thank you. We have received your order.",
+    "orderNumberLabel": "Order number",
+    "contactNote": "We will call you within two working days to confirm the order and arrange payment.",
+    "keepNote": "Please make a note of the order number above — quoting it is the fastest way to reach us about this order.",
+    "shipNote": "We dispatch within two working days of payment being confirmed. No dispatch on weekends or public holidays.",
+    "serviceHours": "Customer service 08:00–17:00",
+    "backHome": "Back to home",
+    "browse": "Keep browsing",
+    "missing": "There is no order number in this address. If you have just placed an order we still have it — please call us if you have any questions."
   },
 
   "story": {

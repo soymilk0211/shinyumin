@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowLink } from "@/components/arrow-link";
+import type { CatalogueEntry } from "@/lib/catalogue";
 import { useCart } from "@/lib/cart-store";
 import { formatPrice } from "@/lib/products";
 
@@ -14,14 +16,6 @@ import { formatPrice } from "@/lib/products";
  * 這裡算的小計只是「給客人看的預估」，真正的金額在結帳時由伺服器
  * 重新查資料庫計算（第 4 步）。
  */
-
-export type CatalogueEntry = {
-  productName: string;
-  productSlug: string;
-  label: string;
-  priceTwd: number;
-  available: boolean;
-};
 
 export function CartView({
   catalogue,
@@ -38,7 +32,6 @@ export function CartView({
     shippingNote: string;
     priceNote: string;
     checkout: string;
-    checkoutSoon: string;
     unavailable: string;
     quantity: string;
     decrease: string;
@@ -176,10 +169,8 @@ export function CartView({
         {labels.priceNote}
       </p>
 
-      {/* 結帳在第 4 步才會開放 */}
-      <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-line pt-8">
-        <span className="label text-ink-faint">{labels.checkout}</span>
-        <span className="label text-brand">{labels.checkoutSoon}</span>
+      <div className="mt-12 border-t border-line pt-8">
+        <ArrowLink href={`/${locale}/checkout`}>{labels.checkout}</ArrowLink>
       </div>
     </div>
   );

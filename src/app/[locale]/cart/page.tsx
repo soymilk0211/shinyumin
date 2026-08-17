@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { CartView, type CatalogueEntry } from "@/components/cart-view";
+import { CartView } from "@/components/cart-view";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
+import { buildCatalogue } from "@/lib/catalogue";
 import { getProducts } from "@/lib/products";
 
 /**
@@ -32,21 +33,7 @@ export default async function CartPage({ params }: PageProps<"/[locale]/cart">) 
   if (!isLocale(locale)) notFound();
 
   const dict = getDictionary(locale);
-  const products = await getProducts(locale);
-
-  // 規格 ID → 商品名稱、包裝、價格
-  const catalogue: Record<string, CatalogueEntry> = {};
-  for (const product of products) {
-    for (const variant of product.variants) {
-      catalogue[variant.id] = {
-        productName: product.name,
-        productSlug: product.slug,
-        label: variant.label,
-        priceTwd: variant.priceTwd,
-        available: variant.status === "on_sale",
-      };
-    }
-  }
+  const catalogue = buildCatalogue(await getProducts(locale));
 
   return (
     <div className="px-6 pt-14 pb-28 sm:px-10 sm:pt-20 sm:pb-40">
@@ -72,7 +59,6 @@ export default async function CartPage({ params }: PageProps<"/[locale]/cart">) 
                 shippingNote: dict.cart.shippingNote,
                 priceNote: dict.cart.priceNote,
                 checkout: dict.cart.checkout,
-                checkoutSoon: dict.cart.checkoutSoon,
                 unavailable: dict.cart.unavailable,
                 quantity: dict.product.quantity,
                 decrease: dict.product.decrease,
