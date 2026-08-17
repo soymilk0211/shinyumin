@@ -68,7 +68,7 @@
 | i18n | zh / en 網址路由 | 介面文字用翻譯檔；**商品內容存資料庫雙欄** |
 | 寄信 | Resend | **必須有自有網域才能寄信** |
 | 即時通知 | LINE Messaging API 推播至內部群組 | |
-| 每日報表 | **Claude Cowork 排程** | 取代原規格的 Vercel Cron + LINE |
+| 每日報表 | **Vercel 排程 + LINE** | 2026-08-18 業主要求改回 LINE，**Cowork 作廢**，見第 7 節 |
 | 主題 | next-themes 深淺色 | 冷色背景 + **品牌赭紅當重點色** |
 | 部署 | Vercel | 開發用免費版，**收錢前必須升 Pro $20/月** |
 | AI | **網站端不使用任何 AI API** | 見第 7 節 |
