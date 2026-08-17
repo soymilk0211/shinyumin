@@ -33,6 +33,10 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# 範本例外：.env.example 裡【只有欄位名稱，沒有任何值】，是要給接手的人看的。
+# 真正的鑰匙一律只在 .env.local，那個檔案仍然被上面那行擋住。
+!.env.example
+
 # vercel
 .vercel
 

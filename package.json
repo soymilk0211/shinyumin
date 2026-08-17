@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "check:supabase": "node --env-file=.env.local scripts/check-supabase.mjs",
+    "check:line": "node --env-file=.env.local scripts/check-line.mjs",
     "load:products": "node --env-file=.env.local scripts/load-products.mjs"
   },
   "dependencies": {

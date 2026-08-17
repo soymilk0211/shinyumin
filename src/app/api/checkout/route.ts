@@ -1,3 +1,5 @@
+import { after } from "next/server";
+import { notifyNewOrder } from "@/lib/line";
 import { createOrder, type OrderDraftLine } from "@/lib/orders";
 import { isPaymentMethod, isShippingMethod } from "@/lib/order-rules";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
@@ -60,6 +62,28 @@ export async function POST(request: Request) {
       { status: result.reason === "unavailable" ? 409 : 500 },
     );
   }
+
+  // ── 通知業主 ─────────────────────────────────────────
+  // 【放在回應之後才跑。】訂單已經寫進資料庫了，客人不需要等 LINE。
+  // 推播失敗也不會影響這張訂單 —— notifyNewOrder 自己吞掉所有錯誤。
+  after(() =>
+    notifyNewOrder({
+      orderNumber: result.orderNumber,
+      items: result.items,
+      subtotalTwd: result.subtotalTwd,
+      shippingFeeTwd: result.shippingFeeTwd,
+      totalTwd: result.totalTwd,
+      shippingMethod: draft.shippingMethod,
+      paymentMethod: draft.paymentMethod,
+      customerName: draft.customerName,
+      customerPhone: draft.customerPhone,
+      customerEmail: draft.customerEmail,
+      shippingAddress: draft.shippingAddress,
+      taxId: draft.taxId,
+      invoiceTitle: draft.invoiceTitle,
+      note: draft.note,
+    }),
+  );
 
   return Response.json({
     ok: true,

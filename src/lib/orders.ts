@@ -44,6 +44,15 @@ export type OrderDraft = {
   note: string | null;
 };
 
+/** 訂單上的一個品項，金額都是伺服器算出來的 */
+export type OrderItem = {
+  productName: string;
+  label: string;
+  unitPriceTwd: number;
+  quantity: number;
+  lineTotalTwd: number;
+};
+
 export type CreateOrderResult =
   | {
       ok: true;
@@ -51,6 +60,8 @@ export type CreateOrderResult =
       subtotalTwd: number;
       shippingFeeTwd: number;
       totalTwd: number;
+      /** 給 LINE 通知與日後的確認信用。回給瀏覽器的內容不包含這一段。 */
+      items: OrderItem[];
     }
   | {
       ok: false;
@@ -200,6 +211,13 @@ export async function createOrder(
       subtotalTwd: subtotal,
       shippingFeeTwd: shippingFee,
       totalTwd: total,
+      items: items.map((item) => ({
+        productName: item.productName,
+        label: item.label,
+        unitPriceTwd: item.unitPrice,
+        quantity: item.quantity,
+        lineTotalTwd: item.lineTotal,
+      })),
     };
   }
 
