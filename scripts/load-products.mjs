@@ -90,9 +90,11 @@ const PRODUCTS = [
     name_en: "High Mountain Oolong",
     tasting_zh: null,
     tasting_en: null,
-    desc_zh: ORIGIN,
-    desc_en:
-      "Our factory is in Dayan Village, Yuchi Township, Nantou. Leaf is bought from growers we work with regularly; the gardens sit at around 750 metres.",
+    // 業主表示烏龍的介紹不是這樣，先留空等老闆提供。
+    // 上面那段 ORIGIN 講的是紅茶的產區與採收方式，套到高山茶並不成立
+    // （而且 750 公尺也不該叫高山茶）。
+    desc_zh: null,
+    desc_en: null,
     sort: 4,
     sizes: ["150"],
   },
@@ -104,8 +106,9 @@ const PRODUCTS = [
     name_en: "Green Tea",
     tasting_zh: null,
     tasting_en: null,
-    desc_zh: ORIGIN,
-    desc_en: "Our factory is in Dayan Village, Yuchi Township, Nantou.",
+    // 同高山茶，先留空
+    desc_zh: null,
+    desc_en: null,
     sort: 5,
     sizes: ["150"],
     unpublished: true,
