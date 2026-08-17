@@ -28,7 +28,7 @@ export function ThemeToggle({ label }: { label: string }) {
       onClick={toggle}
       aria-label={label}
       title={label}
-      className="flex h-9 w-9 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-surface-sunken hover:text-brand"
+      className="text-ink-soft transition-colors hover:text-brand"
     >
       {/* 深色模式時顯示太陽（按下去會變亮） */}
       <SunIcon className="hidden dark:block" />
@@ -45,7 +45,7 @@ function SunIcon({ className }: { className?: string }) {
       className={`h-5 w-5 ${className ?? ""}`}
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.5"
+      strokeWidth="1"
       strokeLinecap="round"
       aria-hidden="true"
     >
@@ -62,7 +62,7 @@ function MoonIcon({ className }: { className?: string }) {
       className={`h-5 w-5 ${className ?? ""}`}
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.5"
+      strokeWidth="1"
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"

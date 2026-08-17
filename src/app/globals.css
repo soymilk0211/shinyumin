@@ -12,25 +12,107 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* 標題一律用襯線體 */
+/* ============================================================
+   排版基礎
+   ============================================================
+   這個網站走編輯雜誌／藝廊型錄的路線，不是一般的網頁。
+   幾條貫穿全站的規則：
+     標題一律明體，而且【不加粗】—— 靠字級與留白拉層次，不靠粗體
+     小字一律拉寬字距 —— 精緻感來自字與字之間的呼吸
+     不用圓角矩形按鈕 —— 用細線與箭頭
+   ============================================================ */
+
 h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  font-weight: 400; /* 藝廊感：標題不加粗，靠字級與留白拉出層次 */
+  font-weight: 300;
+  text-wrap: balance;
+}
+
+/* 超巨大的主視覺標題。字級越大，行高與字距要越緊，否則會鬆散 */
+.display-xl {
+  font-family: var(--font-display);
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+/* 直式排版 —— 東方書冊的閱讀方向，用在裝飾性的副標與標籤 */
+.vertical {
+  writing-mode: vertical-rl;
+  /* mixed = 中文字直立、英文與數字側轉 90 度。
+     這是中日文直排的標準作法。若設成 upright，英文會變成一個字母
+     一個字母疊著站，英文站的那一行會又長又難讀。 */
+  text-orientation: mixed;
+  letter-spacing: 0.4em;
+}
+
+/* 極小、字距拉到很寬的標籤字。編輯式設計的細節都在這種字上 */
+.label {
+  font-size: 0.6875rem; /* 11px */
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  line-height: 1.6;
+}
+
+/* 型錄式的文字連結：底線在滑鼠移上去時從左往右展開 */
+.link-rule {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75em;
+}
+.link-rule::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.35em;
+  height: 1px;
+  width: 100%;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.link-rule:hover::after,
+.link-rule:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* 工序的階梯縮排。
+   手機上【完全不縮排】—— 螢幕只有那麼寬，再往右推文字會被擠成細長條，
+   反而不好看也不好讀。階梯的效果留給平板與電腦。 */
+.step-stagger {
+  margin-left: 0;
+}
+@media (min-width: 640px) {
+  .step-stagger {
+    margin-left: calc(var(--step) * 7%);
+  }
 }
 
 /* 鍵盤操作（Tab 鍵）時的焦點框，用品牌色，無障礙需要 */
 :focus-visible {
-  outline: 2px solid var(--brand);
-  outline-offset: 2px;
+  outline: 1px solid var(--brand);
+  outline-offset: 4px;
 }
 
 /* 換頁、切換深淺色時顏色平順過渡，不要突然閃一下 */
 @media (prefers-reduced-motion: no-preference) {
   body {
     transition:
-      background-color 200ms ease,
-      color 200ms ease;
+      background-color 240ms ease,
+      color 240ms ease;
+  }
+}
+
+/* 尊重「減少動態效果」的系統設定 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }

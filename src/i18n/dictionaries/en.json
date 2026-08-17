@@ -1,8 +1,10 @@
 {
   "site": {
     "name": "SHIN-YU-MIN",
+    "nameLatin": "SHIN-YU-MIN",
     "nameFull": "SHIN-YU-MIN Co., Ltd.",
     "tagline": "Yuchi, Sun Moon Lake · Family Tea Makers",
+    "place": "Dayan · Yuchi · Nantou",
     "description": "A family tea factory in Dayan Village, Yuchi Township, Nantou — the heart of the Sun Moon Lake black tea region. Best known for Ruby Black Tea (Taiwan Tea No. 18)."
   },
 
@@ -17,14 +19,47 @@
 
   "home": {
     "heroTitle": "We are in Yuchi",
-    "heroBody": "Dayan Village, Yuchi Township, Nantou — the heart of the Sun Moon Lake black tea region. This is not a sourcing choice; it is where our family has lived and made tea for generations.",
-    "heroPrimary": "See our teas",
-    "heroSecondary": "Our story",
+    "heroLead": "The heart of the Sun Moon Lake black tea region. This is not a sourcing choice; it is where our family has lived and made tea for generations.",
+    "heroMark": "Taiwan Tea No. 18",
+    "heroMarkLatin": "RUBY No.18",
 
-    "originTitle": "From leaf to tin, all under our own roof",
-    "originBody": "Plucking, withering, rolling, oxidation, drying — every step happens in our own factory in Dayan Village, tended by hand. We do not make many teas, but each one is made properly.",
+    "craftLabel": "Process",
+    "craftTitle": "Five steps, one leaf",
+    "craftLead": "From plucking to drying, everything happens in our own factory in Dayan Village. We do not make many teas, but each one is made properly.",
+    "craftSteps": [
+      {
+        "name": "Plucking",
+        "note": "One bud, two leaves — picked only once the morning dew has lifted."
+      },
+      {
+        "name": "Withering",
+        "note": "Spread indoors to lose water slowly. This is where the aroma wakes up."
+      },
+      {
+        "name": "Rolling",
+        "note": "The leaf is bruised so its juices return to the surface."
+      },
+      {
+        "name": "Oxidation",
+        "note": "The soul of black tea. When it is ready it is ready — not a moment early or late."
+      },
+      {
+        "name": "Drying",
+        "note": "Heat takes the last water out and fixes the aroma in place."
+      }
+    ],
 
-    "categoriesTitle": "Our Teas",
+    "featureLabel": "Signature tea",
+    "featureName": "Ruby Black Tea",
+    "featureSub": "Taiwan Tea No. 18",
+    "featureLatin": "Ruby Black Tea",
+    "featureNotes": "Natural notes of cinnamon and mint — the signature character of the Ruby cultivar. A bright, clear red liquor with a sweet finish and no astringency.",
+    "featureVariant": "150g vacuum-sealed tin",
+    "featurePrice": "NT$ 650",
+    "featureCta": "See this tea",
+    "featureOrigin": "Wild Taiwan tea × Burmese large-leaf",
+
+    "categoriesLabel": "Categories",
     "categoriesNote": "Product content is still being prepared; real data arrives in step 3."
   },
 
@@ -36,8 +71,11 @@
 
   "categories": {
     "blackTea": "Black Tea",
+    "blackTeaLatin": "Black",
     "oolongTea": "Oolong Tea",
-    "greenTea": "Green Tea"
+    "oolongTeaLatin": "Oolong",
+    "greenTea": "Green Tea",
+    "greenTeaLatin": "Green"
   },
 
   "footer": {

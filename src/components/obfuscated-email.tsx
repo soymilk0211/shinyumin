@@ -25,7 +25,7 @@ export function ObfuscatedEmail({ revealLabel }: { revealLabel: string }) {
       <button
         type="button"
         onClick={() => setRevealed(true)}
-        className="text-brand underline underline-offset-4 transition-colors hover:text-brand-strong"
+        className="link-rule text-brand transition-colors hover:text-brand-strong"
       >
         {revealLabel}
       </button>
@@ -37,7 +37,7 @@ export function ObfuscatedEmail({ revealLabel }: { revealLabel: string }) {
   return (
     <a
       href={`mailto:${address}`}
-      className="text-brand underline underline-offset-4 transition-colors hover:text-brand-strong"
+      className="link-rule text-brand transition-colors hover:text-brand-strong"
     >
       {address}
     </a>

@@ -28,22 +28,20 @@ export function LocaleSwitcher({
   }
 
   return (
-    <div
-      className="flex items-center gap-1 text-sm"
-      role="group"
-      aria-label={label}
-    >
+    <div className="label flex items-center" role="group" aria-label={label}>
       {locales.map((locale, index) => (
-        <span key={locale} className="flex items-center gap-1">
-          {index > 0 && <span className="text-ink-faint">/</span>}
+        <span key={locale} className="flex items-center">
+          {index > 0 && (
+            <span className="mx-2 h-3 w-px bg-line" aria-hidden="true" />
+          )}
           {locale === current ? (
-            <span className="font-medium text-brand" aria-current="true">
+            <span className="text-brand" aria-current="true">
               {localeNames[locale]}
             </span>
           ) : (
             <Link
               href={hrefFor(locale)}
-              className="text-ink-soft transition-colors hover:text-brand"
+              className="text-ink-faint transition-colors hover:text-brand"
             >
               {localeNames[locale]}
             </Link>
