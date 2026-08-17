@@ -60,6 +60,24 @@ YM-20260817-0001
 > **絕對不要動您現有的客服官方帳號** —— 那個帳號一旦切成機器人模式，
 > 真人聊天功能會失效，客人傳訊息就沒有人回得了。
 
+### ①-0 先確認 Messaging API 已經開通
+
+> **這一步是業主 2026-08-17 實際卡住的地方，不要跳過。**
+>
+> 在官方帳號管理頁面建立的帳號，**預設沒有打開 Messaging API**。
+> 沒開通的話，LINE Developers 上那個 channel **根本不會有 Messaging API 分頁**，
+> 也就永遠找不到 access token —— 不是藏起來，是還不存在。
+>
+> 開通方式（在 [LINE 官方帳號管理頁面](https://manager.line.biz/)，
+> 注意這跟 LINE Developers 是**兩個不同的網站**）：
+>
+> 1. 選「御茗內部通知」→ 右上角 **設定**
+> 2. 左邊選單 → **Messaging API**
+> 3. 按「**啟用 Messaging API**」
+> 4. 選一個 **Provider**（提供者）；沒有就新建一個
+>
+> 開通之後，LINE Developers 上那個 channel 才會長出 Messaging API 分頁。
+
 ### ① 拿兩把鑰匙
 
 到 [LINE Developers](https://developers.line.biz/console/) ，
