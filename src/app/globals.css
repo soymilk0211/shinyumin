@@ -190,10 +190,10 @@ h3 {
 .tea-dial__drag {
   width: 100%;
   height: 100%;
-  transform: rotate(var(--drag, 0deg));
-
   /* 【整個圓都可以用手轉】。原本只有外圈那兩個小字抓得到，等於轉不動。
-     border-radius 讓它只在圓形範圍內吃觸控，圓以外的四個角落仍然穿透。 */
+     border-radius 讓它只在圓形範圍內吃觸控，圓以外的四個角落仍然穿透。
+
+     手轉時不在這裡改角度 —— 而是去捲頁面，盤子的角度由捲動連動自然跟上。 */
   pointer-events: auto;
   border-radius: 50%;
   cursor: grab;

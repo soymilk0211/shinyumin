@@ -8,14 +8,18 @@ import { useEffect, useRef, useState } from "react";
  * 它同時是三件事：
  *   一、裝飾：一杯俯視的茶湯，隨捲動連續旋轉
  *   二、指示：捲到哪一區，茶湯就換成那一區的顏色
- *   三、可玩：整個盤子可以用手轉，外圈有一圈字跟著轉
+ *   三、可操作：整個盤子可以用手轉，【轉盤子就等於捲頁面】 ——
+ *              轉一圈剛好把整頁捲完，跟捲動時盤子轉一圈是同一套刻度
  *
  * 幾個刻意的作法：
  *
  * **旋轉不用 JavaScript。** 用 CSS 的 scroll-driven animation
  * （animation-timeline: scroll()），由瀏覽器自己跑。用 JS 監聽捲動再改角度，
- * 手機上會頓。手轉的角度是另外一層 transform，跟捲動的旋轉互相疊加，
- * 兩者不會打架。
+ * 手機上會頓。
+ *
+ * 手轉的時候也不去改盤子的角度 —— 而是【去捲頁面】，
+ * 盤子的角度自然就跟著捲動連動轉過去。這樣手轉與捲動永遠是同一個真相，
+ * 不會出現「盤子轉了但頁面沒動」或兩者對不上的狀況。
  *
  * **換色只改 opacity。** 三張圖一直疊在那裡，換色是淡入淡出。
  * 若去換 <img> 的 src 或把圖藏起來，正在跑的旋轉會被打斷、畫面會跳。
@@ -58,12 +62,9 @@ export function TeaDial({
   const [tone, setTone] = useState<TeaTone>(initialTone);
   const dragRef = useRef<HTMLDivElement>(null);
 
-  // 手轉的累積角度。放在 ref 而不是 state：
-  // 拖曳時每一次移動都直接改 CSS 變數，不經過 React 重繪，才會跟手。
-  const rotation = useRef(0);
-  const pointer = useRef<{ id: number; angle: number; moved: number } | null>(
-    null,
-  );
+  // 拖曳狀態放在 ref 而不是 state：每一次移動都直接捲頁面，
+  // 不經過 React 重繪，才會跟手。
+  const pointer = useRef<{ id: number; angle: number } | null>(null);
 
   // 捲到哪一區，就換成那一區的茶湯顏色
   useEffect(() => {
@@ -108,11 +109,7 @@ export function TeaDial({
   }
 
   function handlePointerDown(event: React.PointerEvent) {
-    pointer.current = {
-      id: event.pointerId,
-      angle: angleFromCentre(event),
-      moved: 0,
-    };
+    pointer.current = { id: event.pointerId, angle: angleFromCentre(event) };
     (event.target as Element).setPointerCapture?.(event.pointerId);
   }
 
@@ -126,11 +123,15 @@ export function TeaDial({
     if (delta > 180) delta -= 360;
     if (delta < -180) delta += 360;
 
-    rotation.current += delta;
     state.angle = current;
-    state.moved += Math.abs(delta);
 
-    dragRef.current?.style.setProperty("--drag", `${rotation.current}deg`);
+    // 轉一整圈 = 捲完整頁，跟捲動時盤子轉一圈是同一套刻度。
+    // 順時針（角度增加）＝ 往下捲。
+    const scrollable =
+      document.documentElement.scrollHeight - window.innerHeight;
+    if (scrollable <= 0) return;
+
+    window.scrollBy({ top: (delta / 360) * scrollable, behavior: "instant" });
   }
 
   function handlePointerUp() {
