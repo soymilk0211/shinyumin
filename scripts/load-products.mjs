@@ -63,7 +63,10 @@ const PRODUCTS = [
     desc_en:
       "Taiwan Tea No. 18, commonly known as Ruby. The one we recommend most, and the most distinctive of our teas.",
     sort: 1,
-    sizes: ["150", "75"],
+    variants: [
+      ["150", 600],
+      ["75", 350],
+    ],
   },
   {
     slug: "assam",
@@ -76,7 +79,10 @@ const PRODUCTS = [
     desc_zh: null,
     desc_en: null,
     sort: 2,
-    sizes: ["150", "75"],
+    variants: [
+      ["150", 600],
+      ["75", 350],
+    ],
   },
   {
     slug: "taiwan-wild",
@@ -88,7 +94,10 @@ const PRODUCTS = [
     desc_zh: "產量很少的一款。",
     desc_en: "Made in small quantities.",
     sort: 3,
-    sizes: ["150", "75"],
+    variants: [
+      ["150", 600],
+      ["75", 350],
+    ],
   },
   {
     slug: "high-mountain",
@@ -103,40 +112,79 @@ const PRODUCTS = [
     desc_zh: null,
     desc_en: null,
     sort: 4,
-    sizes: ["150"],
+    variants: [["150", 600]],
   },
+  // ── 以下三款是業主 2026-08-17 補的烏龍 ─────────────────
+  // 【價格與紅茶差很多，這是對的，不要「順手改成一致」】——
+  // 四季春與焙火／碳焙是平價的日常茶，高山茶是另一個等級。
   {
-    // 綠茶老闆說「先不要賣」→ 建好但不上架，之後在後台按一下就能開賣
-    slug: "green-tea",
-    category: "green-tea",
-    name_zh: "綠茶",
-    name_en: "Green Tea",
+    slug: "four-seasons",
+    category: "oolong-tea",
+    name_zh: "四季春茶",
+    name_en: "Four Seasons Oolong",
     tasting_zh: null,
     tasting_en: null,
-    // 同高山茶，先留空
     desc_zh: null,
     desc_en: null,
     sort: 5,
-    sizes: ["150"],
-    unpublished: true,
+    variants: [
+      ["150", 120],
+      ["600", 400],
+    ],
+  },
+  {
+    slug: "roasted-oolong",
+    category: "oolong-tea",
+    name_zh: "焙火烏龍",
+    name_en: "Roasted Oolong",
+    tasting_zh: null,
+    tasting_en: null,
+    desc_zh: null,
+    desc_en: null,
+    sort: 6,
+    variants: [
+      ["150", 150],
+      ["600", 450],
+    ],
+  },
+  {
+    slug: "charcoal-oolong",
+    category: "oolong-tea",
+    name_zh: "碳焙烏龍",
+    name_en: "Charcoal-Roasted Oolong",
+    tasting_zh: null,
+    tasting_en: null,
+    desc_zh: null,
+    desc_en: null,
+    sort: 7,
+    variants: [
+      ["150", 150],
+      ["600", 450],
+    ],
   },
 ];
 
-/** 兩種規格。老闆用「兩」報價，網站兩種單位都標出來 */
+/**
+ * 包裝規格。老闆習慣用「兩」報價，網站上兩種單位並陳。
+ * 台制一斤 = 十六兩 = 600 克，所以四兩剛好是 150 克。
+ *
+ * 【價格不在這裡】—— 同一個包裝在不同茶款是不同價錢
+ * （四兩的四季春 $120、四兩的高山茶 $600），所以價格掛在各自的商品上。
+ */
 const SIZES = {
-  "150": {
-    label_zh: "四兩・150g 鐵罐",
-    label_en: "150g tin",
-    grams: 150,
-    price: 600,
-  },
-  "75": {
-    label_zh: "二兩・75g 鐵罐",
-    label_en: "75g tin",
-    grams: 75,
-    price: 350,
-  },
+  "600": { label_zh: "一斤・600g", label_en: "600g (1 catty)", grams: 600 },
+  "150": { label_zh: "四兩・150g 鐵罐", label_en: "150g tin", grams: 150 },
+  "75": { label_zh: "二兩・75g 鐵罐", label_en: "75g tin", grams: 75 },
 };
+
+/** 大包裝排前面，小包裝排後面 */
+const SIZE_ORDER = { "600": 1, "150": 2, "75": 3 };
+
+/**
+ * 要從資料庫移除的商品。
+ * 綠茶：業主 2026-08-17 說「幫我刪掉」。它從來沒有上架過，也沒有訂單用到它。
+ */
+const REMOVE_SLUGS = ["green-tea"];
 
 const categories = await api("categories?select=id,slug");
 const categoryId = Object.fromEntries(categories.map((c) => [c.slug, c.id]));
@@ -159,7 +207,7 @@ for (const product of PRODUCTS) {
     }),
   });
 
-  for (const size of product.sizes) {
+  for (const [size, price] of product.variants) {
     const spec = SIZES[size];
     await api("variants?on_conflict=sku", {
       method: "POST",
@@ -170,16 +218,16 @@ for (const product of PRODUCTS) {
         label_zh: spec.label_zh,
         label_en: spec.label_en,
         weight_grams: spec.grams,
-        price_twd: spec.price,
+        price_twd: price,
         status: "on_sale",
-        sort_order: size === "150" ? 1 : 2,
+        sort_order: SIZE_ORDER[size],
       }),
     });
   }
 
   console.log(
-    `✅ ${product.name_zh}${product.unpublished ? "（未上架）" : ""} — ${product.sizes
-      .map((s) => `${SIZES[s].label_zh} NT$${SIZES[s].price}`)
+    `✅ ${product.name_zh}${product.unpublished ? "（未上架）" : ""} — ${product.variants
+      .map(([size, price]) => `${SIZES[size].label_zh} NT$${price}`)
       .join("、")}`,
   );
 }
@@ -192,6 +240,17 @@ if (stale.length > 0) {
     body: JSON.stringify({ status: "archived" }),
   });
   console.log(`\n🧹 舊的測試規格已下架：${stale.map((s) => s.sku).join("、")}`);
+}
+
+// 業主指名要移除的商品。
+// 規格會跟著商品一起刪掉；歷史訂單不受影響 —— order_items 存的是
+// 下單當下的商品名稱與價格「快照」，不是每次回頭查商品表。
+for (const slug of REMOVE_SLUGS) {
+  const found = await api(`products?slug=eq.${slug}&select=id,name_zh`);
+  if (found.length === 0) continue;
+
+  await api(`products?slug=eq.${slug}`, { method: "DELETE" });
+  console.log(`\n🗑️ 已從資料庫移除：${found[0].name_zh}`);
 }
 
 console.log("\n完成。");
