@@ -405,6 +405,16 @@ export function CheckoutForm({
           <p className="mt-6 max-w-[46ch] text-[12px] leading-[2] tracking-[0.06em] text-ink-soft">
             {labels.paymentNote}
           </p>
+
+          {/* 貨到付款的代收手續費由老闆另計，不寫進訂單金額。
+              只有選了貨到付款才顯示 —— 選匯款的人不需要看到這件事。
+              但【選了就一定要看到】：畫面上的總額不含這筆錢，
+              不先講清楚，客人在門口收到帳單會覺得被多收。 */}
+          {payment === "cod" && (
+            <p className="mt-4 max-w-[46ch] text-[12px] leading-[2] tracking-[0.06em] text-brand">
+              {labels.paymentCodFee}
+            </p>
+          )}
         </section>
 
         {/* 發票（選填） */}

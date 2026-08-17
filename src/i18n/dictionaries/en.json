@@ -132,6 +132,7 @@
     "paymentTransfer": "Bank transfer",
     "paymentCod": "Cash on delivery",
     "paymentNote": "Once your order is placed we will call you within two working days to confirm it and give you our bank details. For safety, our account number is never shown on the website.",
+    "paymentCodFee": "Cash on delivery carries a separate collection fee, which is not included in the amount above. We will confirm it with you by phone.",
 
     "invoiceTitle": "Invoice",
     "taxId": "Company tax ID",
