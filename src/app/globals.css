@@ -92,6 +92,91 @@ h3 {
   }
 }
 
+/* ============================================================
+   茶湯轉盤（首頁右下角的裝飾圓）
+   ============================================================
+   元件在 src/components/tea-dial.tsx，那裡有完整的設計說明。
+   ============================================================ */
+
+.tea-dial {
+  position: fixed;
+  /* 三分之一裁切到畫面外 */
+  right: -14vw;
+  bottom: -16vw;
+  width: 62vw;
+  max-width: 460px;
+  aspect-ratio: 1;
+
+  /* 純裝飾：絕對不能擋住任何按鈕或連結 */
+  pointer-events: none;
+
+  /* 壓在內容之上、但低於選單列（z-50）與日後任何浮動 UI */
+  z-index: 10;
+
+  opacity: 0.9;
+}
+
+/* 手機縮小約四成，免得佔掉半個畫面 */
+@media (max-width: 767px) {
+  .tea-dial {
+    width: 46vw;
+    right: -12vw;
+    bottom: -12vw;
+    opacity: 0.8;
+  }
+}
+
+/* 深色模式壓低飽和度與亮度，才不會在炭焙黑上刺眼 */
+.dark .tea-dial {
+  opacity: 0.55;
+  filter: saturate(0.75) brightness(0.9);
+}
+
+.tea-dial__spin {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.tea-dial__layer {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+
+  /* 換色一律柔和交叉淡入，不硬切 */
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+
+.tea-dial__layer[data-active="true"] {
+  opacity: 1;
+}
+
+/* 旋轉：整頁捲完剛好一圈。
+   交給瀏覽器的 scroll-driven animation，不用 JavaScript 監聽捲動 ——
+   JS 監聽在手機上會頓。 */
+@keyframes tea-dial-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  .tea-dial__spin {
+    animation: tea-dial-spin linear;
+    animation-timeline: scroll(root block);
+  }
+}
+
+/* 使用者若在系統開啟「減少動態效果」，就完全不轉，只留靜態的圓 */
+@media (prefers-reduced-motion: reduce) {
+  .tea-dial__spin {
+    animation: none;
+  }
+}
+
 /* 鍵盤操作（Tab 鍵）時的焦點框，用品牌色，無障礙需要 */
 :focus-visible {
   outline: 1px solid var(--brand);

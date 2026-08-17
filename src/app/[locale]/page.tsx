@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { CSSProperties } from "react";
 import { ArrowLink } from "@/components/arrow-link";
+import { TeaDial } from "@/components/tea-dial";
 import { ImagePlaceholder } from "@/components/image-placeholder";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -64,8 +65,18 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
 
   return (
     <div className="overflow-x-clip">
+      {/* 一進頁面時顯示綠茶，與下面第一個段落的 data-tea-tone 一致 */}
+      <TeaDial initialTone="green" />
+
       {/* ============ 一、開場 ============ */}
-      <section className="relative px-6 pt-12 pb-28 sm:px-10 sm:pt-20 sm:pb-40">
+      {/* data-tea-tone 決定右下角茶湯轉盤在這一段要顯示哪一種茶湯。
+          目前首頁沒有「綠茶區／烏龍區／紅茶區」這種分區，所以先照製茶的順序
+          分配：新葉（綠）→ 發酵中（烏龍）→ 成茶（紅）。
+          日後若首頁改成一個分類一個區塊，把這個屬性搬過去就會自動跟著換色。 */}
+      <section
+        data-tea-tone="green"
+        className="relative px-6 pt-12 pb-28 sm:px-10 sm:pt-20 sm:pb-40"
+      >
         <div className="relative flex gap-5 sm:gap-10">
           {/* 直式地名，貼著版面左緣 */}
           <span className="vertical label mt-1 shrink-0 text-ink-faint">
@@ -73,8 +84,14 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           </span>
 
           <div className="min-w-0 flex-1">
-            <h1 className="display-xl max-w-[7ch] text-[clamp(2.5rem,8.5vw,7rem)] text-ink">
-              {home.heroTitle}
+            {/* 標題的斷行是寫死的，不交給瀏覽器決定 ——
+                「日月潭」三個字必須在同一行，不能讓「潭」掉到下一行去 */}
+            <h1 className="display-xl text-[clamp(2.5rem,8.5vw,7rem)] text-ink">
+              {home.heroTitleLines.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
             </h1>
 
             {/* 圖。手機上排在標題下方、向右出血；
@@ -99,7 +116,10 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       </section>
 
       {/* ============ 二、五道工序 ============ */}
-      <section className="border-t border-line px-6 py-24 sm:px-10 sm:py-36">
+      <section
+        data-tea-tone="oolong"
+        className="border-t border-line px-6 py-24 sm:px-10 sm:py-36"
+      >
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <span className="label text-brand">{home.craftLabel}</span>
@@ -138,7 +158,10 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       </section>
 
       {/* ============ 三、紅玉 ============ */}
-      <section className="relative border-t border-line bg-surface px-6 py-24 sm:px-10 sm:py-36">
+      <section
+        data-tea-tone="black"
+        className="relative border-t border-line bg-surface px-6 py-24 sm:px-10 sm:py-36"
+      >
         <div className="relative sm:flex sm:items-start sm:gap-0">
           {/* 圖 */}
           <div className="sm:w-[46%]">
@@ -185,7 +208,10 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       </section>
 
       {/* ============ 四、分類 ============ */}
-      <section className="border-t border-line px-6 py-24 sm:px-10 sm:py-36">
+      <section
+        data-tea-tone="black"
+        className="border-t border-line px-6 py-24 sm:px-10 sm:py-36"
+      >
         <div className="flex items-baseline justify-between gap-6">
           <span className="label text-brand">{home.categoriesLabel}</span>
           <span className="label text-ink-faint">{home.categoriesNote}</span>

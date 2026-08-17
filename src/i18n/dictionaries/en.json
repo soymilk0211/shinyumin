@@ -18,7 +18,7 @@
   },
 
   "home": {
-    "heroTitle": "Sun Moon Lake Ruby",
+    "heroTitleLines": ["Sun Moon Lake", "Black Tea"],
     "heroLead": "Our tea garden and factory are both in Dayan Village, Yuchi Township, Nantou — the heart of the Sun Moon Lake black tea region. This is not a sourcing choice; it is where our family has lived and made tea for generations.",
 
     "craftLabel": "Process",
