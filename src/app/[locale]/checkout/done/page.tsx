@@ -95,15 +95,6 @@ export default async function OrderDonePage({
                 <p className="mt-4 text-[13px] leading-[2.1] tracking-[0.06em] text-ink">
                   {dict.orderDone.transferNote}
                 </p>
-                <div className="mt-5 flex flex-wrap items-baseline gap-x-6 gap-y-2 text-[12px] tracking-[0.06em]">
-                  <ObfuscatedContact
-                    kind="phone"
-                    revealLabel={dict.orderDone.phoneHint}
-                  />
-                  <span className="text-ink-faint">
-                    {dict.orderDone.serviceHours}
-                  </span>
-                </div>
               </div>
 
               <div className="mt-12 max-w-[46ch] border-t border-line pt-10">
@@ -113,6 +104,35 @@ export default async function OrderDonePage({
                 <p className="mt-4 text-[13px] leading-[2.1] tracking-[0.06em] text-ink-soft">
                   {dict.orderDone.codNote}
                 </p>
+              </div>
+
+              {/* 【網站上不能自己改單，所以一定要講清楚要找誰。】
+                  客人下完單才想到要改地址、要加一罐，這是最常見的事。
+                  沒有寫的話他只會在網站上到處找一個不存在的按鈕。 */}
+              <div className="mt-12 max-w-[46ch] border-t border-line pt-10">
+                <span className="label text-ink-faint">
+                  {dict.orderDone.changeTitle}
+                </span>
+                <p className="mt-4 text-[13px] leading-[2.1] tracking-[0.06em] text-ink-soft">
+                  {dict.orderDone.changeNote}
+                </p>
+              </div>
+
+              {/* 電話只出現這一次。上面「匯款要來電」與「改單要來電」
+                  都是指這一支 —— 放三個一模一樣的按鈕只會讓人以為是不同的號碼。 */}
+              <div className="mt-12 max-w-[46ch] border-t border-line pt-10">
+                <span className="label text-brand">
+                  {dict.orderDone.contactTitle}
+                </span>
+                <div className="mt-5 flex flex-wrap items-baseline gap-x-6 gap-y-2 text-[13px] tracking-[0.06em]">
+                  <ObfuscatedContact
+                    kind="phone"
+                    revealLabel={dict.orderDone.phoneHint}
+                  />
+                  <span className="text-ink-faint">
+                    {dict.orderDone.serviceHours}
+                  </span>
+                </div>
               </div>
 
               <p className="mt-12 max-w-[46ch] text-[12px] leading-[2] tracking-[0.06em] text-ink-faint">
