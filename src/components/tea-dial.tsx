@@ -1,183 +1,132 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 /**
- * 茶湯轉盤 —— 首頁右下角那個會轉的圓。
+ * 茶湯轉盤 —— 首頁右下角那個圓。
  *
- * 它同時是三件事：
- *   一、裝飾：一杯俯視的茶湯，隨捲動連續旋轉
- *   二、指示：捲到哪一區，茶湯就換成那一區的顏色
- *   三、可操作：整個盤子可以用手轉，【轉盤子就等於捲頁面】 ——
- *              轉一圈剛好把整頁捲完，跟捲動時盤子轉一圈是同一套刻度
+ * 它是一個「你現在在哪一段」的指示器：捲到哪一段，盤子就轉到那一段，
+ * 並換成那一段對應的茶湯顏色。該段落的字會轉到正上方，而且【剛好是正的】。
  *
- * 幾個刻意的作法：
+ * ## 為什麼不跟著捲動連續轉
  *
- * **旋轉不用 JavaScript。** 用 CSS 的 scroll-driven animation
- * （animation-timeline: scroll()），由瀏覽器自己跑。用 JS 監聽捲動再改角度，
- * 手機上會頓。
+ * 第一版做成「捲動時連續旋轉、拖曳盤子等於捲頁面」，實際用起來很卡 ——
+ * 拖曳盤子去捲頁面等於跟瀏覽器搶方向盤；而且連續轉的時候，外圈的字
+ * 跟畫面上的內容根本對不起來，轉了半天也不知道那些字在指什麼。
  *
- * 手轉的時候也不去改盤子的角度 —— 而是【去捲頁面】，
- * 盤子的角度自然就跟著捲動連動轉過去。這樣手轉與捲動永遠是同一個真相，
- * 不會出現「盤子轉了但頁面沒動」或兩者對不上的狀況。
+ * 現在改成**一段一格**：每一段對應一個固定角度，捲進哪一段就轉過去，
+ * 中間用一次平順的過場補上。好處是
+ *   一、不卡 —— 一次捲動只做一次 transform，其餘時間完全靜止
+ *   二、字有意義 —— 轉到正上方的那個字，就是你正在看的段落
  *
- * **換色只改 opacity。** 三張圖一直疊在那裡，換色是淡入淡出。
- * 若去換 <img> 的 src 或把圖藏起來，正在跑的旋轉會被打斷、畫面會跳。
+ * ## 字的方向
  *
- * **外圈的字是裝飾，不是按鈕。** 可以轉的是整個圓；
- * 圓以外的四個角落仍然穿透，不會擋住底下的東西。
+ * 每個字的**底部朝向圓心**，不是全部朝同一個方向。
+ * 因此轉到正上方的那個字必然是正的，其餘順著圓周傾斜 —— 像轉盤上的刻度。
  *
  * 照片還沒拍，每一層底下先鋪對應的顏色 —— 圖檔不存在時就是一個純色的圓，
  * 畫面不會破。之後把照片放進 /public/images/decor/（檔名不變）就會自動換上。
  */
 
-/** 三種茶湯。順序＝盤面由外而內的疊放順序，也是換色的先後 */
-const TONES = [
-  { key: "black", file: "tea-black.png", color: "#c48770" },
-  { key: "green", file: "tea-green.png", color: "#b9c497" },
-  { key: "oolong", file: "tea-oolong.png", color: "#dcb383" },
-] as const;
+/** 三種茶湯。顏色是照片到位之前的替身，也是照片載入失敗時的底色。 */
+const TONE_STYLE = {
+  black: { file: "tea-black.png", color: "#c48770" },
+  green: { file: "tea-green.png", color: "#b9c497" },
+  oolong: { file: "tea-oolong.png", color: "#dcb383" },
+} as const;
 
-export type TeaTone = (typeof TONES)[number]["key"];
+export type TeaTone = keyof typeof TONE_STYLE;
 
-/** 外圈的一個字：內容與擺放的角度 */
-export type DialLabel = {
-  text: string;
-  /** 0 度在正上方，順時針增加 */
-  angle: number;
+/** 一個段落：頁面上的 id、外圈要顯示的字、對應的茶湯 */
+export type DialSection = {
+  id: string;
+  label: string;
+  tone: TeaTone;
 };
 
-function isTone(value: string | null | undefined): value is TeaTone {
-  return value === "green" || value === "oolong" || value === "black";
-}
+export function TeaDial({ sections }: { sections: DialSection[] }) {
+  const [current, setCurrent] = useState(0);
 
-export function TeaDial({
-  initialTone = "black",
-  labels = [],
-}: {
-  /** 一進頁面時顯示哪一杯。由頁面指定，伺服器產生的畫面一開始就是對的 */
-  initialTone?: TeaTone;
-  labels?: DialLabel[];
-}) {
-  const [tone, setTone] = useState<TeaTone>(initialTone);
-  const dragRef = useRef<HTMLDivElement>(null);
+  // 只在「段落清單真的變了」時才重新掛偵測器。
+  // 若直接依賴 sections 這個陣列，每次重繪都是新的物件，
+  // 偵測器會被反覆拆掉重建。
+  const sectionKey = sections.map((section) => section.id).join("|");
 
-  // 拖曳狀態放在 ref 而不是 state：每一次移動都直接捲頁面，
-  // 不經過 React 重繪，才會跟手。
-  const pointer = useRef<{ id: number; angle: number } | null>(null);
-
-  // 捲到哪一區，就換成那一區的茶湯顏色
   useEffect(() => {
-    const sections = document.querySelectorAll<HTMLElement>("[data-tea-tone]");
     if (sections.length === 0) return;
     if (typeof IntersectionObserver === "undefined") return;
 
-    const visible = new Map<Element, number>();
+    // 用 IntersectionObserver 而不是監聽捲動事件：
+    // 瀏覽器只在段落進出畫面的那一瞬間通知一次，捲動過程中完全不做事。
+    const ratios = new Map<string, number>();
 
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          visible.set(entry.target, entry.intersectionRatio);
+          ratios.set(entry.target.id, entry.intersectionRatio);
         }
 
-        let best: Element | null = null;
-        let bestRatio = 0;
-        for (const [element, ratio] of visible) {
+        let bestIndex = 0;
+        let bestRatio = -1;
+        sections.forEach((section, index) => {
+          const ratio = ratios.get(section.id) ?? 0;
           if (ratio > bestRatio) {
-            best = element;
             bestRatio = ratio;
+            bestIndex = index;
           }
-        }
+        });
 
-        const next = best?.getAttribute("data-tea-tone");
-        if (isTone(next)) setTone(next);
+        setCurrent(bestIndex);
       },
-      { threshold: [0, 0.25, 0.5, 0.75, 1] },
+      { threshold: [0, 0.2, 0.4, 0.6, 0.8, 1] },
     );
 
-    sections.forEach((section) => observer.observe(section));
+    for (const section of sections) {
+      const element = document.getElementById(section.id);
+      if (element) observer.observe(element);
+    }
+
     return () => observer.disconnect();
-  }, []);
+    // sections 的內容以 sectionKey 代表，見上方說明
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sectionKey]);
 
-  /** 指標相對於盤心的角度 */
-  function angleFromCentre(event: React.PointerEvent) {
-    const box = dragRef.current?.getBoundingClientRect();
-    if (!box) return 0;
-    const cx = box.left + box.width / 2;
-    const cy = box.top + box.height / 2;
-    return (Math.atan2(event.clientY - cy, event.clientX - cx) * 180) / Math.PI;
-  }
+  const step = sections.length > 0 ? 360 / sections.length : 0;
 
-  function handlePointerDown(event: React.PointerEvent) {
-    pointer.current = { id: event.pointerId, angle: angleFromCentre(event) };
-    (event.target as Element).setPointerCapture?.(event.pointerId);
-  }
-
-  function handlePointerMove(event: React.PointerEvent) {
-    const state = pointer.current;
-    if (!state || state.id !== event.pointerId) return;
-
-    const current = angleFromCentre(event);
-    let delta = current - state.angle;
-    // 跨過 ±180 度的接縫時要修正，否則會突然轉一大圈
-    if (delta > 180) delta -= 360;
-    if (delta < -180) delta += 360;
-
-    state.angle = current;
-
-    // 轉一整圈 = 捲完整頁，跟捲動時盤子轉一圈是同一套刻度。
-    // 順時針（角度增加）＝ 往下捲。
-    const scrollable =
-      document.documentElement.scrollHeight - window.innerHeight;
-    if (scrollable <= 0) return;
-
-    window.scrollBy({ top: (delta / 360) * scrollable, behavior: "instant" });
-  }
-
-  function handlePointerUp() {
-    pointer.current = null;
-  }
+  // 目前這一段的字要轉到正上方，所以整個盤子往回轉同樣的角度
+  const angle = -current * step;
+  const tone = sections[current]?.tone ?? "black";
 
   return (
-    <div className="tea-dial">
-      {/* 手轉的角度掛在這一層，捲動的旋轉掛在下一層，兩層相乘 */}
+    <div className="tea-dial" aria-hidden="true">
       <div
-        ref={dragRef}
-        className="tea-dial__drag"
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={handlePointerUp}
+        className="tea-dial__spin"
+        style={{ transform: `rotate(${angle}deg)` }}
       >
-        <div className="tea-dial__spin">
-          {TONES.map((t) => (
-            <div
-              key={t.key}
-              className="tea-dial__layer"
-              data-active={t.key === tone ? "true" : undefined}
-              style={{
-                backgroundColor: t.color,
-                backgroundImage: `url(/images/decor/${t.file})`,
-              }}
-              aria-hidden="true"
-            />
-          ))}
+        {(Object.keys(TONE_STYLE) as TeaTone[]).map((key) => (
+          <div
+            key={key}
+            className="tea-dial__layer"
+            data-active={key === tone ? "true" : undefined}
+            style={{
+              backgroundColor: TONE_STYLE[key].color,
+              backgroundImage: `url(/images/decor/${TONE_STYLE[key].file})`,
+            }}
+          />
+        ))}
 
-          {/* 外圈的字。純裝飾，跟著盤子一起轉 */}
-          {labels.map((label) => (
-            <div
-              key={label.text}
-              className="tea-dial__label"
-              style={{ transform: `rotate(${label.angle}deg)` }}
-              aria-hidden="true"
-            >
-              {/* 字再轉回來，盤子停著的時候是正的 */}
-              <span style={{ transform: `rotate(${-label.angle}deg)` }}>
-                {label.text}
-              </span>
-            </div>
-          ))}
-        </div>
+        {/* 外圈的字。刻意【不】把字轉正 —— 底部朝向圓心，
+            轉到正上方的那個字自然就是正的。全部朝同一個方向就沒有轉盤的味道了。 */}
+        {sections.map((section, index) => (
+          <div
+            key={section.id}
+            className="tea-dial__label"
+            data-current={index === current ? "true" : undefined}
+            style={{ transform: `rotate(${index * step}deg)` }}
+          >
+            <span>{section.label}</span>
+          </div>
+        ))}
       </div>
     </div>
   );

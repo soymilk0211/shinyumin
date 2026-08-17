@@ -152,20 +152,17 @@ h3 {
 
 .tea-dial {
   position: fixed;
-  /* 業主明確表示盤子可以蓋到內容，所以做大、往畫面內移，
-     只讓約四分之一裁切出去 —— 它是主角，不是躲在角落的裝飾 */
+  /* 業主同意盤子可以蓋到內容，所以做大、往畫面內移，只裁掉約四分之一 */
   right: -10vw;
   bottom: -10vw;
   width: 72vw;
   max-width: 560px;
   aspect-ratio: 1;
 
-  /* 這一層不吃點擊；真正可以按、可以轉的是裡面的圓（.tea-dial__drag），
-     圓以外的四個角落仍然穿透。 */
+  /* 純指示，不吃任何點擊 */
   pointer-events: none;
 
-  /* 壓在內容之上（業主同意盤子可以蓋到內容），但低於選單列（z-50）。
-     必須高於主標題的 z-10，否則外圈的字會被標題蓋住、按不到。 */
+  /* 壓在內容之上，但低於選單列（z-50） */
   z-index: 20;
 
   /* 茶湯的濃淡。只作用在茶湯圖層，不影響外圈的字 —— 字必須永遠清楚 */
@@ -186,28 +183,15 @@ h3 {
   --tea-opacity: 0.4;
 }
 
-/* 手轉的角度。跟捲動的旋轉分成兩層，兩者互不干擾 */
-.tea-dial__drag {
-  width: 100%;
-  height: 100%;
-  /* 【整個圓都可以用手轉】。原本只有外圈那兩個小字抓得到，等於轉不動。
-     border-radius 讓它只在圓形範圍內吃觸控，圓以外的四個角落仍然穿透。
-
-     手轉時不在這裡改角度 —— 而是去捲頁面，盤子的角度由捲動連動自然跟上。 */
-  pointer-events: auto;
-  border-radius: 50%;
-  cursor: grab;
-  touch-action: none; /* 手機上轉盤子時不要跟著捲動頁面 */
-}
-
-.tea-dial__drag:active {
-  cursor: grabbing;
-}
-
+/* 轉動。
+   【不跟捲動連續連動】—— 捲進哪一段就轉到那一段，中間補一次平順的過場。
+   一次捲動只做一次 transform，其餘時間完全靜止，所以不會卡。 */
 .tea-dial__spin {
   width: 100%;
   height: 100%;
   position: relative;
+  transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
 }
 
 .tea-dial__layer {
@@ -227,9 +211,10 @@ h3 {
   opacity: var(--tea-opacity, 0.62);
 }
 
-/* 外圈的字。純裝飾，不是按鈕 —— 要導覽的話上面有選單列。
+/* 外圈的字。
    作法：每個標籤是一個【和盤子一樣大】的透明方框，整框依角度旋轉，
-   字則貼在框的上緣 —— 旋轉之後就落在圓周上對應的位置。 */
+   字則貼在框的上緣 —— 旋轉之後就落在圓周上對應的位置，
+   而且【底部自然朝向圓心】，轉到正上方的那個字剛好是正的。 */
 .tea-dial__label {
   position: absolute;
   inset: 0;
@@ -237,10 +222,6 @@ h3 {
   justify-content: center;
   align-items: flex-start;
   padding-top: 0.35rem;
-
-  background: none;
-  border: 0;
-  pointer-events: none;
 }
 
 .tea-dial__label > span {
@@ -252,36 +233,28 @@ h3 {
   text-indent: 0.42em; /* 補回字距造成的偏移，讓字真的置中 */
   white-space: nowrap;
 
-  /* 用最清楚的墨色，而且【不跟著茶湯一起變淡】。
-     再加一圈與頁面同色的暈影，之後換上真實茶湯照片時，
-     字壓在照片上一樣讀得到。 */
-  color: var(--ink);
+  /* 不跟著茶湯一起變淡；加一圈與頁面同色的暈影，
+     日後壓在真實茶湯照片上一樣讀得到 */
+  color: var(--ink-faint);
   text-shadow:
     0 0 10px var(--page),
     0 0 4px var(--page);
 
   padding: 0.6rem 0.9rem;
+  transition: color 500ms ease;
 }
 
-/* 旋轉：整頁捲完剛好一圈。
-   交給瀏覽器的 scroll-driven animation，不用 JavaScript 監聽捲動。 */
-@keyframes tea-dial-spin {
-  to {
-    transform: rotate(360deg);
-  }
+/* 目前所在的那一段：轉到正上方，並用品牌色點亮 */
+.tea-dial__label[data-current="true"] > span {
+  color: var(--brand);
 }
 
-@supports (animation-timeline: scroll()) {
-  .tea-dial__spin {
-    animation: tea-dial-spin linear;
-    animation-timeline: scroll(root block);
-  }
-}
-
-/* 使用者若在系統開啟「減少動態效果」，就完全不轉；手轉仍然可用 */
+/* 使用者若在系統開啟「減少動態效果」，就直接跳到定位，不做過場 */
 @media (prefers-reduced-motion: reduce) {
-  .tea-dial__spin {
-    animation: none;
+  .tea-dial__spin,
+  .tea-dial__layer,
+  .tea-dial__label > span {
+    transition: none;
   }
 }
 

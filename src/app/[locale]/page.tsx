@@ -53,21 +53,21 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     <div className="overflow-x-clip">
       {/* 外圈的字是導覽按鈕：點了會捲到對應段落或跳到對應頁面，
           也可以直接用手轉盤子。角度 0 在正上方，四個標籤平均分佈一圈。 */}
+      {/* 右下角的轉盤：捲到哪一段就轉到那一段，
+          該段落的字轉到正上方並點亮，茶湯也換成該段落的顏色。
+          這四筆的順序＝圓周上的順序，也＝頁面由上而下的順序。 */}
       <TeaDial
-        initialTone="black"
-        labels={[
-          { text: home.craftLabel, angle: 0 },
-          { text: home.featureLabel, angle: 90 },
-          { text: dict.teas.title, angle: 180 },
-          { text: dict.story.title, angle: 270 },
+        sections={[
+          { id: "opening", label: home.heroLabel, tone: "black" },
+          { id: "craft", label: home.craftLabel, tone: "oolong" },
+          { id: "feature", label: home.featureLabel, tone: "black" },
+          { id: "more", label: home.moreLabel, tone: "green" },
         ]}
       />
 
       {/* ============ 一、開場 ============ */}
-      {/* data-tea-tone 決定右下角茶湯轉盤在這一段要顯示哪一種茶湯。
-          下面每個分類各自一個區塊，捲到哪一區就換成那一種茶湯。 */}
       <section
-        data-tea-tone="black"
+        id="opening"
         className="relative px-6 pt-12 pb-28 sm:px-10 sm:pt-20 sm:pb-40"
       >
         <div className="relative flex gap-5 sm:gap-10">
@@ -128,7 +128,6 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       {/* ============ 二、五道工序 ============ */}
       <section
         id="craft"
-        data-tea-tone="oolong"
         className="border-t border-line px-6 py-24 sm:px-10 sm:py-36"
       >
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -171,7 +170,6 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       {/* ============ 三、紅玉 ============ */}
       <section
         id="feature"
-        data-tea-tone="black"
         className="relative border-t border-line bg-surface px-6 py-24 sm:px-10 sm:py-36"
       >
         <div className="relative sm:flex sm:items-start sm:gap-0">
@@ -221,7 +219,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       {/* 首頁刻意【不列分類】—— 品項還不多，列三個分類只會排出三個空框。
           分類瀏覽交給「茶品」頁，首頁維持雜誌封面的節奏。 */}
       <section
-        data-tea-tone="green"
+        id="more"
         className="border-t border-line px-6 py-24 sm:px-10 sm:py-36"
       >
         <span className="label text-brand">{home.moreLabel}</span>
