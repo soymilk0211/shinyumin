@@ -10,6 +10,12 @@ import {
   startSession,
 } from "@/lib/admin-auth";
 import { setOrderStatus, type OrderStatus } from "@/lib/admin-orders";
+import {
+  setProductPublished,
+  setVariantPrice,
+  setVariantStatus,
+  type AdminVariant,
+} from "@/lib/admin-products";
 import { rateLimit } from "@/lib/rate-limit";
 
 /**
@@ -55,10 +61,65 @@ export async function updateOrderStatus(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   const status = String(formData.get("status") ?? "") as OrderStatus;
 
-  if (!/^[0-9a-fA-F-]{36}$/.test(id)) return;
+  if (!isUuid(id)) return;
 
   await setOrderStatus(id, status);
 
   revalidatePath("/admin");
   revalidatePath(`/admin/orders/${id}`);
+}
+
+// ── 商品與價格 ──────────────────────────────────────────
+
+export async function updateVariantPrice(formData: FormData) {
+  if (!(await isSignedIn())) redirect("/admin/login");
+
+  const id = String(formData.get("id") ?? "");
+  const price = Number(String(formData.get("price") ?? "").trim());
+
+  if (!isUuid(id)) return;
+
+  await setVariantPrice(id, price);
+  refreshShop();
+}
+
+export async function updateVariantStatus(formData: FormData) {
+  if (!(await isSignedIn())) redirect("/admin/login");
+
+  const id = String(formData.get("id") ?? "");
+  const status = String(formData.get("status") ?? "") as AdminVariant["status"];
+
+  if (!isUuid(id)) return;
+  if (!["on_sale", "sold_out", "archived"].includes(status)) return;
+
+  await setVariantStatus(id, status);
+  refreshShop();
+}
+
+export async function updateProductPublished(formData: FormData) {
+  if (!(await isSignedIn())) redirect("/admin/login");
+
+  const id = String(formData.get("id") ?? "");
+  const published = String(formData.get("published") ?? "") === "true";
+
+  if (!isUuid(id)) return;
+
+  await setProductPublished(id, published);
+  refreshShop();
+}
+
+/**
+ * 改完價格或狀態之後，把前台的頁面一起更新。
+ *
+ * 前台為了跑得快，會把頁面暫存起來（最多一分鐘）。不特別講一聲的話，
+ * 業主改完價格回前台看，會以為沒有生效 —— 其實只是還在看舊的那一份。
+ */
+function refreshShop() {
+  revalidatePath("/admin/products");
+  revalidatePath("/", "layout");
+}
+
+/** 資料庫的 ID 都是 UUID，長度固定。順手擋掉亂塞的字串。 */
+function isUuid(value: string) {
+  return /^[0-9a-fA-F-]{36}$/.test(value);
 }

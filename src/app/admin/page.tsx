@@ -36,14 +36,22 @@ export default async function AdminOrdersPage() {
     <main>
       <div className="flex items-baseline justify-between gap-4">
         <h1 className="text-2xl">訂單</h1>
-        <form action={signOut}>
-          <button
-            type="submit"
+        <div className="flex items-baseline gap-5">
+          <Link
+            href="/admin/products"
             className="text-[13px] text-ink-faint underline-offset-4 hover:text-brand hover:underline"
           >
-            登出
-          </button>
-        </form>
+            商品與價格
+          </Link>
+          <form action={signOut}>
+            <button
+              type="submit"
+              className="text-[13px] text-ink-faint underline-offset-4 hover:text-brand hover:underline"
+            >
+              登出
+            </button>
+          </form>
+        </div>
       </div>
 
       {/* 一眼看完「還有幾張要處理」 */}
