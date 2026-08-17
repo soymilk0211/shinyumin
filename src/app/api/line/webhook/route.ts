@@ -91,9 +91,28 @@ function setupMessage(id: string) {
 }
 
 /**
- * LINE 後台按「Verify」時會打 GET 或 POST。
- * 這裡回一個明確的訊息，方便確認網址有沒有打對。
+ * 用瀏覽器打開這個網址時看到的東西。
+ *
+ * 【這是給業主自己檢查用的。】設定 LINE 的時候最難確認的一件事是
+ * 「網址到底有沒有填對」—— 填錯的話 LINE 那邊也只會說失敗，
+ * 不會告訴你錯在哪。用手機瀏覽器打開這個網址，看到下面這段話
+ * 就表示網址是通的。
+ *
+ * 這裡【刻意不顯示任何設定內容】—— 這個網址是公開的，
+ * 誰都打得開，不能拿來報告哪一把鑰匙有沒有設定。
  */
 export function GET() {
-  return new Response("御茗 LINE webhook 正常運作中。請用 LINE 後台的 Verify 測試。");
+  return new Response(
+    [
+      "御茗 LINE webhook 正常運作中。",
+      "",
+      "看到這一行，表示您在 LINE 後台填的 Webhook 網址是通的。",
+      "接下來請把機器人加進群組，在群組裡打一句話，",
+      "它會把群組 ID 回貼在群組裡。",
+      "",
+      "（機器人沒有回話的話，多半是「自動回應訊息」還開著，",
+      "或是兩把鑰匙填進 Vercel 之後還沒有重新部署。）",
+    ].join("\n"),
+    { headers: { "Content-Type": "text/plain; charset=utf-8" } },
+  );
 }
