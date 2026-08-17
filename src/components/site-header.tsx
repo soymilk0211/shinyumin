@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { BrandLogo } from "@/components/brand-logo";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { Locale } from "@/i18n/config";
@@ -42,14 +43,13 @@ export function SiteHeader({
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-page/90 backdrop-blur-sm">
       <div className="flex items-center justify-between gap-6 px-6 py-5 sm:px-10">
-        {/* 品牌名。商標圖檔到位之前先用字體處理 */}
-        <Link href={`/${locale}`} className="group flex flex-col leading-none">
-          <span className="font-display text-2xl tracking-[0.25em] text-ink transition-colors group-hover:text-brand">
-            {dict.site.name}
-          </span>
-          <span className="label mt-1.5 text-ink-faint">
-            {dict.site.nameLatin}
-          </span>
+        {/* 商標。深色底要換一版：書法字的深紅在炭焙黑上看不見 */}
+        <Link
+          href={`/${locale}`}
+          aria-label={dict.site.nameFull}
+          className="transition-opacity hover:opacity-75"
+        >
+          <BrandLogo alt={dict.site.nameFull} className="h-8 w-auto sm:h-10" />
         </Link>
 
         <div className="flex items-center gap-6 sm:gap-10">

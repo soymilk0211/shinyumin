@@ -1,3 +1,4 @@
+import { BrandLogo } from "@/components/brand-logo";
 import { ObfuscatedEmail } from "@/components/obfuscated-email";
 import type { Dictionary } from "@/i18n/dictionaries";
 
@@ -17,13 +18,13 @@ export function SiteFooter({ dict }: { dict: Dictionary }) {
   return (
     <footer className="mt-32 border-t border-line px-6 pt-16 pb-10 sm:px-10 sm:pt-24">
       <div className="flex flex-col gap-16 sm:flex-row sm:justify-between sm:gap-20">
-        {/* 左：品牌名當作版面的重量 */}
+        {/* 左：商標當作版面的重量 */}
         <div className="shrink-0">
-          <div className="font-display text-[clamp(2rem,6vw,4rem)] leading-none font-light text-ink">
-            {dict.site.name}
-          </div>
-          <div className="label mt-5 text-ink-faint">{dict.site.nameLatin}</div>
-          <div className="label mt-2 text-ink-faint">{dict.site.place}</div>
+          <BrandLogo
+            alt={dict.site.nameFull}
+            className="h-16 w-auto sm:h-20"
+          />
+          <div className="label mt-7 text-ink-faint">{dict.site.place}</div>
         </div>
 
         {/* 右：聯絡資訊，細線分欄 */}
