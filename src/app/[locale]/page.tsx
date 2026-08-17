@@ -78,17 +78,27 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         className="relative px-6 pt-12 pb-28 sm:px-10 sm:pt-20 sm:pb-40"
       >
         <div className="relative flex gap-5 sm:gap-10">
-          {/* 直式地名，貼著版面左緣 */}
-          <span className="vertical label mt-1 shrink-0 text-ink-faint">
+          {/* 直式地名。刻意放大、拉長，讓它像展場牆上的側標 */}
+          <span
+            className="rise vertical mt-1 shrink-0 text-[13px] tracking-[0.7em] text-ink-faint sm:text-[15px]"
+            style={{ "--delay": "150ms" } as CSSProperties}
+          >
             {dict.site.place}
           </span>
 
           <div className="min-w-0 flex-1">
             {/* 標題的斷行是寫死的，不交給瀏覽器決定 ——
-                「日月潭」三個字必須在同一行，不能讓「潭」掉到下一行去 */}
-            <h1 className="display-xl text-[clamp(2.5rem,8.5vw,7rem)] text-ink">
-              {home.heroTitleLines.map((line) => (
-                <span key={line} className="block">
+                「日月潭」三個字必須在同一行，不能讓「潭」掉到下一行去。
+                第二行往右錯開並且可以衝出版面右緣 —— 這是整頁最大的手勢。 */}
+            <h1 className="display-xl text-[clamp(3.75rem,14vw,12rem)] text-ink">
+              {home.heroTitleLines.map((line, index) => (
+                <span
+                  key={line}
+                  className={`rise block whitespace-nowrap ${
+                    index === 1 ? "pl-[12%] sm:pl-[34%]" : ""
+                  }`}
+                  style={{ "--delay": `${index * 140}ms` } as CSSProperties}
+                >
                   {line}
                 </span>
               ))}
@@ -103,11 +113,17 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               />
             </div>
 
-            <p className="mt-12 max-w-[34ch] text-[13px] leading-[2.1] tracking-[0.06em] text-ink-soft sm:mt-20 sm:ml-[12%]">
+            <p
+              className="rise mt-12 max-w-[34ch] text-[13px] leading-[2.1] tracking-[0.06em] text-ink-soft sm:mt-20 sm:ml-[12%]"
+              style={{ "--delay": "420ms" } as CSSProperties}
+            >
               {home.heroLead}
             </p>
 
-            <div className="mt-10 sm:ml-[12%]">
+            <div
+              className="rise mt-10 sm:ml-[12%]"
+              style={{ "--delay": "540ms" } as CSSProperties}
+            >
               <ArrowLink href={`/${locale}/teas`}>{home.featureCta}</ArrowLink>
             </div>
           </div>
@@ -123,7 +139,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <span className="label text-brand">{home.craftLabel}</span>
-            <h2 className="mt-5 max-w-[12ch] text-[clamp(1.5rem,4vw,2.75rem)] leading-[1.15] text-ink">
+            <h2 className="reveal mt-5 max-w-[12ch] text-[clamp(1.9rem,5vw,3.75rem)] leading-[1.05] text-ink">
               {home.craftTitle}
             </h2>
           </div>
@@ -137,15 +153,15 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           {home.craftSteps.map((step, index) => (
             <li
               key={step.name}
-              className="step-stagger border-t border-line py-7 sm:py-9"
+              className="step-stagger reveal border-t border-line py-7 sm:py-9"
               style={{ "--step": index } as CSSProperties}
             >
               {/* 手機上說明另起一行，才不會被擠成細長條；電腦上並排 */}
               <div className="flex flex-wrap items-baseline gap-x-5 gap-y-3 sm:flex-nowrap sm:gap-x-10">
-                <span className="label w-6 shrink-0 text-brand">
+                <span className="w-10 shrink-0 font-display text-[clamp(1.5rem,3.5vw,2.5rem)] leading-none text-brand tabular-nums opacity-70 sm:w-16">
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                <h3 className="shrink-0 text-[clamp(1.15rem,2.6vw,1.85rem)] text-ink sm:w-[4.5em]">
+                <h3 className="shrink-0 text-[clamp(1.35rem,3.2vw,2.25rem)] text-ink sm:w-[4.5em]">
                   {step.name}
                 </h3>
                 <p className="w-full pl-11 text-[12px] leading-[2] tracking-[0.06em] text-ink-soft sm:w-auto sm:max-w-[36ch] sm:pl-0">
@@ -175,7 +191,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           <div className="relative -mt-12 ml-6 bg-page px-6 py-10 sm:mt-28 sm:-ml-[10%] sm:w-[56%] sm:px-12 sm:py-14">
             <span className="label text-brand">{home.featureLabel}</span>
 
-            <h2 className="mt-6 text-[clamp(1.7rem,4.5vw,3rem)] leading-[1.05] text-ink">
+            <h2 className="reveal mt-6 text-[clamp(2rem,5.5vw,4rem)] leading-[0.95] text-ink sm:-ml-[14%]">
               {feature.name}
             </h2>
             <p className="label mt-4 text-ink-faint">{home.featureSub}</p>

@@ -34,8 +34,9 @@ h3 {
 .display-xl {
   font-family: var(--font-display);
   font-weight: 400;
-  line-height: 0.95;
-  letter-spacing: -0.02em;
+  /* 字級越大，行距與字距要收得越緊，否則會鬆散無力 */
+  line-height: 0.86;
+  letter-spacing: -0.03em;
 }
 
 /* 直式排版 —— 東方書冊的閱讀方向，用在裝飾性的副標與標籤 */
@@ -80,6 +81,56 @@ h3 {
   transform: scaleX(1);
 }
 
+/* ============================================================
+   動態：進場與捲動揭露
+   ============================================================
+   兩個原則：
+     一、全部用 CSS，不用 JavaScript —— 手機上才不會頓
+     二、使用者若開啟「減少動態效果」，全部不執行
+   ============================================================ */
+
+/* 開頁時由下往上浮現。用 --delay 控制先後，做出一個有節奏的開場 */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.8em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    animation: rise 1000ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--delay, 0ms);
+  }
+}
+
+/* 捲到才浮現。同樣交給瀏覽器的 scroll-driven animation，不監聽捲動事件。
+   不支援的瀏覽器直接顯示，不會有東西消失。 */
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 22%;
+    }
+  }
+}
+
 /* 工序的階梯縮排。
    手機上【完全不縮排】—— 螢幕只有那麼寬，再往右推文字會被擠成細長條，
    反而不好看也不好讀。階梯的效果留給平板與電腦。 */
@@ -88,7 +139,8 @@ h3 {
 }
 @media (min-width: 640px) {
   .step-stagger {
-    margin-left: calc(var(--step) * 7%);
+    /* 階梯拉得更斜。這是版面上最明顯的一個不對稱手勢，不要客氣 */
+    margin-left: calc(var(--step) * 11%);
   }
 }
 
