@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ObfuscatedContact } from "@/components/obfuscated-contact";
 import type { Dictionary } from "@/i18n/dictionaries";
 import type { CatalogueEntry } from "@/lib/catalogue";
 import { useCart } from "@/lib/cart-store";
@@ -401,17 +402,30 @@ export function CheckoutForm({
             })}
           </div>
 
-          {/* 【匯款帳號不出現在網站上】—— 訂單成立後由店家電話告知 */}
-          <p className="mt-6 max-w-[46ch] text-[12px] leading-[2] tracking-[0.06em] text-ink-soft">
-            {labels.paymentNote}
-          </p>
+          {/* 【匯款帳號不出現在網站上】，而且【由客人打來，不是我們打過去】——
+              業主 2026-08-18 的要求。所以這裡一定要把電話擺出來，
+              不然客人根本不知道要打去哪。 */}
+          {payment === "transfer" && (
+            <div className="mt-6 max-w-[46ch]">
+              <p className="text-[12px] leading-[2] tracking-[0.06em] text-ink-soft">
+                {labels.paymentTransferNote}
+              </p>
+              <div className="mt-4 flex flex-wrap items-baseline gap-x-6 gap-y-2 text-[12px] tracking-[0.06em]">
+                <ObfuscatedContact
+                  kind="phone"
+                  revealLabel={labels.paymentPhoneHint}
+                />
+                <span className="text-ink-faint">{labels.serviceHours}</span>
+              </div>
+            </div>
+          )}
 
           {/* 貨到付款的代收手續費由老闆另計，不寫進訂單金額。
               只有選了貨到付款才顯示 —— 選匯款的人不需要看到這件事。
               但【選了就一定要看到】：畫面上的總額不含這筆錢，
               不先講清楚，客人在門口收到帳單會覺得被多收。 */}
           {payment === "cod" && (
-            <p className="mt-4 max-w-[46ch] text-[12px] leading-[2] tracking-[0.06em] text-brand">
+            <p className="mt-6 max-w-[46ch] text-[12px] leading-[2] tracking-[0.06em] text-brand">
               {labels.paymentCodFee}
             </p>
           )}

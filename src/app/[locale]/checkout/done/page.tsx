@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArrowLink } from "@/components/arrow-link";
+import { ObfuscatedContact } from "@/components/obfuscated-contact";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 
@@ -81,18 +82,42 @@ export default async function OrderDonePage({
                 </p>
               </div>
 
-              {/* 接下來會發生什麼事。方案 A：由店家電話聯絡 */}
-              <div className="mt-16 max-w-[46ch] space-y-5 border-t border-line pt-10">
-                <p className="text-[13px] leading-[2.1] tracking-[0.06em] text-ink">
-                  {dict.orderDone.contactNote}
+              {/* 接下來會發生什麼事。
+                  【匯款是客人打來，不是我們打過去】—— 業主 2026-08-18 的要求。
+                  所以這一頁一定要把電話擺出來：客人剛下完單，
+                  這是他唯一會看到「該打去哪」的地方。
+                  這一頁不知道客人選了哪一種付款方式（網址上只有訂單編號），
+                  所以兩種都寫，讓客人自己對號入座。 */}
+              <div className="mt-16 max-w-[46ch] border-t border-line pt-10">
+                <span className="label text-brand">
+                  {dict.orderDone.transferTitle}
+                </span>
+                <p className="mt-4 text-[13px] leading-[2.1] tracking-[0.06em] text-ink">
+                  {dict.orderDone.transferNote}
                 </p>
-                <p className="text-[12px] leading-[2] tracking-[0.06em] text-ink-soft">
-                  {dict.orderDone.shipNote}
-                </p>
-                <p className="text-[12px] tracking-[0.08em] text-ink-faint">
-                  {dict.orderDone.serviceHours}
+                <div className="mt-5 flex flex-wrap items-baseline gap-x-6 gap-y-2 text-[12px] tracking-[0.06em]">
+                  <ObfuscatedContact
+                    kind="phone"
+                    revealLabel={dict.orderDone.phoneHint}
+                  />
+                  <span className="text-ink-faint">
+                    {dict.orderDone.serviceHours}
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-12 max-w-[46ch] border-t border-line pt-10">
+                <span className="label text-ink-faint">
+                  {dict.orderDone.codTitle}
+                </span>
+                <p className="mt-4 text-[13px] leading-[2.1] tracking-[0.06em] text-ink-soft">
+                  {dict.orderDone.codNote}
                 </p>
               </div>
+
+              <p className="mt-12 max-w-[46ch] text-[12px] leading-[2] tracking-[0.06em] text-ink-faint">
+                {dict.orderDone.shipNote}
+              </p>
             </>
           ) : (
             <p className="mt-14 max-w-[46ch] border-t border-line pt-10 text-[13px] leading-[2.1] tracking-[0.06em] text-ink-soft">

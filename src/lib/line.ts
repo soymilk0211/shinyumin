@@ -85,11 +85,12 @@ export function buildOrderMessage(order: OrderNotification): string {
 
   lines.push(`付款　${PAYMENT_LABEL[order.paymentMethod]}`);
   if (order.paymentMethod === "cod") {
-    lines.push("　　　代收手續費另計，記得跟客人講");
+    lines.push("　　　代收手續費另計，出貨前記得算進去");
   } else {
-    // 方案 A：帳號不放在網站上，靠這通電話告知。
-    // 這一行是要提醒老闆「這張單需要你打電話」。
-    lines.push("　　　⚠️ 兩個工作天內打電話給客人，告知匯款帳號");
+    // 帳號不放在網站上，靠電話告知 —— 而且【是客人打來，不是我們打過去】
+    // （業主 2026-08-18 的要求）。所以這一行不是叫老闆去打電話，
+    // 是提醒他「這通電話會進來」。
+    lines.push("　　　客人會來電問匯款帳號");
   }
 
   lines.push("");
