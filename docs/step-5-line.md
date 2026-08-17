@@ -60,43 +60,38 @@ YM-20260817-0001
 > **絕對不要動您現有的客服官方帳號** —— 那個帳號一旦切成機器人模式，
 > 真人聊天功能會失效，客人傳訊息就沒有人回得了。
 
-### ①-0 先確認 Messaging API 已經開通
+### ⚠️ 最重要的前提：LINE 有【兩個】後台，而且兩邊都有「Messaging API」
 
-> **這一步是業主 2026-08-17 實際卡住的地方，不要跳過。**
->
-> 在官方帳號管理頁面建立的帳號，**預設沒有打開 Messaging API**。
-> 沒開通的話，LINE Developers 上那個 channel **根本不會有 Messaging API 分頁**，
-> 也就永遠找不到 access token —— 不是藏起來，是還不存在。
->
-> 開通方式（在 [LINE 官方帳號管理頁面](https://manager.line.biz/)，
-> 注意這跟 LINE Developers 是**兩個不同的網站**）：
->
-> 1. 選「御茗內部通知」→ 右上角 **設定**
-> 2. 左邊選單 → **Messaging API**
-> 3. 按「**啟用 Messaging API**」
-> 4. 選一個 **Provider**（提供者）；沒有就新建一個
->
-> 開通之後，LINE Developers 上那個 channel 才會長出 Messaging API 分頁。
+**這是本步驟唯一真正的坑，業主 2026-08-17 就是卡在這裡。**
+兩個網站都有一個叫 Messaging API 的地方，但東西不在同一邊：
+
+| 網站 | 這裡有什麼 | 這裡沒有什麼 |
+|---|---|---|
+| **官方帳號管理頁面**<br>`manager.line.biz`<br>（中文介面） | Channel ID、**Channel secret**、**Webhook 網址**、回應設定 | **沒有 access token，永遠不會有** |
+| **LINE Developers Console**<br>`developers.line.biz`<br>（英文介面） | **Channel access token**（Messaging API 分頁最底下，要按 Issue） | — |
+
+在中文那個後台把整頁翻爛也找不到 access token，**不是漏看，是它真的不在那邊**。
+中文後台最底下那句「您可由 LINE Developers Console 進行其他設定」裡的
+藍色連結，就是通往另一個網站的門。
 
 ### ① 拿兩把鑰匙
 
-到 [LINE Developers](https://developers.line.biz/console/) ，
-進入「御茗內部通知」那個 channel。
+**Channel secret** 在中文後台（`manager.line.biz`）→ 設定 → **Messaging API**，
+按旁邊的「複製」。那一頁最上面如果寫「狀態：**使用中**」，
+代表 Messaging API 已經開通了。
 
-| 要拿的東西 | 在哪裡 |
-|---|---|
-| **Channel secret** | **Basic settings** 分頁，往下找 |
-| **Channel access token** | **Messaging API** 分頁，最下面。第一次要按 **Issue** 產生 |
+（如果狀態不是使用中，就先在那一頁按「啟用 Messaging API」，選一個 Provider。）
+
+**Channel access token** 在 [LINE Developers](https://developers.line.biz/console/)，
+進入同一個 channel。
+
+上面那排分頁（在手機上要**左右滑**才看得到全部）點 **Messaging API**，
+**一路捲到最底下**，最後一個區塊是 **Channel access token**，
+第一次要自己按 **Issue** 才會產生。
 
 兩個都是很長一串英數字。**先不要貼進我們的對話** —— 等一下直接貼進 Vercel。
 
-> ⚠️ **不要拿錯：Channel ID 不是我們要的東西。**
-> Basic settings 那一頁上，`Channel ID` 與 `Channel secret` 長得很像、又排在一起，
-> 但**只有 Channel secret 用得到**。
->
-> 另外 **Channel access token 不在這一頁** —— 它在上面的 **Messaging API** 分頁，
-> 要捲到最底下，而且第一次要自己按 **Issue** 才會生出來。
-> 在 Basic settings 找不到它是正常的。
+> ⚠️ **Channel ID 不是我們要的東西**，雖然它跟 Channel secret 排在一起。
 
 ### ② 把三個設定填進 Vercel
 
@@ -128,15 +123,19 @@ YM-20260817-0001
 **自動回應訊息一定要關掉。** 它開著的話，LINE 會自己先回一句罐頭訊息、
 然後把事件攔下來不轉給我們，通知就永遠不會送出。這是最常見的卡關原因。
 
-接著回到 [LINE Developers](https://developers.line.biz/console/) 的
-**Messaging API** 分頁，找到 **Webhook URL**，填：
+**Webhook 網址在中文後台就能填**，不必跑到 LINE Developers ——
+就在剛剛拿 Channel secret 的那一頁（設定 → Messaging API），
+Channel secret 底下那個空的 `https://` 欄位：
 
 ```
 https://shinyumin.vercel.app/api/line/webhook
 ```
 
-填完按 **Update**，再按旁邊的 **Verify**。
-出現 **Success** 就對了。並確認下面的 **Use webhook** 是開啟的。
+填完按綠色的「**儲存**」。
+
+（LINE Developers 的 Messaging API 分頁上也有同一個欄位，
+兩邊填的是同一個東西，填一邊就好。那邊多一個 **Verify** 按鈕可以測，
+出現 **Success** 代表網址通得到。）
 
 > 網域 `yumintea.com.tw` 接上去之後，這個網址要改成
 > `https://yumintea.com.tw/api/line/webhook`，記得回來改。
