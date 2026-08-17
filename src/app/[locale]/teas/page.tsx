@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowLink } from "@/components/arrow-link";
 import { ImagePlaceholder } from "@/components/image-placeholder";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -74,12 +76,17 @@ export default async function TeasPage({ params }: PageProps<"/[locale]/teas">) 
                     flip ? "sm:flex-row-reverse" : ""
                   }`}
                 >
-                  <div className="sm:w-[42%]">
+                  <Link
+                    href={`/${locale}/teas/${product.slug}`}
+                    className="block sm:w-[42%]"
+                    tabIndex={-1}
+                    aria-hidden="true"
+                  >
                     <ImagePlaceholder
                       ratio="aspect-[4/5]"
                       label={dict.common.imagePending}
                     />
-                  </div>
+                  </Link>
 
                   <div className="mt-10 sm:mt-6 sm:flex-1">
                     {product.categoryName && (
@@ -88,8 +95,13 @@ export default async function TeasPage({ params }: PageProps<"/[locale]/teas">) 
                       </span>
                     )}
 
-                    <h2 className="mt-5 text-[clamp(1.6rem,4vw,2.75rem)] leading-[1.1] text-ink">
-                      {product.name}
+                    <h2 className="mt-5 text-[clamp(1.6rem,4vw,2.75rem)] leading-[1.1]">
+                      <Link
+                        href={`/${locale}/teas/${product.slug}`}
+                        className="text-ink transition-colors hover:text-brand"
+                      >
+                        {product.name}
+                      </Link>
                     </h2>
 
                     {from !== null && (
@@ -139,6 +151,12 @@ export default async function TeasPage({ params }: PageProps<"/[locale]/teas">) 
                         ))}
                         <div className="border-t border-line" />
                       </dl>
+
+                      <div className="mt-8">
+                        <ArrowLink href={`/${locale}/teas/${product.slug}`}>
+                          {dict.product.aboutTea}
+                        </ArrowLink>
+                      </div>
                     </div>
                   </div>
                 </div>

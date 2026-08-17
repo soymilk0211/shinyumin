@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { BrandLogo } from "@/components/brand-logo";
+import { CartBadge } from "@/components/cart-badge";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { Locale } from "@/i18n/config";
@@ -30,10 +31,10 @@ export function SiteHeader({
   const [menuOpen, setMenuOpen] = useState(false);
 
   const links = [
-    { href: `/${locale}`, label: dict.nav.home },
-    { href: `/${locale}/teas`, label: dict.nav.products },
-    { href: `/${locale}/story`, label: dict.nav.story },
-    { href: `/${locale}/cart`, label: dict.nav.cart },
+    { href: `/${locale}`, label: dict.nav.home, cart: false },
+    { href: `/${locale}/teas`, label: dict.nav.products, cart: false },
+    { href: `/${locale}/story`, label: dict.nav.story, cart: false },
+    { href: `/${locale}/cart`, label: dict.nav.cart, cart: true },
   ];
 
   function isActive(href: string) {
@@ -66,6 +67,7 @@ export function SiteHeader({
                     }
                   >
                     {link.label}
+                    {link.cart && <CartBadge />}
                   </Link>
                 </li>
               ))}
@@ -142,6 +144,7 @@ export function SiteHeader({
                       }`}
                     >
                       {link.label}
+                      {link.cart && <CartBadge />}
                     </span>
                   </Link>
                 </li>

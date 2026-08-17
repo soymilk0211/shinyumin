@@ -57,7 +57,7 @@
     "featureOrigin": "Wild Taiwan tea × Burmese large-leaf",
 
     "categoriesLabel": "Categories",
-    "categoriesNote": "Product content is still being prepared; real data arrives in step 3."
+    "categoriesNote": "Open a tea to see its packaging and prices"
   },
 
   "teas": {
@@ -70,11 +70,51 @@
     "notesLabel": "Tasting notes"
   },
 
-  "pages": {
-    "teasNote": "The tea list arrives in step 3, connected to the database — every tea and its available packaging.",
-    "storyNote": "Our story arrives in step 3: Yuchi, Dayan Village, and how our family makes tea.",
-    "cartNote": "The cart arrives in step 3; checkout and payment follow in step 4."
+  "product": {
+    "back": "Back to teas",
+    "chooseSpec": "Choose packaging",
+    "quantity": "Quantity",
+    "addToCart": "Add to cart",
+    "added": "Added to cart",
+    "viewCart": "View cart",
+    "soldOut": "Sold out",
+    "allSoldOut": "This tea is currently sold out. Please call us if you would like some.",
+    "aboutTea": "About this tea",
+    "tastingNotes": "Tasting notes",
+    "decrease": "Remove one",
+    "increase": "Add one"
   },
+
+  "cart": {
+    "title": "Cart",
+    "empty": "Your cart is still empty.",
+    "browse": "Browse our teas",
+    "remove": "Remove",
+    "subtotalLabel": "Items subtotal",
+    "shippingNote": "Shipping and the amount due are calculated at checkout. Free shipping on orders over NT$ 2,000 within Taiwan's main island; outlying islands excluded.",
+    "priceNote": "Prices are confirmed at checkout.",
+    "checkout": "Go to checkout",
+    "checkoutSoon": "Checkout opens in step 4",
+    "unavailable": "This packaging is no longer available — please remove it"
+  },
+
+  "story": {
+    "title": "Our Story",
+    "lead": "Our tea garden and factory are both in Dayan Village, Yuchi Township, Nantou — the heart of the Sun Moon Lake black tea region. This is not a sourcing choice; it is where our family has lived and made tea for generations.",
+
+    "placeTitle": "Dayan Village",
+    "placeBody": "Yuchi Township sits beside Sun Moon Lake. Its elevation, mist and soil make it one of the best black tea regions in Taiwan, and Dayan Village lies within it. Our address is where the tea is made and where we live — for us the origin is not a label, it is what we see when we open our eyes.",
+
+    "cultivarTitle": "Taiwan Tea No. 18",
+    "cultivarBody": "Ruby is a Taiwanese cultivar, bred from native wild Taiwan tea and Burmese large-leaf assamica, officially registered as Taiwan Tea No. 18. Its cinnamon and mint aroma comes from the cultivar itself — nothing is added. It is also why it holds up in milk: made into milk tea, the tea still speaks.",
+
+    "craftTitle": "Our own factory",
+    "craftBody": "Plucking, withering, rolling, oxidation and drying — all five steps happen in our own factory, tended by hand. Oxidation is the soul of black tea: when it is ready it is ready, not a moment early or late. That is not something you can outsource; you have to stand there and watch it.",
+
+    "todayTitle": "Today",
+    "todayBody": "We do not make many teas, but each one is made properly. For bulk orders, please call us — we will quote and arrange delivery separately."
+  },
+
 
   "categories": {
     "blackTea": "Black Tea",
