@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "check:supabase": "node --env-file=.env.local scripts/check-supabase.mjs"
+    "check:supabase": "node --env-file=.env.local scripts/check-supabase.mjs",
+    "load:products": "node --env-file=.env.local scripts/load-products.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",
