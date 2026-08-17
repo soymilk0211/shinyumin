@@ -56,6 +56,9 @@ function pickLocale(acceptLanguage: string | null) {
 }
 
 export const config = {
-  // 不處理：Next.js 內部檔案、API、以及任何有副檔名的檔案（圖片、字型…）
-  matcher: ["/((?!_next|api|.*\\.).*)"],
+  // 不處理：Next.js 內部檔案、API、後台、以及任何有副檔名的檔案（圖片、字型…）
+  //
+  // 【後台要排除】：後台只有繁體中文一種語言，網址就是 /admin。
+  // 沒有排除的話，這支程式會把它導去 /zh/admin —— 那個網址不存在。
+  matcher: ["/((?!_next|api|admin|.*\\.).*)"],
 };
