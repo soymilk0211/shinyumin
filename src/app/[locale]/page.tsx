@@ -7,12 +7,7 @@ import { ImagePlaceholder } from "@/components/image-placeholder";
 import { ProductName } from "@/components/product-name";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
-import {
-  formatPrice,
-  getCategories,
-  getProducts,
-  lowestPrice,
-} from "@/lib/products";
+import { formatPrice, getProducts } from "@/lib/products";
 
 // 每 60 秒重新向資料庫確認一次，業主在後台改價後最慢一分鐘會反映到網站上
 export const revalidate = 60;
@@ -25,9 +20,9 @@ export const revalidate = 60;
  *   一、開場   —— 楷書標題與右側出血的圖刻意重疊，左緣一行直式地名
  *   二、工序   —— 五道手續排成往右下走的階梯，不是整齊的五等分
  *   三、紅玉   —— 圖與文字錯開重疊，價格與規格用細線表格呈現
- *   四、分類   —— 三格高低錯落，不對齊
+ *   四、結尾   —— 兩個大字連結，通往茶品與品牌故事
  *
- * 內容目前是寫死的，第 3 步會換成資料庫裡真正的商品。
+ * 主力茶款的名稱、風味、規格、價格都來自資料庫。
  */
 export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const { locale } = await params;
@@ -39,27 +34,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   // 分類與主力茶款都從資料庫讀。
   // 資料庫還沒接上（.env.local 的鑰匙還沒填）時，退回用寫在翻譯檔裡的內容，
   // 這樣版面不會開天窗，仍然看得出網站長什麼樣子。
-  const [dbCategories, dbProducts] = await Promise.all([
-    getCategories(locale),
-    getProducts(locale),
-  ]);
-
-  const categories =
-    dbCategories.length > 0
-      ? dbCategories.map((c) => ({ slug: c.slug, name: c.name }))
-      : [
-          { slug: "black-tea", name: dict.categories.blackTea },
-          { slug: "oolong-tea", name: dict.categories.oolongTea },
-          { slug: "green-tea", name: dict.categories.greenTea },
-        ];
-
-  // 每個分類自己一個區塊，捲到哪一區，右下角的轉盤就換成那一種茶湯。
-  // 分類代號 → 茶湯顏色
-  const toneOf: Record<string, "black" | "oolong" | "green"> = {
-    "black-tea": "black",
-    "oolong-tea": "oolong",
-    "green-tea": "green",
-  };
+  const dbProducts = await getProducts(locale);
 
   const featured = dbProducts[0] ?? null;
   const featuredVariant =
@@ -76,17 +51,15 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
 
   return (
     <div className="overflow-x-clip">
-      {/* 外圈的字是導覽按鈕：點了會捲到對應的區塊，也可以直接用手轉盤子。
-          角度 0 在正上方，四個標籤平均分佈一圈。 */}
+      {/* 外圈的字是導覽按鈕：點了會捲到對應段落或跳到對應頁面，
+          也可以直接用手轉盤子。角度 0 在正上方，四個標籤平均分佈一圈。 */}
       <TeaDial
         initialTone="black"
         labels={[
-          { targetId: "craft", text: home.craftLabel, angle: 0 },
-          ...categories.map((category, index) => ({
-            targetId: `cat-${category.slug}`,
-            text: category.name,
-            angle: 90 * (index + 1),
-          })),
+          { text: home.craftLabel, angle: 0 },
+          { text: home.featureLabel, angle: 90 },
+          { text: dict.teas.title, angle: 180 },
+          { text: dict.story.title, angle: 270 },
         ]}
       />
 
@@ -197,6 +170,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
 
       {/* ============ 三、紅玉 ============ */}
       <section
+        id="feature"
         data-tea-tone="black"
         className="relative border-t border-line bg-surface px-6 py-24 sm:px-10 sm:py-36"
       >
@@ -243,68 +217,47 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         </div>
       </section>
 
-      {/* ============ 四、分類：一個分類一個區塊 ============ */}
-      {categories.map((category) => {
-        const items = dbProducts.filter(
-          (p) => p.categorySlug === category.slug,
-        );
+      {/* ============ 四、結尾：往下走的兩個入口 ============ */}
+      {/* 首頁刻意【不列分類】—— 品項還不多，列三個分類只會排出三個空框。
+          分類瀏覽交給「茶品」頁，首頁維持雜誌封面的節奏。 */}
+      <section
+        data-tea-tone="green"
+        className="border-t border-line px-6 py-24 sm:px-10 sm:py-36"
+      >
+        <span className="label text-brand">{home.moreLabel}</span>
 
-        return (
-          <section
-            key={category.slug}
-            id={`cat-${category.slug}`}
-            data-tea-tone={toneOf[category.slug] ?? "black"}
-            className="border-t border-line px-6 py-24 sm:px-10 sm:py-36"
-          >
-            <span className="label text-brand">{home.categoriesLabel}</span>
-
-            <h2 className="reveal mt-5 text-[clamp(2.25rem,7vw,5.5rem)] leading-[0.95] text-ink">
-              {category.name}
-            </h2>
-
-            {items.length === 0 ? (
-              <p className="label mt-10 text-ink-faint">
-                {dict.common.comingSoon}
-              </p>
-            ) : (
-              <ul className="mt-14 grid gap-12 sm:mt-20 sm:grid-cols-2 sm:gap-14">
-                {items.map((product, index) => {
-                  const from = lowestPrice(product);
-                  return (
-                    <li
-                      key={product.id}
-                      className={index % 2 === 1 ? "sm:mt-16" : undefined}
-                    >
-                      <Link
-                        href={`/${locale}/teas/${product.slug}`}
-                        className="group block"
-                      >
-                        <ImagePlaceholder
-                          ratio="aspect-[4/5]"
-                          label={dict.common.imagePending}
-                        />
-                        <div className="mt-5 border-t border-line pt-4">
-                          <h3 className="text-xl text-ink transition-colors group-hover:text-brand">
-                            <ProductName name={product.name} />
-                          </h3>
-                          {from !== null && (
-                            <p className="mt-2 font-display text-lg text-ink-soft tabular-nums">
-                              {formatPrice(from)}
-                              <span className="label ml-2 text-ink-faint">
-                                {dict.teas.fromPrice}
-                              </span>
-                            </p>
-                          )}
-                        </div>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </section>
-        );
-      })}
+        <ul className="mt-12 sm:mt-16">
+          {[
+            { href: `/${locale}/teas`, text: dict.teas.title },
+            { href: `/${locale}/story`, text: dict.story.title },
+          ].map((item, index) => (
+            <li
+              key={item.href}
+              className="reveal border-t border-line last:border-b"
+              style={{ marginLeft: index === 1 ? "12%" : undefined }}
+            >
+              <Link
+                href={item.href}
+                className="group flex items-center justify-between gap-8 py-10 sm:py-14"
+              >
+                <span className="font-display text-[clamp(2rem,6vw,4.5rem)] leading-none text-ink transition-colors group-hover:text-brand">
+                  {item.text}
+                </span>
+                <svg
+                  viewBox="0 0 32 8"
+                  className="h-2 w-10 shrink-0 text-brand transition-transform duration-300 ease-out group-hover:translate-x-2"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="0.75"
+                  aria-hidden="true"
+                >
+                  <path d="M0 4h30M26 1l4 3-4 3" />
+                </svg>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }

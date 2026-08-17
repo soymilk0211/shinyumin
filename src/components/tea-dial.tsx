@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
  * 它同時是三件事：
  *   一、裝飾：一杯俯視的茶湯，隨捲動連續旋轉
  *   二、指示：捲到哪一區，茶湯就換成那一區的顏色
- *   三、導覽：外圈的字是按鈕，點了會捲到對應的區塊；盤面也可以用手轉
+ *   三、可玩：整個盤子可以用手轉，外圈有一圈字跟著轉
  *
  * 幾個刻意的作法：
  *
@@ -20,8 +20,8 @@ import { useEffect, useRef, useState } from "react";
  * **換色只改 opacity。** 三張圖一直疊在那裡，換色是淡入淡出。
  * 若去換 <img> 的 src 或把圖藏起來，正在跑的旋轉會被打斷、畫面會跳。
  *
- * **只有「字」吃得到點擊。** 盤面其他地方一律穿透，
- * 不會擋住底下的連結或按鈕。
+ * **外圈的字是裝飾，不是按鈕。** 可以轉的是整個圓；
+ * 圓以外的四個角落仍然穿透，不會擋住底下的東西。
  *
  * 照片還沒拍，每一層底下先鋪對應的顏色 —— 圖檔不存在時就是一個純色的圓，
  * 畫面不會破。之後把照片放進 /public/images/decor/（檔名不變）就會自動換上。
@@ -36,12 +36,10 @@ const TONES = [
 
 export type TeaTone = (typeof TONES)[number]["key"];
 
-/** 外圈的一個字標籤：要跳到哪個區塊、擺在幾度的位置 */
+/** 外圈的一個字：內容與擺放的角度 */
 export type DialLabel = {
-  /** 對應頁面上某個元素的 id */
-  targetId: string;
   text: string;
-  /** 0 度在正上方，順時針increase */
+  /** 0 度在正上方，順時針增加 */
   angle: number;
 };
 
@@ -106,9 +104,7 @@ export function TeaDial({
     if (!box) return 0;
     const cx = box.left + box.width / 2;
     const cy = box.top + box.height / 2;
-    return (
-      (Math.atan2(event.clientY - cy, event.clientX - cx) * 180) / Math.PI
-    );
+    return (Math.atan2(event.clientY - cy, event.clientX - cx) * 180) / Math.PI;
   }
 
   function handlePointerDown(event: React.PointerEvent) {
@@ -137,24 +133,8 @@ export function TeaDial({
     dragRef.current?.style.setProperty("--drag", `${rotation.current}deg`);
   }
 
-  function handlePointerUp(event: React.PointerEvent) {
-    const state = pointer.current;
+  function handlePointerUp() {
     pointer.current = null;
-    // 有明顯轉動就當作「轉盤子」，不要順便觸發跳頁
-    if (state && state.moved > 6) event.preventDefault();
-  }
-
-  function goTo(targetId: string) {
-    // 剛剛在轉盤子的話就不要跳頁
-    if (pointer.current) return;
-    const target = document.getElementById(targetId);
-    if (!target) return;
-    target.scrollIntoView({
-      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-        ? "auto"
-        : "smooth",
-      block: "start",
-    });
   }
 
   return (
@@ -182,20 +162,19 @@ export function TeaDial({
             />
           ))}
 
-          {/* 外圈的字。整圈跟著盤子轉，但只有字本身吃得到點擊 */}
+          {/* 外圈的字。純裝飾，跟著盤子一起轉 */}
           {labels.map((label) => (
-            <button
-              key={label.targetId}
-              type="button"
+            <div
+              key={label.text}
               className="tea-dial__label"
               style={{ transform: `rotate(${label.angle}deg)` }}
-              onClick={() => goTo(label.targetId)}
+              aria-hidden="true"
             >
-              {/* 字再轉回來，站著的時候是正的 */}
+              {/* 字再轉回來，盤子停著的時候是正的 */}
               <span style={{ transform: `rotate(${-label.angle}deg)` }}>
                 {label.text}
               </span>
-            </button>
+            </div>
           ))}
         </div>
       </div>
