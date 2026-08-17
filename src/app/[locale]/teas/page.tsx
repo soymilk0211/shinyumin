@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLink } from "@/components/arrow-link";
 import { ImagePlaceholder } from "@/components/image-placeholder";
+import { ProductName } from "@/components/product-name";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { formatPrice, getProducts, lowestPrice } from "@/lib/products";
@@ -100,7 +101,7 @@ export default async function TeasPage({ params }: PageProps<"/[locale]/teas">) 
                         href={`/${locale}/teas/${product.slug}`}
                         className="text-ink transition-colors hover:text-brand"
                       >
-                        {product.name}
+                        <ProductName name={product.name} />
                       </Link>
                     </h2>
 

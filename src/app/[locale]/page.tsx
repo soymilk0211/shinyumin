@@ -4,6 +4,7 @@ import type { CSSProperties } from "react";
 import { ArrowLink } from "@/components/arrow-link";
 import { TeaDial } from "@/components/tea-dial";
 import { ImagePlaceholder } from "@/components/image-placeholder";
+import { ProductName } from "@/components/product-name";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { formatPrice, getCategories, getProducts } from "@/lib/products";
@@ -42,12 +43,18 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     dbCategories.length > 0
       ? dbCategories.map((c) => ({ name: c.name, latin: c.slug }))
       : [
-          { name: dict.categories.blackTea, latin: dict.categories.blackTeaLatin },
+          {
+            name: dict.categories.blackTea,
+            latin: dict.categories.blackTeaLatin,
+          },
           {
             name: dict.categories.oolongTea,
             latin: dict.categories.oolongTeaLatin,
           },
-          { name: dict.categories.greenTea, latin: dict.categories.greenTeaLatin },
+          {
+            name: dict.categories.greenTea,
+            latin: dict.categories.greenTeaLatin,
+          },
         ];
 
   const featured = dbProducts[0] ?? null;
@@ -90,7 +97,9 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             {/* 標題的斷行是寫死的，不交給瀏覽器決定 ——
                 「日月潭」三個字必須在同一行，不能讓「潭」掉到下一行去。
                 第二行往右錯開並且可以衝出版面右緣 —— 這是整頁最大的手勢。 */}
-            <h1 className="display-xl text-[clamp(3.75rem,14vw,12rem)] text-ink">
+            {/* relative z-10：讓標題壓在右側那張圖【上面】。
+                不加的話，絕對定位的圖會蓋住標題，字就被切掉了。 */}
+            <h1 className="display-xl relative z-10 text-[clamp(3.75rem,14vw,12rem)] text-ink">
               {home.heroTitleLines.map((line, index) => (
                 <span
                   key={line}
@@ -128,7 +137,6 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             </div>
           </div>
         </div>
-
       </section>
 
       {/* ============ 二、五道工序 ============ */}
@@ -191,8 +199,8 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           <div className="relative -mt-12 ml-6 bg-page px-6 py-10 sm:mt-28 sm:-ml-[10%] sm:w-[56%] sm:px-12 sm:py-14">
             <span className="label text-brand">{home.featureLabel}</span>
 
-            <h2 className="reveal mt-6 text-[clamp(2rem,5.5vw,4rem)] leading-[0.95] text-ink sm:-ml-[14%]">
-              {feature.name}
+            <h2 className="reveal mt-6 text-[clamp(1.9rem,4.6vw,3.25rem)] leading-[1.05] text-ink">
+              <ProductName name={feature.name} />
             </h2>
             <p className="label mt-4 text-ink-faint">{home.featureSub}</p>
 
@@ -203,9 +211,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             {/* 規格與價格：細線表格，不是卡片 */}
             <dl className="mt-10 text-[12px] tracking-[0.06em]">
               <div className="flex items-baseline justify-between border-t border-line py-3.5">
-                <dt className="label text-ink-faint">
-                  {home.featureOrigin}
-                </dt>
+                <dt className="label text-ink-faint">{home.featureOrigin}</dt>
               </div>
               <div className="flex items-baseline justify-between border-t border-line py-3.5">
                 <dt className="text-ink-soft">{feature.variantLabel}</dt>

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { AddToCart } from "@/components/add-to-cart";
 import { ArrowLink } from "@/components/arrow-link";
 import { ImagePlaceholder } from "@/components/image-placeholder";
+import { ProductName } from "@/components/product-name";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { getProductBySlug } from "@/lib/products";
@@ -74,8 +75,8 @@ export default async function ProductPage({
             <span className="label text-brand">{product.categoryName}</span>
           )}
 
-          <h1 className="display-xl mt-5 text-[clamp(2rem,5.5vw,3.75rem)] text-ink">
-            {product.name}
+          <h1 className="display-xl mt-5 text-[clamp(1.9rem,4.6vw,3.25rem)] leading-[1.05] text-ink">
+            <ProductName name={product.name} />
           </h1>
 
           {product.tastingNotes && (

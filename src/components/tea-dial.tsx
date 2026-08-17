@@ -32,9 +32,9 @@ import { useEffect, useState } from "react";
  * 整體的濃淡另外由 globals.css 的 opacity 控制，改那裡最快。
  */
 const TONES = [
+  { key: "black", file: "tea-black.png", color: "#c48770" },
   { key: "green", file: "tea-green.png", color: "#b9c497" },
   { key: "oolong", file: "tea-oolong.png", color: "#dcb383" },
-  { key: "black", file: "tea-black.png", color: "#c48770" },
 ] as const;
 
 export type TeaTone = (typeof TONES)[number]["key"];
