@@ -24,7 +24,11 @@ export function SiteFooter({ dict }: { dict: Dictionary }) {
             alt={dict.site.nameFull}
             className="h-16 w-auto sm:h-20"
           />
-          <div className="label mt-7 text-ink-faint">{dict.site.place}</div>
+          {/* 頁尾用公司全名，不是簡稱 —— 這裡是網站上最正式的一塊 */}
+          <div className="mt-7 font-display text-2xl tracking-[0.12em] text-ink sm:text-3xl">
+            {dict.site.nameFull}
+          </div>
+          <div className="label mt-4 text-ink-faint">{dict.site.place}</div>
         </div>
 
         {/* 右：聯絡資訊，細線分欄 */}

@@ -60,10 +60,14 @@
 
 /* ---------- 字型 ---------- */
 :root {
-  /* 標題：繁體明體。這個設計的靈魂在字體，所以值得下載。
-     瀏覽器只會抓實際用到的那幾個字，不是整份字型檔。 */
-  --font-display: var(--font-noto-serif-tc), "Noto Serif TC", "Songti TC",
-    "PMingLiU", Georgia, serif;
+  /* 標題：霞鶩文楷（楷書風格），跟商標上的毛筆字是同一種語氣。
+     這個設計的靈魂在字體，所以值得下載；瀏覽器只會抓實際用到的那幾個字。
+
+     備援字型刻意【不放新細明體（PMingLiU）】—— 那套字在螢幕上像公文，
+     沒有品牌個性。改用各系統內建的楷書：
+       Mac／iPhone → Kaiti TC　　Windows → 標楷體（DFKai-SB） */
+  --font-display: var(--font-display-cjk), "LXGW WenKai TC", "Kaiti TC",
+    "DFKai-SB", "BiauKai", serif;
 
   /* 內文：無襯線，刻意設得小而精緻、字距拉寬 */
   --font-body: var(--font-geist-sans), "PingFang TC", "Noto Sans TC",

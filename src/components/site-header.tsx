@@ -16,7 +16,7 @@ import type { Dictionary } from "@/i18n/dictionaries";
  * 只有一條髮絲般的細線把它與內容分開。
  * 選單文字刻意設得很小、字距拉得很寬 —— 精緻感來自留白，不是來自尺寸。
  *
- * 手機上點開選單會蓋滿整個畫面，用巨大的明體排列 ——
+ * 手機上點開選單會蓋滿整個畫面，用大字的楷書排列 ——
  * 翻開一本書的感覺，而不是拉開一個下拉式清單。
  */
 export function SiteHeader({
@@ -137,7 +137,7 @@ export function SiteHeader({
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <span
-                      className={`font-display text-2xl font-light ${
+                      className={`font-display text-2xl ${
                         isActive(link.href) ? "text-brand" : "text-ink"
                       }`}
                     >

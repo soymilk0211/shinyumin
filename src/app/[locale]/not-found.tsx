@@ -21,7 +21,7 @@ export default function NotFound() {
             這個網址可能已經變更，或是輸入時少了幾個字。
           </p>
 
-          <h2 className="mt-20 max-w-[10ch] text-[clamp(1.4rem,4.5vw,2.75rem)] leading-[1.1] font-light text-ink-soft">
+          <h2 className="mt-20 max-w-[10ch] text-[clamp(1.4rem,4.5vw,2.75rem)] leading-[1.1] text-ink-soft">
             Page not found
           </h2>
           <p className="mt-8 max-w-[36ch] text-[13px] leading-[2.1] tracking-[0.06em] text-ink-soft sm:ml-[14%]">

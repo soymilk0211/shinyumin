@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Noto_Serif_TC } from "next/font/google";
+import { Geist, LXGW_WenKai_TC } from "next/font/google";
 import { notFound } from "next/navigation";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -22,15 +22,18 @@ const geistSans = Geist({
   display: "swap",
 });
 
-// 標題用的繁體襯線體（明體）。這個設計的靈魂在字體上，所以值得下載。
+// 標題字型：霞鶩文楷（LXGW WenKai TC）。
 //
-// 【只要一種字重】：中文字型每一個字重都是一份完整的字型檔。
-// 原本抓了 200／300／500 三種，手機要下載 1.4MB；只留 300 一種之後降到約 1/3。
-// 這個設計本來就靠「字級大小」拉層次、不靠粗細，所以一種字重完全夠用。
-const notoSerifTC = Noto_Serif_TC({
-  variable: "--font-noto-serif-tc",
+// 這是一套楷書風格的繁體字型，筆畫帶手寫的起收，跟商標上那兩個毛筆字
+// 是同一種語氣。刻意不用明體 —— 明體（新細明體那一類）在螢幕上太像
+// 公文與教科書，沒有品牌個性。
+//
+// 【只要一種字重】：中文字型每一個字重都是一份完整的字型檔，
+// 多載一種就多幾百 KB。這個設計本來就靠字級大小拉層次、不靠粗細。
+const displayFont = LXGW_WenKai_TC({
+  variable: "--font-display-cjk",
   subsets: ["latin"],
-  weight: ["300"],
+  weight: ["400"],
   display: "swap",
 });
 
@@ -67,7 +70,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={localeHtmlLang[locale]}
-      className={`${geistSans.variable} ${notoSerifTC.variable} h-full`}
+      className={`${geistSans.variable} ${displayFont.variable} h-full`}
       // 深淺色模式是在瀏覽器端才決定的，這一行是告訴 React：
       // <html> 標籤上的 class 兩邊對不起來是正常的，不用警告。
       suppressHydrationWarning
