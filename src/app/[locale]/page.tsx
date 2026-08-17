@@ -7,7 +7,12 @@ import { ImagePlaceholder } from "@/components/image-placeholder";
 import { ProductName } from "@/components/product-name";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
-import { formatPrice, getCategories, getProducts } from "@/lib/products";
+import {
+  formatPrice,
+  getCategories,
+  getProducts,
+  lowestPrice,
+} from "@/lib/products";
 
 // 每 60 秒重新向資料庫確認一次，業主在後台改價後最慢一分鐘會反映到網站上
 export const revalidate = 60;
@@ -41,21 +46,20 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
 
   const categories =
     dbCategories.length > 0
-      ? dbCategories.map((c) => ({ name: c.name, latin: c.slug }))
+      ? dbCategories.map((c) => ({ slug: c.slug, name: c.name }))
       : [
-          {
-            name: dict.categories.blackTea,
-            latin: dict.categories.blackTeaLatin,
-          },
-          {
-            name: dict.categories.oolongTea,
-            latin: dict.categories.oolongTeaLatin,
-          },
-          {
-            name: dict.categories.greenTea,
-            latin: dict.categories.greenTeaLatin,
-          },
+          { slug: "black-tea", name: dict.categories.blackTea },
+          { slug: "oolong-tea", name: dict.categories.oolongTea },
+          { slug: "green-tea", name: dict.categories.greenTea },
         ];
+
+  // 每個分類自己一個區塊，捲到哪一區，右下角的轉盤就換成那一種茶湯。
+  // 分類代號 → 茶湯顏色
+  const toneOf: Record<string, "black" | "oolong" | "green"> = {
+    "black-tea": "black",
+    "oolong-tea": "oolong",
+    "green-tea": "green",
+  };
 
   const featured = dbProducts[0] ?? null;
   const featuredVariant =
@@ -72,16 +76,25 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
 
   return (
     <div className="overflow-x-clip">
-      {/* 一進頁面時顯示綠茶，與下面第一個段落的 data-tea-tone 一致 */}
-      <TeaDial initialTone="green" />
+      {/* 外圈的字是導覽按鈕：點了會捲到對應的區塊，也可以直接用手轉盤子。
+          角度 0 在正上方，四個標籤平均分佈一圈。 */}
+      <TeaDial
+        initialTone="black"
+        labels={[
+          { targetId: "craft", text: home.craftLabel, angle: 0 },
+          ...categories.map((category, index) => ({
+            targetId: `cat-${category.slug}`,
+            text: category.name,
+            angle: 90 * (index + 1),
+          })),
+        ]}
+      />
 
       {/* ============ 一、開場 ============ */}
       {/* data-tea-tone 決定右下角茶湯轉盤在這一段要顯示哪一種茶湯。
-          目前首頁沒有「綠茶區／烏龍區／紅茶區」這種分區，所以先照製茶的順序
-          分配：新葉（綠）→ 發酵中（烏龍）→ 成茶（紅）。
-          日後若首頁改成一個分類一個區塊，把這個屬性搬過去就會自動跟著換色。 */}
+          下面每個分類各自一個區塊，捲到哪一區就換成那一種茶湯。 */}
       <section
-        data-tea-tone="green"
+        data-tea-tone="black"
         className="relative px-6 pt-12 pb-28 sm:px-10 sm:pt-20 sm:pb-40"
       >
         <div className="relative flex gap-5 sm:gap-10">
@@ -141,6 +154,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
 
       {/* ============ 二、五道工序 ============ */}
       <section
+        id="craft"
         data-tea-tone="oolong"
         className="border-t border-line px-6 py-24 sm:px-10 sm:py-36"
       >
@@ -229,41 +243,68 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         </div>
       </section>
 
-      {/* ============ 四、分類 ============ */}
-      <section
-        data-tea-tone="black"
-        className="border-t border-line px-6 py-24 sm:px-10 sm:py-36"
-      >
-        <div className="flex items-baseline justify-between gap-6">
-          <span className="label text-brand">{home.categoriesLabel}</span>
-          <span className="label text-ink-faint">{home.categoriesNote}</span>
-        </div>
+      {/* ============ 四、分類：一個分類一個區塊 ============ */}
+      {categories.map((category) => {
+        const items = dbProducts.filter(
+          (p) => p.categorySlug === category.slug,
+        );
 
-        {/* 三格高低錯落，不對齊 */}
-        <ul className="mt-16 grid gap-14 sm:mt-24 sm:grid-cols-3 sm:gap-8">
-          {categories.map((category, index) => (
-            <li
-              key={category.name}
-              className={
-                index === 1 ? "sm:mt-24" : index === 2 ? "sm:mt-10" : undefined
-              }
-            >
-              <Link href={`/${locale}/teas`} className="group block">
-                <ImagePlaceholder
-                  ratio={index === 0 ? "aspect-[4/5]" : "aspect-square"}
-                  label={dict.common.imagePending}
-                />
-                <div className="mt-5 flex items-baseline justify-between border-t border-line pt-4">
-                  <h3 className="text-xl text-ink transition-colors group-hover:text-brand">
-                    {category.name}
-                  </h3>
-                  <span className="label text-ink-faint">{category.latin}</span>
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
+        return (
+          <section
+            key={category.slug}
+            id={`cat-${category.slug}`}
+            data-tea-tone={toneOf[category.slug] ?? "black"}
+            className="border-t border-line px-6 py-24 sm:px-10 sm:py-36"
+          >
+            <span className="label text-brand">{home.categoriesLabel}</span>
+
+            <h2 className="reveal mt-5 text-[clamp(2.25rem,7vw,5.5rem)] leading-[0.95] text-ink">
+              {category.name}
+            </h2>
+
+            {items.length === 0 ? (
+              <p className="label mt-10 text-ink-faint">
+                {dict.common.comingSoon}
+              </p>
+            ) : (
+              <ul className="mt-14 grid gap-12 sm:mt-20 sm:grid-cols-2 sm:gap-14">
+                {items.map((product, index) => {
+                  const from = lowestPrice(product);
+                  return (
+                    <li
+                      key={product.id}
+                      className={index % 2 === 1 ? "sm:mt-16" : undefined}
+                    >
+                      <Link
+                        href={`/${locale}/teas/${product.slug}`}
+                        className="group block"
+                      >
+                        <ImagePlaceholder
+                          ratio="aspect-[4/5]"
+                          label={dict.common.imagePending}
+                        />
+                        <div className="mt-5 border-t border-line pt-4">
+                          <h3 className="text-xl text-ink transition-colors group-hover:text-brand">
+                            <ProductName name={product.name} />
+                          </h3>
+                          {from !== null && (
+                            <p className="mt-2 font-display text-lg text-ink-soft tabular-nums">
+                              {formatPrice(from)}
+                              <span className="label ml-2 text-ink-faint">
+                                {dict.teas.fromPrice}
+                              </span>
+                            </p>
+                          )}
+                        </div>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </section>
+        );
+      })}
     </div>
   );
 }
