@@ -5,6 +5,10 @@ import { ArrowLink } from "@/components/arrow-link";
 import { ImagePlaceholder } from "@/components/image-placeholder";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
+import { formatPrice, getCategories, getProducts } from "@/lib/products";
+
+// 每 60 秒重新向資料庫確認一次，業主在後台改價後最慢一分鐘會反映到網站上
+export const revalidate = 60;
 
 /**
  * 首頁。
@@ -25,11 +29,38 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const dict = getDictionary(locale);
   const { home } = dict;
 
-  const categories = [
-    { name: dict.categories.blackTea, latin: dict.categories.blackTeaLatin },
-    { name: dict.categories.oolongTea, latin: dict.categories.oolongTeaLatin },
-    { name: dict.categories.greenTea, latin: dict.categories.greenTeaLatin },
-  ];
+  // 分類與主力茶款都從資料庫讀。
+  // 資料庫還沒接上（.env.local 的鑰匙還沒填）時，退回用寫在翻譯檔裡的內容，
+  // 這樣版面不會開天窗，仍然看得出網站長什麼樣子。
+  const [dbCategories, dbProducts] = await Promise.all([
+    getCategories(locale),
+    getProducts(locale),
+  ]);
+
+  const categories =
+    dbCategories.length > 0
+      ? dbCategories.map((c) => ({ name: c.name, latin: c.slug }))
+      : [
+          { name: dict.categories.blackTea, latin: dict.categories.blackTeaLatin },
+          {
+            name: dict.categories.oolongTea,
+            latin: dict.categories.oolongTeaLatin,
+          },
+          { name: dict.categories.greenTea, latin: dict.categories.greenTeaLatin },
+        ];
+
+  const featured = dbProducts[0] ?? null;
+  const featuredVariant =
+    featured?.variants.find((v) => v.status === "on_sale") ?? null;
+
+  const feature = {
+    name: featured?.name ?? home.featureName,
+    notes: featured?.tastingNotes ?? home.featureNotes,
+    variantLabel: featuredVariant?.label ?? home.featureVariant,
+    price: featuredVariant
+      ? formatPrice(featuredVariant.priceTwd)
+      : home.featurePrice,
+  };
 
   return (
     <div className="overflow-x-clip">
@@ -122,12 +153,12 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             <span className="label text-brand">{home.featureLabel}</span>
 
             <h2 className="mt-6 text-[clamp(1.7rem,4.5vw,3rem)] leading-[1.05] text-ink">
-              {home.featureName}
+              {feature.name}
             </h2>
             <p className="label mt-4 text-ink-faint">{home.featureSub}</p>
 
             <p className="mt-8 max-w-[34ch] text-[13px] leading-[2.1] tracking-[0.06em] text-ink-soft">
-              {home.featureNotes}
+              {feature.notes}
             </p>
 
             {/* 規格與價格：細線表格，不是卡片 */}
@@ -138,9 +169,9 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
                 </dt>
               </div>
               <div className="flex items-baseline justify-between border-t border-line py-3.5">
-                <dt className="text-ink-soft">{home.featureVariant}</dt>
+                <dt className="text-ink-soft">{feature.variantLabel}</dt>
                 <dd className="font-display text-xl text-ink tabular-nums">
-                  {home.featurePrice}
+                  {feature.price}
                 </dd>
               </div>
               <div className="border-t border-line" />

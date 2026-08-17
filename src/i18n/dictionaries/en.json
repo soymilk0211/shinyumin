@@ -60,6 +60,16 @@
     "categoriesNote": "Product content is still being prepared; real data arrives in step 3."
   },
 
+  "teas": {
+    "title": "Teas",
+    "intro": "Every tea is finished in our own factory in Dayan Village, Yuchi. We do not make many, but each one is made properly.",
+    "empty": "Our teas are being prepared and will be listed shortly.",
+    "fromPrice": "from",
+    "soldOut": "Sold out",
+    "specs": "Packaging",
+    "notesLabel": "Tasting notes"
+  },
+
   "pages": {
     "teasNote": "The tea list arrives in step 3, connected to the database — every tea and its available packaging.",
     "storyNote": "Our story arrives in step 3: Yuchi, Dayan Village, and how our family makes tea.",
