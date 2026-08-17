@@ -33,7 +33,23 @@
    |---|---|
    | `ADMIN_PASSWORD` | 您自己想的密碼 |
 
-3. 到 **Deployments** → 最上面那筆的 **⋯** → **Redeploy**
+3. **捲到最下面按 Save** ← 很容易漏掉。沒按這一步等於沒加
+4. 回專案首頁 →「Production Deployment」卡片右上角的 **⋯** → **Redeploy**
+
+> ### ⚠️ 兩個一定會踩到的坑
+>
+> **一、存了不會馬上生效，一定要 Redeploy。**
+> Vercel 的環境變數是在「部署那一刻」被讀進網站裡的。
+> 只存不重新部署，網站跑的還是舊的那一份，後台會一直說「還沒設定密碼」。
+>
+> **二、Environments 要包含 Production。**
+> 新增時那個下拉選單如果只選到 Preview 或 Development，
+> 正式網站（`shinyumin.vercel.app`）就讀不到。跟其他變數一樣選
+> **Production and Preview** 就對了。
+>
+> **在手機上找不到 Environment Variables 那一頁**：手機版會把左邊那排選單藏
+> 起來。最快的方法是進到 Settings 之後，直接在網址列結尾加上
+> `/environment-variables`。或者用 Safari 的「切換至電腦版網站」。
 
 密碼**請設長一點**，例如四個不相干的中文詞連起來，或十二個以上的英數字。
 這一組密碼等於整間店的訂單資料 —— 裡面有每一位客人的姓名、電話、地址。
