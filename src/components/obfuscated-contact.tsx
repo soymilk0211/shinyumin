@@ -32,6 +32,8 @@ const CONTACTS = {
     scheme: "tel:",
     format: (value: string) =>
       `${value.slice(0, 4)}-${value.slice(4, 7)}-${value.slice(7)}`,
+    /** 顯示在號碼後面，讓客人知道要找誰 */
+    contactName: "陳小姐",
   },
 } as const;
 
@@ -61,10 +63,14 @@ export function ObfuscatedContact({
 
   const contact = CONTACTS[kind];
   const value = contact.reversed.split("").reverse().join("");
+  const name = "contactName" in contact ? contact.contactName : null;
 
   return (
-    <a href={`${contact.scheme}${value}`} className={className}>
-      {contact.format(value)}
-    </a>
+    <span className="inline-flex flex-wrap items-baseline gap-x-3">
+      <a href={`${contact.scheme}${value}`} className={className}>
+        {contact.format(value)}
+      </a>
+      {name && <span className="text-ink-soft">{name}</span>}
+    </span>
   );
 }

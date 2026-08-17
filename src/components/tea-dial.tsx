@@ -8,6 +8,9 @@ import { useEffect, useState } from "react";
  * 它是一個「你現在在哪一段」的指示器：捲到哪一段，盤子就轉到那一段，
  * 並換成那一段對應的茶湯顏色。該段落的字會轉到正上方，而且【剛好是正的】。
  *
+ * 捲到頁尾時會自己淡出讓開 —— 頁尾是地址、電話、統編這類密集資訊，
+ * 蓋住那裡只是擋路。
+ *
  * ## 為什麼不跟著捲動連續轉
  *
  * 第一版做成「捲動時連續旋轉、拖曳盤子等於捲頁面」，實際用起來很卡 ——
@@ -46,6 +49,7 @@ export type DialSection = {
 
 export function TeaDial({ sections }: { sections: DialSection[] }) {
   const [current, setCurrent] = useState(0);
+  const [hidden, setHidden] = useState(false);
 
   // 只在「段落清單真的變了」時才重新掛偵測器。
   // 若直接依賴 sections 這個陣列，每次重繪都是新的物件，
@@ -91,6 +95,23 @@ export function TeaDial({ sections }: { sections: DialSection[] }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionKey]);
 
+  // 捲到頁尾時把盤子淡出。
+  // 頁尾是密集的聯絡資訊（地址、電話、統編），跟主視覺區不一樣 ——
+  // 那裡蓋住內容就只是擋路，不是設計。
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") return;
+    const footer = document.querySelector("footer");
+    if (!footer) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setHidden(entry.isIntersecting),
+      // 頁尾只要露出一點點就開始讓開，不要等它整個進畫面
+      { threshold: 0.01 },
+    );
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, []);
+
   const step = sections.length > 0 ? 360 / sections.length : 0;
 
   // 目前這一段的字要轉到正上方，所以整個盤子往回轉同樣的角度
@@ -98,7 +119,7 @@ export function TeaDial({ sections }: { sections: DialSection[] }) {
   const tone = sections[current]?.tone ?? "black";
 
   return (
-    <div className="tea-dial" aria-hidden="true">
+    <div className="tea-dial" data-hidden={hidden || undefined} aria-hidden="true">
       <div
         className="tea-dial__spin"
         style={{ transform: `rotate(${angle}deg)` }}

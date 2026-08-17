@@ -167,6 +167,14 @@ h3 {
 
   /* 茶湯的濃淡。只作用在茶湯圖層，不影響外圈的字 —— 字必須永遠清楚 */
   --tea-opacity: 0.62;
+
+  opacity: 1;
+  transition: opacity 500ms ease;
+}
+
+/* 捲到頁尾就整個讓開 */
+.tea-dial[data-hidden] {
+  opacity: 0;
 }
 
 @media (max-width: 767px) {
