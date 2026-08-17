@@ -26,7 +26,7 @@ export function ComingSoon({
         </span>
 
         <div className="min-w-0 flex-1">
-          <h1 className="display-xl max-w-[8ch] text-[clamp(2.75rem,10vw,7.5rem)] text-ink">
+          <h1 className="display-xl max-w-[8ch] text-[clamp(2.1rem,7vw,5rem)] text-ink">
             {title}
           </h1>
 

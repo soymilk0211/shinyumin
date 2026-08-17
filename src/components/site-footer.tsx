@@ -19,7 +19,7 @@ export function SiteFooter({ dict }: { dict: Dictionary }) {
       <div className="flex flex-col gap-16 sm:flex-row sm:justify-between sm:gap-20">
         {/* 左：品牌名當作版面的重量 */}
         <div className="shrink-0">
-          <div className="font-display text-[clamp(2.75rem,9vw,5.5rem)] leading-none font-light text-ink">
+          <div className="font-display text-[clamp(2rem,6vw,4rem)] leading-none font-light text-ink">
             {dict.site.name}
           </div>
           <div className="label mt-5 text-ink-faint">{dict.site.nameLatin}</div>

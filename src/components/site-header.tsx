@@ -131,13 +131,13 @@ export function SiteHeader({
                   <Link
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className="flex items-baseline gap-5 py-6"
+                    className="flex items-baseline gap-5 py-5"
                   >
                     <span className="label w-6 shrink-0 text-ink-faint">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <span
-                      className={`font-display text-4xl font-light ${
+                      className={`font-display text-2xl font-light ${
                         isActive(link.href) ? "text-brand" : "text-ink"
                       }`}
                     >

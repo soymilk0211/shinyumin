@@ -18,10 +18,8 @@
   },
 
   "home": {
-    "heroTitle": "We are in Yuchi",
-    "heroLead": "The heart of the Sun Moon Lake black tea region. This is not a sourcing choice; it is where our family has lived and made tea for generations.",
-    "heroMark": "Taiwan Tea No. 18",
-    "heroMarkLatin": "RUBY No.18",
+    "heroTitle": "Sun Moon Lake Ruby",
+    "heroLead": "Our tea garden and factory are both in Dayan Village, Yuchi Township, Nantou — the heart of the Sun Moon Lake black tea region. This is not a sourcing choice; it is where our family has lived and made tea for generations.",
 
     "craftLabel": "Process",
     "craftTitle": "Five steps, one leaf",
@@ -52,7 +50,6 @@
     "featureLabel": "Signature tea",
     "featureName": "Ruby Black Tea",
     "featureSub": "Taiwan Tea No. 18",
-    "featureLatin": "Ruby Black Tea",
     "featureNotes": "Natural notes of cinnamon and mint — the signature character of the Ruby cultivar. A bright, clear red liquor with a sweet finish and no astringency.",
     "featureVariant": "150g vacuum-sealed tin",
     "featurePrice": "NT$ 650",

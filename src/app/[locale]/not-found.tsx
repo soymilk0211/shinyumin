@@ -14,14 +14,14 @@ export default function NotFound() {
         <span className="vertical label mt-1 shrink-0 text-brand">404</span>
 
         <div className="min-w-0 flex-1">
-          <h1 className="display-xl max-w-[8ch] text-[clamp(2.5rem,9vw,6.5rem)] text-ink">
+          <h1 className="display-xl max-w-[8ch] text-[clamp(2rem,6.5vw,4.5rem)] text-ink">
             找不到這個頁面
           </h1>
           <p className="mt-10 max-w-[32ch] text-[13px] leading-[2.1] tracking-[0.06em] text-ink-soft sm:ml-[14%]">
             這個網址可能已經變更，或是輸入時少了幾個字。
           </p>
 
-          <h2 className="mt-20 max-w-[10ch] text-[clamp(1.75rem,6vw,4rem)] leading-[1.1] font-light text-ink-soft">
+          <h2 className="mt-20 max-w-[10ch] text-[clamp(1.4rem,4.5vw,2.75rem)] leading-[1.1] font-light text-ink-soft">
             Page not found
           </h2>
           <p className="mt-8 max-w-[36ch] text-[13px] leading-[2.1] tracking-[0.06em] text-ink-soft sm:ml-[14%]">
