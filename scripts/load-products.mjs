@@ -128,10 +128,13 @@ const PRODUCTS = [
     desc_en: null,
     sort: 5,
     variants: [
-      ["150", 120],
-      ["600", 400],
+      ["150", 200],
+      ["600", 600],
     ],
   },
+  // 焙火烏龍與碳焙烏龍：業主說【先不要上網頁，但之後可能還會上】，
+  // 所以資料留在資料庫裡、只是不上架。要開賣時把 unpublished 拿掉重跑，
+  // 或日後在後台按一下就好 —— 不必重新建資料。
   {
     slug: "roasted-oolong",
     category: "oolong-tea",
@@ -146,6 +149,7 @@ const PRODUCTS = [
       ["150", 150],
       ["600", 450],
     ],
+    unpublished: true,
   },
   {
     slug: "charcoal-oolong",
@@ -161,6 +165,7 @@ const PRODUCTS = [
       ["150", 150],
       ["600", 450],
     ],
+    unpublished: true,
   },
 ];
 
@@ -168,13 +173,28 @@ const PRODUCTS = [
  * 包裝規格。老闆習慣用「兩」報價，網站上兩種單位並陳。
  * 台制一斤 = 十六兩 = 600 克，所以四兩剛好是 150 克。
  *
+ * 【全部都是真空包裝，沒有鐵罐。】業主 2026-08-17 更正 ——
+ * 早期的 HANDOVER 寫「鐵罐外包裝 + 真空袋內包裝」，那是錯的。
+ *
  * 【價格不在這裡】—— 同一個包裝在不同茶款是不同價錢
- * （四兩的四季春 $120、四兩的高山茶 $600），所以價格掛在各自的商品上。
+ * （四兩的四季春 $200、四兩的高山茶 $600），所以價格掛在各自的商品上。
  */
 const SIZES = {
-  "600": { label_zh: "一斤・600g", label_en: "600g (1 catty)", grams: 600 },
-  "150": { label_zh: "四兩・150g 鐵罐", label_en: "150g tin", grams: 150 },
-  "75": { label_zh: "二兩・75g 鐵罐", label_en: "75g tin", grams: 75 },
+  "600": {
+    label_zh: "一斤・600g 真空包裝",
+    label_en: "600g vacuum pack (1 catty)",
+    grams: 600,
+  },
+  "150": {
+    label_zh: "四兩・150g 真空包裝",
+    label_en: "150g vacuum pack",
+    grams: 150,
+  },
+  "75": {
+    label_zh: "二兩・75g 真空包裝",
+    label_en: "75g vacuum pack",
+    grams: 75,
+  },
 };
 
 /** 大包裝排前面，小包裝排後面 */

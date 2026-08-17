@@ -24,7 +24,7 @@
     "heroLabel": "Yuchi",
     "craftLabel": "Process",
     "craftTitle": "Five steps, one leaf",
-    "craftLead": "From plucking to drying, everything happens in our own factory in Dayan Village. We do not make many teas, but each one is made properly.",
+    "craftLead": "Our black teas go from plucking to drying in our own factory in Dayan Village. We do not carry many teas, but each one is made properly.",
     "craftSteps": [
       {
         "name": "Plucking",
@@ -64,7 +64,7 @@
 
   "teas": {
     "title": "Teas",
-    "intro": "Every tea is finished in our own factory in Dayan Village, Yuchi. We do not make many, but each one is made properly.",
+    "intro": "Our black teas are made in our own factory in Dayan Village, Yuchi. Our oolongs come from other tea regions. We do not carry many teas, but each one is made properly.",
     "empty": "Our teas are being prepared and will be listed shortly.",
     "fromPrice": "from",
     "soldOut": "Sold out",
@@ -195,7 +195,7 @@
     "cultivarBody": "Ruby is a Taiwanese cultivar, bred from native wild Taiwan tea and Burmese large-leaf assamica, officially registered as Taiwan Tea No. 18. Its cinnamon and mint aroma comes from the cultivar itself — nothing is added. It is also why it holds up in milk: made into milk tea, the tea still speaks.",
 
     "craftTitle": "Our own factory",
-    "craftBody": "Plucking, withering, rolling, oxidation and drying — all five steps happen in our own factory, tended by hand. Oxidation is the soul of black tea: when it is ready it is ready, not a moment early or late. That is not something you can outsource; you have to stand there and watch it.",
+    "craftBody": "For our black teas, plucking, withering, rolling, oxidation and drying all happen in our own factory, tended by hand. Oxidation is the soul of black tea: when it is ready it is ready, not a moment early or late. That is not something you can outsource; you have to stand there and watch it.",
 
     "todayTitle": "Today",
     "todayBody": "We do not make many teas, but each one is made properly. For bulk orders, please call us — we will quote and arrange delivery separately."
