@@ -17,9 +17,17 @@ import { clientIp, rateLimit } from "@/lib/rate-limit";
  * 這支程式做三件事：擋濫用 → 檢查資料格式 → 交給 createOrder 建單。
  */
 
-/** 同一個 IP 十分鐘內最多送幾張訂單 */
+/**
+ * 同一個 IP 一小時內最多送幾張訂單。
+ *
+ * 原本是「十分鐘五張」，那等於一天可以灌七百多張 ——
+ * 每張都會推一則 LINE，業主每月只有 200 則額度，一個下午就沒了。
+ * 改成一小時五張：正常客人買完一次通常不會再下第二張，
+ * 就算填錯重送幾次也還夠用；灌單的人一天則被壓到一百多張，
+ * 再加上 lib/line.ts 的額度保險，燒不掉那個月的通知。
+ */
 const ORDER_LIMIT = 5;
-const ORDER_WINDOW_MS = 10 * 60 * 1000;
+const ORDER_WINDOW_MS = 60 * 60 * 1000;
 
 const MAX_LINES = 30;
 

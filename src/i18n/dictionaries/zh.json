@@ -115,7 +115,9 @@
 
     "paymentTitle": "付款方式",
     "paymentTransfer": "匯款",
+    "paymentTransferHint": "需來電問帳號",
     "paymentCod": "貨到付款",
+    "paymentCodHint": "不用先付款",
     "paymentTransferNote": "為了安全，匯款帳號不會顯示在網站上。訂單送出後，麻煩您在客服時間內來電，我們會告知帳號。",
     "paymentPhoneHint": "點一下顯示電話",
     "paymentCodFee": "貨到付款的代收手續費另計，不含在上面的金額裡。收到貨付款時一併結清。",

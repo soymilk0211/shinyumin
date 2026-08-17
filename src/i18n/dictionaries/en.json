@@ -130,7 +130,9 @@
 
     "paymentTitle": "Payment",
     "paymentTransfer": "Bank transfer",
+    "paymentTransferHint": "Call us for the account number",
     "paymentCod": "Cash on delivery",
+    "paymentCodHint": "Nothing to pay up front",
     "paymentTransferNote": "For safety, our bank details are never shown on the website. Once your order is placed, please call us during service hours and we will give you the account number.",
     "paymentPhoneHint": "Tap to reveal phone",
     "paymentCodFee": "Cash on delivery carries a separate collection fee, which is not included in the amount above. It is settled together when you pay on delivery.",

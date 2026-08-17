@@ -397,6 +397,14 @@ export function CheckoutForm({
                       ? labels.paymentTransfer
                       : labels.paymentCod}
                   </span>
+                  {/* 【選之前就要看得到差別】。匯款要自己打電話問帳號，
+                      這是真實存在的麻煩，藏起來只會讓客人下完單才發現，
+                      然後就不了了之 —— 那張訂單會一直卡在待付款。 */}
+                  <span className="mt-1.5 block text-[11px] leading-[1.6] tracking-[0.08em] text-ink-faint">
+                    {method === "transfer"
+                      ? labels.paymentTransferHint
+                      : labels.paymentCodHint}
+                  </span>
                 </label>
               );
             })}

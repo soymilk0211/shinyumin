@@ -1,3 +1,4 @@
+import { readLineQuota } from "@/lib/line";
 import { getAdminClient } from "@/lib/supabase-admin";
 
 /**
@@ -144,7 +145,7 @@ export async function buildDailyReport(): Promise<DailyReport> {
     lines.push("");
     lines.push("──────────");
     if (waitingPayment > 0) {
-      lines.push(`待付款　${waitingPayment} 張　← 要打電話`);
+      lines.push(`待付款　${waitingPayment} 張　← 等客人來電`);
     }
     if (waitingShipment > 0) {
       lines.push(`已付款未出貨　${waitingShipment} 張`);
@@ -157,53 +158,10 @@ export async function buildDailyReport(): Promise<DailyReport> {
     lines.push("");
     lines.push(`本月 LINE 推播已用 ${quota.used}／${quota.limit} 則`);
     if (quota.limit - quota.used <= 30) {
-      lines.push("⚠️ 額度快用完了，用完就收不到通知了");
+      lines.push("⚠️ 額度快用完了。剩下的會留給這則日報。");
+      lines.push("個別訂單的即時通知會先暫停，請直接看後台。");
     }
   }
 
   return { worthSending: true, text: lines.join("\n") };
-}
-
-/**
- * 查 LINE 這個月的推播額度用了多少。
- *
- * 業主擔心「訂單太多會不會把 LINE 塞爆」—— 免費方案每月 200 則，
- * 用完之後推播會靜靜地失敗。與其等到出事，不如每天在日報上報一次數字，
- * 快用完時提前警告。
- *
- * 【查額度本身不算額度。】只有主動推播才算。
- */
-async function readLineQuota(): Promise<{
-  used: number;
-  limit: number;
-} | null> {
-  const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
-  if (!token) return null;
-
-  try {
-    const headers = { Authorization: `Bearer ${token}` };
-    const [limitRes, usedRes] = await Promise.all([
-      fetch("https://api.line.me/v2/bot/message/quota", {
-        headers,
-        signal: AbortSignal.timeout(8000),
-      }),
-      fetch("https://api.line.me/v2/bot/message/quota/consumption", {
-        headers,
-        signal: AbortSignal.timeout(8000),
-      }),
-    ]);
-
-    if (!limitRes.ok || !usedRes.ok) return null;
-
-    const limit = await limitRes.json();
-    const used = await usedRes.json();
-
-    // type 是 "none" 的時候代表無上限（付費方案），那就不用報了
-    if (limit?.type !== "limited" || typeof limit.value !== "number") return null;
-
-    return { used: Number(used?.totalUsage ?? 0), limit: Number(limit.value) };
-  } catch (error) {
-    console.error("查 LINE 額度失敗：", error);
-    return null;
-  }
 }

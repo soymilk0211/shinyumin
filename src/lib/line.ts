@@ -131,6 +131,21 @@ export function isLineConfigured(): boolean {
  * 通知失敗就是失敗，訂單不受影響，錯誤留在伺服器記錄裡。
  */
 export async function notifyNewOrder(order: OrderNotification): Promise<void> {
+  // 【額度保險】業主擔心有人一直下單又取消，把 LINE 的月額度燒光。
+  // 所以推之前先看一眼還剩多少：剩下的不到保留量時，就不推個別訂單了。
+  //
+  // 為什麼要留一手：日報是「整批的摘要」，一天只花一則，
+  // 而且會告訴業主「現在有幾張沒處理」。個別通知則是一張一則。
+  // 真的被灌單時，寧可犧牲個別通知、保住每天那一則日報 ——
+  // 那才是不會漏掉訂單的那一條線。
+  const quota = await readLineQuota();
+  if (quota && quota.limit - quota.used <= QUOTA_RESERVE) {
+    console.warn(
+      `LINE 額度只剩 ${quota.limit - quota.used} 則，暫停個別訂單通知：${order.orderNumber}`,
+    );
+    return;
+  }
+
   await pushText(buildOrderMessage(order), `訂單 ${order.orderNumber}`);
 }
 
@@ -227,5 +242,71 @@ export async function replyText(
     });
   } catch (error) {
     console.error("LINE 回覆失敗：", error);
+  }
+}
+
+/**
+ * 每月要留下來給日報用的則數。
+ *
+ * LINE 免費方案每月 200 則。留 40 則等於「就算個別通知全部停掉，
+ * 剩下的月份每天還是收得到日報」—— 日報才是不會漏掉訂單的那條線。
+ */
+const QUOTA_RESERVE = 40;
+
+/** 額度查詢的暫存，避免每一張訂單都去問一次 LINE */
+let quotaCache: { at: number; value: { used: number; limit: number } | null } | null =
+  null;
+const QUOTA_CACHE_MS = 10 * 60 * 1000;
+
+/**
+ * 查 LINE 這個月的推播額度用了多少。
+ *
+ * 免費方案每月 200 則，用完之後推播會【靜靜地失敗】，不會有人通知你。
+ * 所以這個數字有兩個用途：日報上每天報一次，以及推播前先確認還有沒有額度。
+ *
+ * 【查額度本身不算額度。】只有主動推播才算。
+ * 查不到（沒設定 token、網路不通、付費方案無上限）時回傳 null，
+ * 呼叫端一律當成「沒有限制」處理 —— 查不到不該變成不推播。
+ */
+export async function readLineQuota(): Promise<{
+  used: number;
+  limit: number;
+} | null> {
+  const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+  if (!token) return null;
+
+  if (quotaCache && Date.now() - quotaCache.at < QUOTA_CACHE_MS) {
+    return quotaCache.value;
+  }
+
+  try {
+    const headers = { Authorization: `Bearer ${token}` };
+    const [limitRes, usedRes] = await Promise.all([
+      fetch("https://api.line.me/v2/bot/message/quota", {
+        headers,
+        signal: AbortSignal.timeout(8000),
+      }),
+      fetch("https://api.line.me/v2/bot/message/quota/consumption", {
+        headers,
+        signal: AbortSignal.timeout(8000),
+      }),
+    ]);
+
+    if (!limitRes.ok || !usedRes.ok) return null;
+
+    const limit = await limitRes.json();
+    const used = await usedRes.json();
+
+    // type 是 "none" 的時候代表無上限（付費方案），那就沒有額度問題
+    const value =
+      limit?.type === "limited" && typeof limit.value === "number"
+        ? { used: Number(used?.totalUsage ?? 0), limit: Number(limit.value) }
+        : null;
+
+    quotaCache = { at: Date.now(), value };
+    return value;
+  } catch (error) {
+    console.error("查 LINE 額度失敗：", error);
+    return null;
   }
 }
