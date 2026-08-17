@@ -37,12 +37,18 @@ async function api(path, init = {}) {
   return body;
 }
 
-/** 產地與工藝的共同段落。只寫公開事實，不碰製茶機密。 */
-const ORIGIN = [
-  "我們的製茶廠在南投縣魚池鄉大雁村 —— 日月潭紅茶的核心產區。",
-  "茶菁向固定合作的茶農收，茶園海拔約 750 公尺，一年採五季，",
-  "其中夏、秋兩季的香味最濃。全程人工採摘。",
-].join("");
+/**
+ * 【商品介紹只寫這一款茶自己的事。】
+ *
+ * 產區、海拔、採收季節、人工採摘這些「每一款都一樣」的事實，
+ * 一律放在品牌故事頁講一次就好（`src/i18n/dictionaries/*.json` 的 story 段落）。
+ *
+ * 原本每一款商品下面都貼同一段產區介紹，業主看到之後說
+ * 「是一樣的沒錯，但我不想用同個文案」—— 完全正確：
+ * 同一段字重複四次，讀者第二次就不看了，也顯得沒有誠意。
+ *
+ * 每一款茶的專屬文案要等老闆提供，在那之前寧可留空。
+ */
 
 const PRODUCTS = [
   {
@@ -53,8 +59,9 @@ const PRODUCTS = [
     tasting_zh: "花香帶薄荷氣息。適合熱飲，也很適合冷泡。",
     tasting_en:
       "Floral with a note of mint. Good served hot, and excellent cold-brewed.",
-    desc_zh: `台茶 18 號，也就是俗稱的紅玉。老闆最推薦的一款，也是最有特色的一款。\n\n${ORIGIN}`,
-    desc_en: `Taiwan Tea No. 18, commonly known as Ruby. The one we recommend most, and the most distinctive of our teas.\n\nOur factory is in Dayan Village, Yuchi Township, Nantou — the heart of the Sun Moon Lake black tea region. Leaf is bought from growers we work with regularly; the gardens sit at around 750 metres. We pick five seasons a year, and the summer and autumn pickings carry the strongest aroma. All hand-plucked.`,
+    desc_zh: "台茶 18 號，也就是俗稱的紅玉。老闆最推薦的一款，也是最有特色的一款。",
+    desc_en:
+      "Taiwan Tea No. 18, commonly known as Ruby. The one we recommend most, and the most distinctive of our teas.",
     sort: 1,
     sizes: ["150", "75"],
   },
@@ -65,9 +72,9 @@ const PRODUCTS = [
     name_en: "Assam Black Tea",
     tasting_zh: "蜜香。可以單喝，也很適合做奶茶。",
     tasting_en: "Honeyed aroma. Good on its own, and holds up well in milk tea.",
-    desc_zh: ORIGIN,
-    desc_en:
-      "Our factory is in Dayan Village, Yuchi Township, Nantou — the heart of the Sun Moon Lake black tea region. Leaf is bought from growers we work with regularly; the gardens sit at around 750 metres. We pick five seasons a year, and the summer and autumn pickings carry the strongest aroma. All hand-plucked.",
+    // 專屬文案還沒有，先留空 —— 不要拿產區介紹充數
+    desc_zh: null,
+    desc_en: null,
     sort: 2,
     sizes: ["150", "75"],
   },
@@ -78,8 +85,8 @@ const PRODUCTS = [
     name_en: "Taiwan Wild Mountain Tea",
     tasting_zh: "肉桂味。適合熱飲，也可以冷泡。",
     tasting_en: "Cinnamon character. Good served hot, and fine cold-brewed.",
-    desc_zh: `產量很少的一款。\n\n${ORIGIN}`,
-    desc_en: `Made in small quantities.\n\nOur factory is in Dayan Village, Yuchi Township, Nantou — the heart of the Sun Moon Lake black tea region. Leaf is bought from growers we work with regularly; the gardens sit at around 750 metres. We pick five seasons a year, and the summer and autumn pickings carry the strongest aroma. All hand-plucked.`,
+    desc_zh: "產量很少的一款。",
+    desc_en: "Made in small quantities.",
     sort: 3,
     sizes: ["150", "75"],
   },

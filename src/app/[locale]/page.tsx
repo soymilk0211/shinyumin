@@ -224,7 +224,8 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       >
         <span className="label text-brand">{home.moreLabel}</span>
 
-        <ul className="mt-12 sm:mt-16">
+        {/* 寬度收住，否則在大螢幕上箭頭會被推到很遠，跟文字看起來不像同一個東西 */}
+        <ul className="mt-12 max-w-4xl sm:mt-16">
           {[
             { href: `/${locale}/teas`, text: dict.teas.title },
             { href: `/${locale}/story`, text: dict.story.title },
