@@ -1,4 +1,5 @@
 import { after } from "next/server";
+import { sendOrderArchiveEmail } from "@/lib/email";
 import { getMember } from "@/lib/member-auth";
 import { notifyNewOrder } from "@/lib/line";
 import { createOrder, type OrderDraftLine } from "@/lib/orders";
@@ -76,10 +77,14 @@ export async function POST(request: Request) {
   }
 
   // ── 通知業主 ─────────────────────────────────────────
-  // 【放在回應之後才跑。】訂單已經寫進資料庫了，客人不需要等 LINE。
-  // 推播失敗也不會影響這張訂單 —— notifyNewOrder 自己吞掉所有錯誤。
-  after(() =>
-    notifyNewOrder({
+  // 【放在回應之後才跑。】訂單已經寫進資料庫了，客人不需要等這些。
+  // 失敗也不會影響這張訂單 —— 兩支函式都自己吞掉所有錯誤。
+  //
+  // 兩條路刻意分開：LINE 是「現在有一張新訂單」，要快；
+  // 存檔信是「日後回頭查帳」的備份，要完整、要留得久。
+  // 一條斷了另一條還在。
+  after(async () => {
+    const notification = {
       orderNumber: result.orderNumber,
       items: result.items,
       subtotalTwd: result.subtotalTwd,
@@ -94,8 +99,13 @@ export async function POST(request: Request) {
       taxId: draft.taxId,
       invoiceTitle: draft.invoiceTitle,
       note: draft.note,
-    }),
-  );
+    };
+
+    await Promise.all([
+      notifyNewOrder(notification),
+      sendOrderArchiveEmail(notification),
+    ]);
+  });
 
   return Response.json({
     ok: true,
