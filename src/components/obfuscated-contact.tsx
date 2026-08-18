@@ -35,6 +35,20 @@ const CONTACTS = {
     /** 顯示在號碼後面，讓客人知道要找誰 */
     contactName: "陳小姐",
   },
+  /**
+   * 技術窗口。個人資料的查詢、更正與刪除找這一支。
+   *
+   * 【跟訂單那一支是不同的人，不要合併。】陳小姐處理訂單與出貨；
+   * 個資問題屬於網站與資料的範疇，由這裡負責。業主 2026-08-18 指正過一次：
+   * 他不是公司負責人，是負責技術的人 —— 措辭上不要寫成「負責人」。
+   */
+  techPhone: {
+    reversed: "1800270790",
+    scheme: "tel:",
+    format: (value: string) =>
+      `${value.slice(0, 4)}-${value.slice(4, 7)}-${value.slice(7)}`,
+    contactName: "廖先生",
+  },
 } as const;
 
 export function ObfuscatedContact({

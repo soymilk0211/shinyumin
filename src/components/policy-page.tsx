@@ -21,6 +21,7 @@ export function PolicyPage({
   sections,
   contactTitle,
   contactNote,
+  contactKind = "phone",
   phoneHint,
   serviceHours,
   place,
@@ -31,6 +32,8 @@ export function PolicyPage({
   contactTitle: string;
   /** 只有隱私權頁用得到：說明個資問題要找誰 */
   contactNote?: string;
+  /** 用哪一支電話。退換貨找訂單窗口，隱私權找技術窗口。 */
+  contactKind?: "phone" | "techPhone";
   phoneHint: string;
   serviceHours: string;
   place: string;
@@ -80,7 +83,7 @@ export function PolicyPage({
                 </p>
               )}
               <div className="mt-5 flex flex-wrap items-baseline gap-x-6 gap-y-2 text-[13px] tracking-[0.06em]">
-                <ObfuscatedContact kind="phone" revealLabel={phoneHint} />
+                <ObfuscatedContact kind={contactKind} revealLabel={phoneHint} />
                 <span className="text-ink-faint">{serviceHours}</span>
               </div>
             </div>

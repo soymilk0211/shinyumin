@@ -38,6 +38,7 @@ export default async function PrivacyPage({
       sections={dict.privacy.sections}
       contactTitle={dict.privacy.contactTitle}
       contactNote={dict.privacy.contactNote}
+      contactKind="techPhone"
       phoneHint={dict.privacy.phoneHint}
       serviceHours={dict.privacy.serviceHours}
       place={dict.site.place}
