@@ -346,7 +346,7 @@
       {
         "title": "Where it is stored and who can see it",
         "body": [
-          "Order data is stored in a database provided by Supabase, hosted in Singapore.",
+          "Order data is stored in a database provided by Supabase, hosted in Japan.",
           "Order data is completely locked away from website visitors. The public website cannot read any order; only our password-protected admin can.",
           "Only the family behind SHIN-YU-MIN sees your details. We never sell your data or pass it to marketing companies."
         ]
@@ -378,8 +378,9 @@
       {
         "title": "Your rights",
         "body": [
-          "You may ask us to show, correct or delete the personal data we hold about you.",
-          "Please call us; we will confirm your identity and then act on it.",
+          "You may ask us to show, correct or delete the personal data we hold about you. Please call us; we will confirm your identity and then act on it.",
+          "Why deletion needs a phone call rather than a button: this site has no user accounts, so we have no way to confirm online that the person pressing the button is really you. A self-service delete would mean anyone who guessed your order number could destroy your records. The phone call protects your data; it is not us being awkward.",
+          "Please also note that the amounts and items on completed orders are accounting records and must be retained for a period. Your contact details (phone, address, email) can be removed once we have confirmed who you are.",
           "You can also check your own order status on this site using your order number and the last four digits of your phone number, without providing anything else."
         ]
       }

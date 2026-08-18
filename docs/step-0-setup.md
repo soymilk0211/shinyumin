@@ -87,6 +87,10 @@ npm run dev
 
 1. 在您已經建好的 `shinyumin` organization 底下建立一個 project
    （**Region 一定要選 Singapore / Southeast Asia**，這個設定建立後就不能改了）
+
+   > ⚠️ **2026-08-18 更正：實際建出來的是日本（Tokyo）機房**，不是新加坡。
+   > 業主在 Supabase Dashboard 上確認過。以 Dashboard 顯示的為準 ——
+   > 隱私權政策上寫的機房位置必須跟事實一致。
 2. 建立資料表（分類、商品、規格、訂單、訂單明細）
 3. 匯入測試商品：日月潭魚池台茶 18 號紅玉紅茶，150g 罐裝 $650 與 75g 版本
 
