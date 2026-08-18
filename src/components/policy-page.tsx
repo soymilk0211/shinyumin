@@ -20,6 +20,7 @@ export function PolicyPage({
   updated,
   sections,
   contactTitle,
+  contactNote,
   phoneHint,
   serviceHours,
   place,
@@ -28,6 +29,8 @@ export function PolicyPage({
   updated: string;
   sections: readonly PolicySection[];
   contactTitle: string;
+  /** 只有隱私權頁用得到：說明個資問題要找誰 */
+  contactNote?: string;
   phoneHint: string;
   serviceHours: string;
   place: string;
@@ -71,6 +74,11 @@ export function PolicyPage({
 
             <div className="border-t border-line pt-10">
               <span className="label text-brand">{contactTitle}</span>
+              {contactNote && (
+                <p className="mt-5 max-w-[52ch] text-[13px] leading-[2.1] tracking-[0.04em] text-ink-soft">
+                  {contactNote}
+                </p>
+              )}
               <div className="mt-5 flex flex-wrap items-baseline gap-x-6 gap-y-2 text-[13px] tracking-[0.06em]">
                 <ObfuscatedContact kind="phone" revealLabel={phoneHint} />
                 <span className="text-ink-faint">{serviceHours}</span>

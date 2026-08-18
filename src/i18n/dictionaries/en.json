@@ -385,7 +385,8 @@
         ]
       }
     ],
-    "contactTitle": "Any questions, please call us",
+    "contactTitle": "Questions about your personal data",
+    "contactNote": "Requests to access, correct or delete personal data are handled by the company's principal. Please call and ask for the person in charge, or whoever answers will pass the message on.",
     "phoneHint": "Tap to reveal phone",
     "serviceHours": "Customer service 08:00–17:00"
   },
