@@ -116,6 +116,13 @@ export default async function ProductPage({
             }}
           />
 
+          {/* 包裝說明。客人在選規格的時候最想知道「我會收到什麼」——
+              尤其是鐵罐裡面還有一層真空袋這件事，寫出來才不會被誤會成
+              茶葉直接倒在罐子裡。 */}
+          <p className="mt-8 max-w-[40ch] text-[12px] leading-[2] tracking-[0.06em] text-ink-faint">
+            {dict.teas.packagingNote}
+          </p>
+
           {product.description && (
             <section className="mt-20 border-t border-line pt-10">
               <h2 className="text-[clamp(1.35rem,3vw,2rem)] text-ink">

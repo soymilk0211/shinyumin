@@ -54,6 +54,7 @@ const PRODUCTS = [
   {
     slug: "ruby-18",
     category: "black-tea",
+    packaging: "tin",
     name_zh: "紅玉紅茶",
     name_en: "Ruby Black Tea",
     tasting_zh: "花香帶薄荷氣息。適合熱飲，也很適合冷泡。",
@@ -71,6 +72,7 @@ const PRODUCTS = [
   {
     slug: "assam",
     category: "black-tea",
+    packaging: "tin",
     name_zh: "阿薩姆紅茶",
     name_en: "Assam Black Tea",
     tasting_zh: "蜜香。可以單喝，也很適合做奶茶。",
@@ -87,6 +89,7 @@ const PRODUCTS = [
   {
     slug: "taiwan-wild",
     category: "black-tea",
+    packaging: "tin",
     name_zh: "台灣山茶",
     name_en: "Taiwan Wild Mountain Tea",
     tasting_zh: "肉桂味。適合熱飲，也可以冷泡。",
@@ -102,6 +105,7 @@ const PRODUCTS = [
   {
     slug: "high-mountain",
     category: "oolong-tea",
+    packaging: "vacuum",
     name_zh: "高山茶",
     name_en: "High Mountain Oolong",
     tasting_zh: null,
@@ -120,6 +124,7 @@ const PRODUCTS = [
   {
     slug: "four-seasons",
     category: "oolong-tea",
+    packaging: "vacuum",
     name_zh: "四季春茶",
     name_en: "Four Seasons Oolong",
     tasting_zh: null,
@@ -138,6 +143,7 @@ const PRODUCTS = [
   {
     slug: "roasted-oolong",
     category: "oolong-tea",
+    packaging: "vacuum",
     name_zh: "焙火烏龍",
     name_en: "Roasted Oolong",
     tasting_zh: null,
@@ -154,6 +160,7 @@ const PRODUCTS = [
   {
     slug: "charcoal-oolong",
     category: "oolong-tea",
+    packaging: "vacuum",
     name_zh: "碳焙烏龍",
     name_en: "Charcoal-Roasted Oolong",
     tasting_zh: null,
@@ -173,28 +180,28 @@ const PRODUCTS = [
  * 包裝規格。老闆習慣用「兩」報價，網站上兩種單位並陳。
  * 台制一斤 = 十六兩 = 600 克，所以四兩剛好是 150 克。
  *
- * 【全部都是真空包裝，沒有鐵罐。】業主 2026-08-17 更正 ——
- * 早期的 HANDOVER 寫「鐵罐外包裝 + 真空袋內包裝」，那是錯的。
+ * 【包裝看的是「哪一款茶」，不是「哪個規格」】——
+ * 紅茶是鐵罐（裡面還有一層真空袋），烏龍是真空袋。
+ * 所以包裝寫在每一款商品的 packaging 欄位上，不在這裡。
+ *
+ * 這件事來回改過兩次：早期 HANDOVER 寫的「鐵罐外＋真空袋內」本來就是對的，
+ * 中間問業主「一斤是什麼包裝」，他回「只有真空包裝沒有鐵罐」被誤解成全部，
+ * 於是全站改成真空包裝。後來他傳鐵罐照片、補上「只有紅茶有鐵罐」才問清楚。
+ * 【問包裝要一款一款問，不要用一個答案套全部。】
  *
  * 【價格不在這裡】—— 同一個包裝在不同茶款是不同價錢
  * （四兩的四季春 $200、四兩的高山茶 $600），所以價格掛在各自的商品上。
  */
 const SIZES = {
-  "600": {
-    label_zh: "一斤・600g 真空包裝",
-    label_en: "600g vacuum pack (1 catty)",
-    grams: 600,
-  },
-  "150": {
-    label_zh: "四兩・150g 真空包裝",
-    label_en: "150g vacuum pack",
-    grams: 150,
-  },
-  "75": {
-    label_zh: "二兩・75g 真空包裝",
-    label_en: "75g vacuum pack",
-    grams: 75,
-  },
+  "600": { zh: "一斤・600g", en: "600g", grams: 600 },
+  "150": { zh: "四兩・150g", en: "150g", grams: 150 },
+  "75": { zh: "二兩・75g", en: "75g", grams: 75 },
+};
+
+/** 包裝形式。掛在商品上，不是掛在規格上 —— 只有紅茶有鐵罐。 */
+const PACKAGING = {
+  tin: { zh: "鐵罐", en: "tin" },
+  vacuum: { zh: "真空袋", en: "vacuum pack" },
 };
 
 /** 大包裝排前面，小包裝排後面 */
@@ -227,6 +234,8 @@ for (const product of PRODUCTS) {
     }),
   });
 
+  const pack = PACKAGING[product.packaging];
+
   for (const [size, price] of product.variants) {
     const spec = SIZES[size];
     await api("variants?on_conflict=sku", {
@@ -235,8 +244,8 @@ for (const product of PRODUCTS) {
       body: JSON.stringify({
         product_id: row.id,
         sku: `YM-${product.slug.toUpperCase()}-${size}`,
-        label_zh: spec.label_zh,
-        label_en: spec.label_en,
+        label_zh: `${spec.zh} ${pack.zh}`,
+        label_en: `${spec.en} ${pack.en}`,
         weight_grams: spec.grams,
         price_twd: price,
         status: "on_sale",
@@ -247,7 +256,7 @@ for (const product of PRODUCTS) {
 
   console.log(
     `✅ ${product.name_zh}${product.unpublished ? "（未上架）" : ""} — ${product.variants
-      .map(([size, price]) => `${SIZES[size].label_zh} NT$${price}`)
+      .map(([size, price]) => `${SIZES[size].zh} ${pack.zh} NT${price}`)
       .join("、")}`,
   );
 }
