@@ -27,9 +27,13 @@ const ENDPOINT = "https://api.resend.com/emails";
  * 寄件人。
  *
  * 網域驗證完成之前只能用 Resend 提供的這個位址。
- * 驗證之後改成 `訂單通知 <orders@yumintea.com.tw>` 之類的即可。
+ * 驗證之後改成 `orders@yumintea.com.tw` 之類的即可。
+ *
+ * 【顯示名稱刻意用英文。】中文的顯示名稱要做 MIME 編碼，
+ * 各家服務商處理得不一樣 —— 這是很典型的「設定明明都對卻寄不出去」。
+ * 等網域接好、確認中文名稱會過再改回來。
  */
-const FROM = "御茗訂單 <onboarding@resend.dev>";
+const FROM = "SHIN-YU-MIN Orders <onboarding@resend.dev>";
 
 /**
  * 收件人：業主的信箱。

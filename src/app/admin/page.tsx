@@ -43,6 +43,12 @@ export default async function AdminOrdersPage() {
           >
             商品與價格
           </Link>
+          <Link
+            href="/admin/check"
+            className="text-[13px] text-ink-faint underline-offset-4 hover:text-brand hover:underline"
+          >
+            系統檢查
+          </Link>
           <form action={signOut}>
             <button
               type="submit"

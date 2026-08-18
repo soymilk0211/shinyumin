@@ -123,3 +123,131 @@ function refreshShop() {
 function isUuid(value: string) {
   return /^[0-9a-fA-F-]{36}$/.test(value);
 }
+
+
+// ── 系統檢查 ────────────────────────────────────────────
+
+export type CheckResult = {
+  status: "idle" | "ok" | "fail";
+  message: string;
+};
+
+/**
+ * 按一下，當場試一次寄信或推播，並把服務商回的原文顯示出來。
+ *
+ * 【為什麼要有這個】：這些動作平常是在背景跑的，失敗只會寫進伺服器記錄，
+ * 業主用手機看不到。做成一個按鈕，出問題時才有辦法自己查，
+ * 或至少把錯誤訊息原封不動貼給我。
+ *
+ * 【不翻譯錯誤訊息。】服務商寫的原文通常已經講清楚原因，
+ * 我自己轉述反而會漏掉關鍵字。
+ */
+export async function runSystemCheck(
+  _previous: CheckResult,
+  formData: FormData,
+): Promise<CheckResult> {
+  if (!(await isSignedIn())) redirect("/admin/login");
+
+  // 測試也會消耗額度與寄信配額，所以一樣要限流
+  const gate = rateLimit(`admin-check:${await clientIp()}`, 6, 10 * 60 * 1000);
+  if (!gate.ok) {
+    return { status: "fail", message: "測試太多次了，請等十分鐘再試。" };
+  }
+
+  const kind = String(formData.get("kind") ?? "");
+
+  if (kind === "email") return await checkEmail();
+  if (kind === "line") return await checkLine();
+  return { status: "fail", message: "不認得的檢查項目。" };
+}
+
+async function checkEmail(): Promise<CheckResult> {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    return {
+      status: "fail",
+      message:
+        "Vercel 上沒有 RESEND_API_KEY。可能是還沒存，或是存了之後還沒重新部署 —— 環境變數要重新部署才會生效。",
+    };
+  }
+
+  const to = process.env.ORDER_ARCHIVE_EMAIL || "tim78937@gmail.com";
+
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "SHIN-YU-MIN Orders <onboarding@resend.dev>",
+        to: [to],
+        subject: "【御茗】寄信測試",
+        html: "<p>這是從後台的系統檢查寄出的測試信。</p><p>收到這一封，代表訂單存檔信也會寄得出去。</p>",
+      }),
+      signal: AbortSignal.timeout(10000),
+    });
+
+    const body = await res.text();
+
+    if (res.ok) {
+      return {
+        status: "ok",
+        message: `已送出到 ${to}。請看一下信箱（也看一下垃圾信匣）。\n\nResend 回應：${body}`,
+      };
+    }
+    return {
+      status: "fail",
+      message: `收件人：${to}\nHTTP ${res.status}\n\nResend 回的原文：\n${body}`,
+    };
+  } catch (error) {
+    return {
+      status: "fail",
+      message: `連不上 Resend：${error instanceof Error ? error.message : String(error)}`,
+    };
+  }
+}
+
+async function checkLine(): Promise<CheckResult> {
+  const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+  const groupId = process.env.LINE_GROUP_ID;
+
+  if (!token || !groupId) {
+    return {
+      status: "fail",
+      message: `缺少設定：${!token ? "LINE_CHANNEL_ACCESS_TOKEN " : ""}${!groupId ? "LINE_GROUP_ID" : ""}`.trim(),
+    };
+  }
+
+  try {
+    const res = await fetch("https://api.line.me/v2/bot/message/push", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: groupId,
+        messages: [
+          { type: "text", text: "🍵 這是從後台按出來的測試訊息，不是真的訂單。" },
+        ],
+      }),
+      signal: AbortSignal.timeout(10000),
+    });
+
+    const body = await res.text();
+    if (res.ok) {
+      return { status: "ok", message: "已推送到群組，請看一下 LINE。" };
+    }
+    return {
+      status: "fail",
+      message: `HTTP ${res.status}\n\nLINE 回的原文：\n${body}`,
+    };
+  } catch (error) {
+    return {
+      status: "fail",
+      message: `連不上 LINE：${error instanceof Error ? error.message : String(error)}`,
+    };
+  }
+}
