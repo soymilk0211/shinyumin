@@ -89,13 +89,28 @@ export function SiteFooter({
           </div>
 
           {/* 【查訂單要放在頁尾。】客人隔幾天回來想看進度，
-              是從首頁進來的，不會留著當初那張完成頁的網址。 */}
-          <div className="mt-10">
+              是從首頁進來的，不會留著當初那張完成頁的網址。
+
+              退換貨與隱私權也放這裡 —— 這是大家習慣去找它們的地方，
+              而且金流業者審核網站時也會看有沒有這兩頁。 */}
+          <div className="mt-10 flex flex-wrap gap-x-8 gap-y-4">
             <Link
               href={`/${locale}/orders`}
               className="link-rule label text-brand transition-colors hover:text-brand-strong"
             >
               {dict.footer.trackOrder}
+            </Link>
+            <Link
+              href={`/${locale}/returns`}
+              className="link-rule label text-ink-faint transition-colors hover:text-brand"
+            >
+              {dict.returns.title}
+            </Link>
+            <Link
+              href={`/${locale}/privacy`}
+              className="link-rule label text-ink-faint transition-colors hover:text-brand"
+            >
+              {dict.privacy.title}
             </Link>
           </div>
         </div>

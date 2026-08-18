@@ -253,6 +253,142 @@
   },
 
 
+  "returns": {
+    "title": "Shipping and Returns",
+    "updated": "Last updated: August 2026",
+    "sections": [
+      {
+        "title": "Dispatch times",
+        "body": [
+          "Orders are dispatched within two working days. We do not dispatch on weekends or public holidays.",
+          "For bank transfer orders, the two days start from the day we confirm your payment.",
+          "Tea ships at ambient temperature; no refrigeration is needed."
+        ]
+      },
+      {
+        "title": "Where we ship",
+        "body": [
+          "Taiwan's main island and outlying islands (Penghu, Kinmen, Matsu) only. We do not ship internationally.",
+          "We do not offer convenience-store pickup."
+        ]
+      },
+      {
+        "title": "Shipping fees",
+        "body": [
+          "T-cat home delivery NT$ 200 / Post office NT$ 130 / Post office to outlying islands NT$ 250.",
+          "Free shipping on orders over NT$ 2,000 within the main island. Outlying islands are excluded.",
+          "For cash on delivery, the carrier's collection fee is charged separately and is not included in the amount shown on the website."
+        ]
+      },
+      {
+        "title": "When you can return an order",
+        "body": [
+          "Under Taiwan's Consumer Protection Act you have a seven-day review period after receiving your order. This is a period to inspect the goods, not a trial period.",
+          "If the packaging is unopened and intact, please call us within seven days of delivery and we will arrange the return.",
+          "If the goods are damaged in transit, they can be returned or refunded whether or not the package has been opened."
+        ]
+      },
+      {
+        "title": "When you cannot return an order",
+        "body": [
+          "Tea is a food product. Once a vacuum pack is opened it cannot be restored to its original state, so for food safety reasons opened packages cannot be returned.",
+          "Please open the pack only once you are sure you want to keep the tea."
+        ]
+      },
+      {
+        "title": "Damaged parcels: please film the unboxing",
+        "body": [
+          "If the parcel arrives crushed, torn or damp, please photograph it before opening and film the whole unboxing.",
+          "This is not us being difficult. Carriers require evidence that the damage happened in transit; without footage we cannot claim on your behalf.",
+          "Once you have the footage, please call us and we will arrange a return or a replacement."
+        ]
+      },
+      {
+        "title": "Who pays return postage",
+        "body": [
+          "Defective or damaged goods: we pay.",
+          "Returns for other reasons (ordered the wrong thing, changed your mind): return postage is paid by the buyer.",
+          "If a parcel is returned or has to be resent because the delivery address was wrong, the additional postage is paid by the buyer."
+        ]
+      },
+      {
+        "title": "Changing or cancelling an order",
+        "body": [
+          "There is no way to do this yourself on the website — please call us and we will sort it out.",
+          "Address, items and quantities can all be changed until the parcel is dispatched."
+        ]
+      }
+    ],
+    "contactTitle": "Any questions, please call us",
+    "phoneHint": "Tap to reveal phone",
+    "serviceHours": "Customer service 08:00–17:00"
+  },
+
+  "privacy": {
+    "title": "Privacy Policy",
+    "updated": "Last updated: August 2026",
+    "sections": [
+      {
+        "title": "What we collect",
+        "body": [
+          "What you enter at checkout: name, phone number, email address, delivery address, and optionally a company tax ID, invoice title and a note.",
+          "We collect nothing else. There is no registration, no membership and no password on this website."
+        ]
+      },
+      {
+        "title": "Why we collect it",
+        "body": [
+          "Name, phone and address: to ship your order and to contact you if there is a problem with it.",
+          "Email: to send your order confirmation.",
+          "Tax ID and invoice title: to issue an invoice. If you leave them blank they are never used."
+        ]
+      },
+      {
+        "title": "Where it is stored and who can see it",
+        "body": [
+          "Order data is stored in a database provided by Supabase, hosted in Singapore.",
+          "Order data is completely locked away from website visitors. The public website cannot read any order; only our password-protected admin can.",
+          "Only the family behind SHIN-YU-MIN sees your details. We never sell your data or pass it to marketing companies."
+        ]
+      },
+      {
+        "title": "External services we use",
+        "body": [
+          "Supabase: stores product and order data.",
+          "Vercel: hosts the website.",
+          "LINE: when an order is placed, a notification containing the contact details needed for dispatch is sent to our own internal group, which only family members are in.",
+          "Resend: sends order confirmation emails (not yet enabled).",
+          "This website uses no AI services. What you type is never sent to an AI model."
+        ]
+      },
+      {
+        "title": "Cookies and tracking",
+        "body": [
+          "Your cart is stored in your own browser (LocalStorage); our server does not know what is in it.",
+          "There are no advertising trackers on this site, no cross-site behavioural tracking and no third-party ads."
+        ]
+      },
+      {
+        "title": "How long we keep it",
+        "body": [
+          "Order records are retained as the basis for dispatch, accounting and tax records.",
+          "If you would like your contact details removed, please call us and we will handle it once we have confirmed who you are."
+        ]
+      },
+      {
+        "title": "Your rights",
+        "body": [
+          "You may ask us to show, correct or delete the personal data we hold about you.",
+          "Please call us; we will confirm your identity and then act on it.",
+          "You can also check your own order status on this site using your order number and the last four digits of your phone number, without providing anything else."
+        ]
+      }
+    ],
+    "contactTitle": "Any questions, please call us",
+    "phoneHint": "Tap to reveal phone",
+    "serviceHours": "Customer service 08:00–17:00"
+  },
+
   "categories": {
     "blackTea": "Black Tea",
     "blackTeaLatin": "Black",
