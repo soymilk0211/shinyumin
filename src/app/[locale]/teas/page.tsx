@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLink } from "@/components/arrow-link";
-import { ImagePlaceholder } from "@/components/image-placeholder";
+import { ProductPhoto } from "@/components/product-photo";
 import { ObfuscatedContact } from "@/components/obfuscated-contact";
 import { ProductName } from "@/components/product-name";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
+import { getProductImages } from "@/lib/product-images";
 import { formatPrice, getProducts, lowestPrice } from "@/lib/products";
 
 /**
@@ -84,9 +85,12 @@ export default async function TeasPage({ params }: PageProps<"/[locale]/teas">) 
                     tabIndex={-1}
                     aria-hidden="true"
                   >
-                    <ImagePlaceholder
+                    <ProductPhoto
+                      src={getProductImages(product.slug).main}
+                      alt={product.name}
                       ratio="aspect-[4/5]"
-                      label={dict.common.imagePending}
+                      placeholderLabel={dict.common.imagePending}
+                      sizes="(min-width: 640px) 42vw, 100vw"
                     />
                   </Link>
 

@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AddToCart } from "@/components/add-to-cart";
 import { ArrowLink } from "@/components/arrow-link";
-import { ImagePlaceholder } from "@/components/image-placeholder";
+import { ProductPhoto } from "@/components/product-photo";
 import { ProductName } from "@/components/product-name";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
+import { getProductImages } from "@/lib/product-images";
 import { getProductBySlug } from "@/lib/products";
 
 /**
@@ -42,6 +43,8 @@ export default async function ProductPage({
   const product = await getProductBySlug(slug, locale);
   if (!product) notFound();
 
+  const photos = getProductImages(product.slug);
+
   return (
     <div className="overflow-x-clip px-6 pt-12 pb-28 sm:px-10 sm:pt-16 sm:pb-40">
       <ArrowLink href={`/${locale}/teas`} tone="ink">
@@ -52,21 +55,29 @@ export default async function ProductPage({
         {/* 圖。上面是商品（罐裝），下面是茶乾特寫 ——
             買茶的人真正想看的是葉子長什麼樣子 */}
         <div className="sm:sticky sm:top-28 sm:w-[44%]">
-          <ImagePlaceholder
+          <ProductPhoto
+            src={photos.main}
+            alt={product.name}
             ratio="aspect-[4/5]"
-            label={dict.common.imagePending}
+            placeholderLabel={dict.common.imagePending}
+            priority
           />
 
-          <div className="mt-4 flex items-start gap-4">
-            <span className="vertical label mt-1 shrink-0 text-ink-faint">
-              {dict.product.dryLeaf}
-            </span>
-            <ImagePlaceholder
-              ratio="aspect-[4/3]"
-              className="flex-1"
-              label={dict.common.imagePending}
-            />
-          </div>
+          {/* 茶乾照只有在【跟主圖不是同一張】的時候才出現。
+              同一張圖放兩次只會顯得敷衍。 */}
+          {photos.leaf && (
+            <div className="mt-4 flex items-start gap-4">
+              <span className="vertical label mt-1 shrink-0 text-ink-faint">
+                {dict.product.dryLeaf}
+              </span>
+              <ProductPhoto
+                src={photos.leaf}
+                alt={`${product.name}　${dict.product.dryLeaf}`}
+                ratio="aspect-[4/3]"
+                className="flex-1"
+              />
+            </div>
+          )}
         </div>
 
         {/* 內容 */}
