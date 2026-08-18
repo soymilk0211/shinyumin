@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, LXGW_WenKai_TC } from "next/font/google";
 import { notFound } from "next/navigation";
+import { AnnouncementBar } from "@/components/site-announcement";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ThemeProvider } from "@/components/theme-provider";
 import { isLocale, localeHtmlLang, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
+import { getAnnouncement } from "@/lib/announcement";
 import "../globals.css";
 
 /**
@@ -80,6 +82,10 @@ export default async function LocaleLayout({
 
   const dict = getDictionary(locale);
 
+  // 公告橫幅。沒有在公告的時候這裡是 null，整條橫幅就不會出現。
+  // 資料表還沒建立（業主還沒貼那份 SQL）時也是 null，網站照常運作。
+  const announcement = await getAnnouncement(locale);
+
   return (
     <html
       lang={localeHtmlLang[locale]}
@@ -90,6 +96,14 @@ export default async function LocaleLayout({
     >
       <body className="flex min-h-full flex-col">
         <ThemeProvider>
+          {/* 公告在選單列【上面】：捲下去它就走了，選單列繼續黏著。
+              公告只需要被看到一次，不需要一路跟著客人往下捲。 */}
+          {announcement && (
+            <AnnouncementBar
+              label={dict.announcement.label}
+              message={announcement}
+            />
+          )}
           <SiteHeader locale={locale} dict={dict} />
           <main className="flex-1">{children}</main>
           <SiteFooter dict={dict} locale={locale} />

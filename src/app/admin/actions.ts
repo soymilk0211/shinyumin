@@ -9,6 +9,11 @@ import {
   isSignedIn,
   startSession,
 } from "@/lib/admin-auth";
+import {
+  MAX_MESSAGE_LENGTH,
+  saveAnnouncementContent,
+  setAnnouncementActive,
+} from "@/lib/admin-announcement";
 import { setOrderStatus, type OrderStatus } from "@/lib/admin-orders";
 import {
   setProductPublished,
@@ -116,6 +121,60 @@ export async function updateProductPublished(formData: FormData) {
  */
 function refreshShop() {
   revalidatePath("/admin/products");
+  revalidatePath("/", "layout");
+}
+
+// ── 公告橫幅 ────────────────────────────────────────────
+
+/**
+ * 存公告的內容。【存檔不等於公開】——
+ * 業主很可能會先把下個月的漲價公告打好放著，時間到再按開關。
+ * 把「打字」與「要不要讓客人看到」分成兩個動作，才不會手一滑就上線。
+ */
+export async function saveAnnouncement(formData: FormData) {
+  if (!(await isSignedIn())) redirect("/admin/login");
+
+  const messageZh = String(formData.get("messageZh") ?? "").slice(
+    0,
+    MAX_MESSAGE_LENGTH,
+  );
+  const messageEn = String(formData.get("messageEn") ?? "").slice(
+    0,
+    MAX_MESSAGE_LENGTH,
+  );
+
+  // 日期欄位沒填會是空字串，要轉成 null（資料庫的「一直顯示」）。
+  // 格式不對就當作沒填 —— 寧可變成一直顯示，也不要寫一個壞日期進去
+  // 讓公告在意想不到的時候消失。
+  const rawEndsOn = String(formData.get("endsOn") ?? "").trim();
+  const endsOn = /^\d{4}-\d{2}-\d{2}$/.test(rawEndsOn) ? rawEndsOn : null;
+
+  await saveAnnouncementContent({ messageZh, messageEn, endsOn });
+  refreshAnnouncement();
+}
+
+/** 開關公告。這是唯一會改變「客人看不看得到」的動作。 */
+export async function toggleAnnouncement(formData: FormData) {
+  if (!(await isSignedIn())) redirect("/admin/login");
+
+  const active = String(formData.get("active") ?? "") === "true";
+
+  await setAnnouncementActive(active);
+  refreshAnnouncement();
+}
+
+/**
+ * 公告改完之後，把前台一起更新。
+ *
+ * 前台的頁面為了跑得快會暫存起來（最多一分鐘）。不特別講一聲的話，
+ * 業主按了開關、回前台重整卻沒看到公告，會以為壞掉 ——
+ * 其實只是還在看一分鐘前的那一份。
+ *
+ * 公告在「全站的外框」裡，所以要用 layout 這個層級去更新，
+ * 只更新單一頁面是不夠的。
+ */
+function refreshAnnouncement() {
+  revalidatePath("/admin/announcement");
   revalidatePath("/", "layout");
 }
 

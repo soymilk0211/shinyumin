@@ -17,6 +17,10 @@
     "closeMenu": "Close menu"
   },
 
+  "announcement": {
+    "label": "Notice"
+  },
+
   "home": {
     "heroTitleLines": ["Sun Moon Lake", "Black Tea"],
     "heroLead": "Our factory is in Dayan Village, Yuchi Township, Nantou — the heart of the Sun Moon Lake black tea region. This is not a sourcing choice; it is where our family has lived and made tea for generations.",
@@ -52,8 +56,8 @@
     "featureName": "Ruby Black Tea",
     "featureSub": "Taiwan Tea No. 18",
     "featureNotes": "Natural notes of cinnamon and mint — the signature character of the Ruby cultivar. A bright, clear red liquor with a sweet finish and no astringency.",
-    "featureVariant": "150g vacuum-sealed tin",
-    "featurePrice": "NT$ 650",
+    "featureVariant": "150g caddy (4 taels)",
+    "featurePrice": "NT$ 600",
     "featureCta": "See this tea",
     "featureOrigin": "Wild Taiwan tea × Burmese large-leaf",
 

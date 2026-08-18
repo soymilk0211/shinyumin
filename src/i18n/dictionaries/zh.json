@@ -17,6 +17,10 @@
     "closeMenu": "關閉選單"
   },
 
+  "announcement": {
+    "label": "公告"
+  },
+
   "home": {
     "heroTitleLines": ["日月潭", "紅茶"],
     "heroLead": "我們的製茶廠在南投縣魚池鄉大雁村，日月潭紅茶的核心產區。這不是我們挑選的產地，是我們家世代生活與製茶的地方。",
@@ -37,8 +41,8 @@
     "featureName": "紅玉紅茶",
     "featureSub": "台茶 18 號　Ruby Black Tea",
     "featureNotes": "天然的肉桂與薄荷氣息，是紅玉這個品種特有的香氣。茶湯明亮紅豔，尾韻回甘而不澀。",
-    "featureVariant": "150g 真空罐裝",
-    "featurePrice": "NT$ 650",
+    "featureVariant": "四兩・150g 鐵罐",
+    "featurePrice": "NT$ 600",
     "featureCta": "看這款茶",
     "featureOrigin": "台灣野生山茶 × 緬甸大葉種",
 

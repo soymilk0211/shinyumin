@@ -34,14 +34,21 @@ export default async function AdminOrdersPage() {
 
   return (
     <main>
-      <div className="flex items-baseline justify-between gap-4">
+      {/* 手機上五個項目排不下，所以整列允許換行 */}
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-3">
         <h1 className="text-2xl">訂單</h1>
-        <div className="flex items-baseline gap-5">
+        <div className="flex flex-wrap items-baseline gap-x-5 gap-y-2">
           <Link
             href="/admin/products"
             className="text-[13px] text-ink-faint underline-offset-4 hover:text-brand hover:underline"
           >
             商品與價格
+          </Link>
+          <Link
+            href="/admin/announcement"
+            className="text-[13px] text-ink-faint underline-offset-4 hover:text-brand hover:underline"
+          >
+            公告
           </Link>
           <Link
             href="/admin/check"
