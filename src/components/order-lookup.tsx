@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { ObfuscatedContact } from "@/components/obfuscated-contact";
+import { OrderCard } from "@/components/order-card";
 import type { Dictionary } from "@/i18n/dictionaries";
-import { formatPrice } from "@/lib/products";
+import type { PublicOrder } from "@/lib/order-lookup";
 
 /**
  * 客人查自己的訂單。
@@ -21,66 +22,16 @@ import { formatPrice } from "@/lib/products";
 
 type Labels = Dictionary["orderLookup"];
 
-type FoundOrder = {
-  orderNumber: string;
-  createdAt: string;
-  status: string;
-  paymentMethod: string;
-  shippingMethod: string;
-  subtotalTwd: number;
-  shippingFeeTwd: number;
-  totalTwd: number;
-  items: {
-    productName: string;
-    label: string;
-    quantity: number;
-    lineTotalTwd: number;
-  }[];
-};
-
 export function OrderLookup({ labels }: { labels: Labels }) {
   const [orderNumber, setOrderNumber] = useState("");
   const [phoneLast4, setPhoneLast4] = useState("");
-  const [order, setOrder] = useState<FoundOrder | null>(null);
+  const [order, setOrder] = useState<PublicOrder | null>(null);
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
 
-  function statusText(status: string) {
-    switch (status) {
-      case "paid":
-        return labels.statusPaid;
-      case "shipped":
-        return labels.statusShipped;
-      case "completed":
-        return labels.statusCompleted;
-      case "cancelled":
-        return labels.statusCancelled;
-      default:
-        return labels.statusPendingPayment;
-    }
-  }
 
-  function paymentText(method: string) {
-    return method === "cod" ? labels.paymentCod : labels.paymentTransfer;
-  }
 
-  function shippingText(method: string) {
-    if (method === "tcat") return labels.shippingTcat;
-    if (method === "post_outlying") return labels.shippingPostOutlying;
-    return labels.shippingPost;
-  }
 
-  function orderedAt(iso: string) {
-    return new Intl.DateTimeFormat("zh-TW", {
-      timeZone: "Asia/Taipei",
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    }).format(new Date(iso));
-  }
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -108,7 +59,7 @@ export function OrderLookup({ labels }: { labels: Labels }) {
             : labels.notFound,
         );
       } else {
-        setOrder(result.order as FoundOrder);
+        setOrder(result.order as PublicOrder);
       }
     } catch {
       setError(labels.networkError);
@@ -189,68 +140,8 @@ export function OrderLookup({ labels }: { labels: Labels }) {
         <section className="mt-16 max-w-xl border-t border-line pt-10">
           <span className="label text-ink-faint">{labels.resultTitle}</span>
 
-          <p className="mt-5 font-display text-[clamp(1.4rem,4vw,2rem)] tracking-[0.04em] text-ink tabular-nums">
-            {order.orderNumber}
-          </p>
-
-          <p className="mt-4 text-[15px] tracking-[0.06em] text-brand">
-            {statusText(order.status)}
-          </p>
-          <p className="mt-2 text-[12px] tracking-[0.06em] text-ink-faint tabular-nums">
-            {labels.orderedAt}　{orderedAt(order.createdAt)}
-          </p>
-
-          <ul className="mt-10">
-            {order.items.map((item, index) => (
-              <li key={index} className="border-t border-line py-4">
-                <div className="flex items-baseline justify-between gap-4">
-                  <span className="font-display text-base text-ink">
-                    {item.productName}
-                  </span>
-                  <span className="font-display text-base text-ink tabular-nums">
-                    {formatPrice(item.lineTotalTwd)}
-                  </span>
-                </div>
-                <p className="mt-1.5 text-[12px] tracking-[0.06em] text-ink-soft">
-                  {item.label}
-                  <span className="ml-3 tabular-nums">× {item.quantity}</span>
-                </p>
-              </li>
-            ))}
-            <li className="border-t border-line" />
-          </ul>
-
-          <dl className="mt-6 space-y-3 text-[12px] tracking-[0.06em]">
-            <div className="flex items-baseline justify-between gap-4">
-              <dt className="text-ink-soft">{labels.subtotal}</dt>
-              <dd className="text-ink tabular-nums">
-                {formatPrice(order.subtotalTwd)}
-              </dd>
-            </div>
-            <div className="flex items-baseline justify-between gap-4">
-              <dt className="text-ink-soft">
-                {labels.shippingFee}
-                <span className="ml-2 text-ink-faint">
-                  {shippingText(order.shippingMethod)}
-                </span>
-              </dt>
-              <dd className="text-ink tabular-nums">
-                {order.shippingFeeTwd === 0
-                  ? labels.free
-                  : formatPrice(order.shippingFeeTwd)}
-              </dd>
-            </div>
-            <div className="flex items-baseline justify-between gap-4">
-              <dt className="text-ink-soft">{labels.paymentLabel}</dt>
-              <dd className="text-ink">{paymentText(order.paymentMethod)}</dd>
-            </div>
-          </dl>
-
-          <div className="mt-6 flex items-baseline justify-between gap-4 border-t border-line pt-6">
-            <span className="label text-ink-faint">{labels.total}</span>
-            <span className="font-display text-2xl text-ink tabular-nums">
-              {formatPrice(order.totalTwd)}
-            </span>
+          <div className="mt-6">
+            <OrderCard order={order} labels={labels} />
           </div>
 
           {/* 客人查完訂單，下一個念頭常常是「我要改地址」。

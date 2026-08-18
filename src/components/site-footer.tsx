@@ -101,6 +101,12 @@ export function SiteFooter({
               {dict.footer.trackOrder}
             </Link>
             <Link
+              href={`/${locale}/account`}
+              className="link-rule label text-ink-faint transition-colors hover:text-brand"
+            >
+              {dict.account.title}
+            </Link>
+            <Link
               href={`/${locale}/returns`}
               className="link-rule label text-ink-faint transition-colors hover:text-brand"
             >

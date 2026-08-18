@@ -174,6 +174,41 @@
     "errorNetwork": "The connection dropped and the order was not placed. Please check your connection and try again."
   },
 
+  "account": {
+    "title": "Account",
+    "lead": "Sign in to see all your orders in one place, and to delete your account whenever you like. You can still order without an account — membership is optional.",
+
+    "emailLabel": "Email address",
+    "emailHint": "We will send you a verification code. This site has no passwords, so there is nothing to remember and nothing to forget.",
+    "requestCode": "Send me a code",
+
+    "codeSentTitle": "Code sent",
+    "codeSentNote": "If that address can be used, a verification code will arrive within a few minutes. Do check your spam folder.",
+    "codeLabel": "Verification code",
+    "submitCode": "Sign in",
+    "useAnotherEmail": "Use a different address",
+
+    "signedInAs": "Signed in as",
+    "signOut": "Sign out",
+
+    "ordersTitle": "My orders",
+    "noOrders": "This account has no orders yet. Orders you place while signed in will appear here.",
+    "guestNote": "Orders placed before you signed in do not appear here automatically. You can look those up with the order number and the last four digits of your phone.",
+    "lookupLink": "Track an order",
+
+    "deleteTitle": "Delete account",
+    "deleteNote": "Once deleted, this address is no longer a member and this order list disappears. You can join again with the same address at any time.",
+    "deleteKeepNote": "Your orders themselves are not deleted. The amounts and items on completed orders are accounting records and must be kept for a period, so they simply revert to being guest orders. If you want the contact details on those orders removed, please contact the person who looks after our data.",
+    "deleteConfirmLabel": "Type the word delete here",
+    "deleteButton": "Permanently delete this account",
+
+    "errorEmail": "That email address does not look right.",
+    "errorCode": "That code is wrong or has expired. Please try again.",
+    "errorSlow": "Too many attempts. Please wait a little and try again.",
+    "errorConfirm": "To delete your account, type the word delete in the box.",
+    "deletedNote": "Your account has been deleted. Thank you for your custom."
+  },
+
   "orderLookup": {
     "title": "Track your order",
     "lead": "Enter your order number and the last four digits of your phone number to see where your order is.",

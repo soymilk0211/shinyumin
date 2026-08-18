@@ -38,6 +38,12 @@ export type OrderDraft = {
 
   paymentMethod: PaymentMethod;
 
+  /**
+   * 下單的會員帳號。【沒登入就是 null，那完全正常】——
+   * 會員是選配的，訪客一樣買得到東西。
+   */
+  userId: string | null;
+
   /** 統一編號與發票抬頭都是選填。發票在外部系統人工開立，這裡只收集。 */
   taxId: string | null;
   invoiceTitle: string | null;
@@ -169,6 +175,7 @@ export async function createOrder(
         payment_method: draft.paymentMethod,
         payment_status: "unpaid",
         order_status: "pending_payment",
+        user_id: draft.userId,
         tax_id: draft.taxId,
         invoice_title: draft.invoiceTitle,
         note: draft.note,

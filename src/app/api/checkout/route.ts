@@ -1,4 +1,5 @@
 import { after } from "next/server";
+import { getMember } from "@/lib/member-auth";
 import { notifyNewOrder } from "@/lib/line";
 import { createOrder, type OrderDraftLine } from "@/lib/orders";
 import { isPaymentMethod, isShippingMethod } from "@/lib/order-rules";
@@ -62,7 +63,10 @@ export async function POST(request: Request) {
   }
 
   // ── 建單 ─────────────────────────────────────────────
-  const result = await createOrder(draft);
+  // 有登入就把訂單掛到那個帳號上，之後在「我的訂單」看得到。
+  // 【沒登入照樣建單】—— 會員是選配的，這一行不會擋住任何人。
+  const member = await getMember();
+  const result = await createOrder({ ...draft, userId: member?.userId ?? null });
 
   if (!result.ok) {
     return Response.json(
