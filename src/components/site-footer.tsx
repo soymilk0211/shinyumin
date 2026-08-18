@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { BrandLogo } from "@/components/brand-logo";
 import { ObfuscatedContact } from "@/components/obfuscated-contact";
 import type { Dictionary } from "@/i18n/dictionaries";
@@ -14,7 +15,13 @@ import type { Dictionary } from "@/i18n/dictionaries";
  * 原本「個人手機不上網站」的規則，見 CONTEXT.md 的隱私規則。
  * 批發第一版不上線，所以只寫「大量訂購請電洽」。
  */
-export function SiteFooter({ dict }: { dict: Dictionary }) {
+export function SiteFooter({
+  dict,
+  locale,
+}: {
+  dict: Dictionary;
+  locale: string;
+}) {
   const year = new Date().getFullYear();
 
   return (
@@ -79,6 +86,17 @@ export function SiteFooter({ dict }: { dict: Dictionary }) {
             <p className="mt-3 text-[12px] leading-[2] tracking-[0.06em] text-ink-soft">
               {dict.footer.wholesaleBody}
             </p>
+          </div>
+
+          {/* 【查訂單要放在頁尾。】客人隔幾天回來想看進度，
+              是從首頁進來的，不會留著當初那張完成頁的網址。 */}
+          <div className="mt-10">
+            <Link
+              href={`/${locale}/orders`}
+              className="link-rule label text-brand transition-colors hover:text-brand-strong"
+            >
+              {dict.footer.trackOrder}
+            </Link>
           </div>
         </div>
       </div>

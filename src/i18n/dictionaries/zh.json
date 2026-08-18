@@ -159,6 +159,47 @@
     "errorNetwork": "連線中斷，訂單沒有送出。請確認網路後再試一次。"
   },
 
+  "orderLookup": {
+    "title": "查訂單",
+    "lead": "輸入訂單編號與電話後四碼，就可以看到這張訂單走到哪裡了。",
+    "orderNumber": "訂單編號",
+    "orderNumberHint": "在訂單完成頁與確認信上，YM 開頭的那一串",
+    "phoneLast4": "電話後四碼",
+    "phoneLast4Hint": "下單時填的那支電話的最後四個數字",
+    "submit": "查詢",
+    "submitting": "查詢中",
+
+    "resultTitle": "這張訂單",
+    "orderedAt": "下單時間",
+    "statusLabel": "目前狀態",
+    "subtotal": "商品合計",
+    "shippingFee": "運費",
+    "total": "應付總額",
+    "free": "免運",
+    "paymentLabel": "付款方式",
+    "shippingLabel": "出貨方式",
+
+    "statusPendingPayment": "待付款",
+    "statusPaid": "已付款，準備出貨",
+    "statusShipped": "已出貨",
+    "statusCompleted": "已完成",
+    "statusCancelled": "已取消",
+
+    "paymentTransfer": "匯款",
+    "paymentCod": "貨到付款",
+    "shippingTcat": "黑貓宅急便",
+    "shippingPost": "郵局",
+    "shippingPostOutlying": "離島郵局",
+
+    "changeNote": "要修改地址、加買、或取消這張訂單，麻煩您來電，我們幫您處理。還沒出貨之前都改得動。",
+    "phoneHint": "點一下顯示電話",
+    "serviceHours": "客服時間 08:00–17:00",
+
+    "notFound": "查不到這張訂單。請確認訂單編號與電話後四碼都對，或直接來電詢問。",
+    "rateLimited": "查詢太多次了，請等十五分鐘再試，或直接來電。",
+    "networkError": "連線中斷，請稍後再試一次。"
+  },
+
   "orderDone": {
     "title": "訂單已送出",
     "lead": "謝謝您。我們已經收到這張訂單。",
@@ -214,6 +255,7 @@
     "email": "電子信箱",
     "wholesaleTitle": "大量訂購",
     "wholesaleBody": "大量訂購請電洽，我們會另行報價與安排配送。",
+    "trackOrder": "查我的訂單",
     "phoneHint": "點一下顯示電話",
     "emailHint": "點一下顯示信箱",
     "rights": "版權所有"
