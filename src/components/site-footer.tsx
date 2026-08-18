@@ -88,6 +88,17 @@ export function SiteFooter({
             </p>
           </div>
 
+          {/* 【禮盒是訂製的，網站上不賣。】但一定要寫出來 ——
+              不寫的話，想買禮盒的客人根本不知道我們有這個東西。 */}
+          <div className="mt-10">
+            <span className="label text-ink-faint">
+              {dict.footer.giftTitle}
+            </span>
+            <p className="mt-3 text-[12px] leading-[2] tracking-[0.06em] text-ink-soft">
+              {dict.footer.giftBody}
+            </p>
+          </div>
+
           {/* 【查訂單要放在頁尾。】客人隔幾天回來想看進度，
               是從首頁進來的，不會留著當初那張完成頁的網址。
 

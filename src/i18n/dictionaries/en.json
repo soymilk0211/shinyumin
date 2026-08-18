@@ -69,7 +69,10 @@
     "fromPrice": "from",
     "soldOut": "Sold out",
     "specs": "Packaging",
-    "notesLabel": "Tasting notes"
+    "notesLabel": "Tasting notes",
+    "giftTitle": "Gifts and custom boxes",
+    "giftBody": "Gift boxes are made to order, so there is no fixed set here. If you are buying a gift, or want to specify the contents and quantity, please call us and we will quote and arrange it.",
+    "giftPhoneHint": "Tap to reveal phone"
   },
 
   "product": {
@@ -444,6 +447,8 @@
     "email": "Email",
     "wholesaleTitle": "Wholesale",
     "wholesaleBody": "For bulk orders, please call us. We will quote and arrange delivery separately.",
+    "giftTitle": "Custom gift boxes",
+    "giftBody": "Gift boxes are made to order — there is no fixed set on the website. Contents, quantity and packaging are all open to discussion. Please call us and we will quote for what you need.",
     "trackOrder": "Track my order",
     "phoneHint": "Click to reveal phone",
     "emailHint": "Click to reveal email",

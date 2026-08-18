@@ -54,7 +54,10 @@
     "fromPrice": "起",
     "soldOut": "售罄",
     "specs": "包裝規格",
-    "notesLabel": "風味"
+    "notesLabel": "風味",
+    "giftTitle": "送禮或訂製禮盒",
+    "giftBody": "禮盒是訂製的，這裡沒有現成的規格。要送禮、或想指定內容與數量，請直接來電，我們會依需求報價與安排。",
+    "giftPhoneHint": "點一下顯示電話"
   },
 
   "product": {
@@ -429,6 +432,8 @@
     "email": "電子信箱",
     "wholesaleTitle": "大量訂購",
     "wholesaleBody": "大量訂購請電洽，我們會另行報價與安排配送。",
+    "giftTitle": "客製化禮盒",
+    "giftBody": "禮盒是訂製的，網站上沒有現成的規格。內容、數量與包裝都可以談，請來電，我們會依您的需求報價。",
     "trackOrder": "查我的訂單",
     "phoneHint": "點一下顯示電話",
     "emailHint": "點一下顯示信箱",

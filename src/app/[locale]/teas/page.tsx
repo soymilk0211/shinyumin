@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLink } from "@/components/arrow-link";
 import { ImagePlaceholder } from "@/components/image-placeholder";
+import { ObfuscatedContact } from "@/components/obfuscated-contact";
 import { ProductName } from "@/components/product-name";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -166,6 +167,20 @@ export default async function TeasPage({ params }: PageProps<"/[locale]/teas">) 
           })}
         </ul>
       )}
+
+      {/* 【禮盒是訂製的，網站上不賣，但一定要講。】
+          客人是在這一頁決定要買什麼的 —— 如果他其實想送禮，
+          這裡沒寫的話他會以為我們只賣單罐，然後就走了。 */}
+      <section className="mt-24 border-t border-line pt-12 sm:mt-32">
+        <span className="label text-brand">{dict.teas.giftTitle}</span>
+        <p className="mt-6 max-w-[46ch] text-[13px] leading-[2.1] tracking-[0.06em] text-ink-soft">
+          {dict.teas.giftBody}
+        </p>
+        <div className="mt-6 flex flex-wrap items-baseline gap-x-6 gap-y-2 text-[13px] tracking-[0.06em]">
+          <ObfuscatedContact kind="phone" revealLabel={dict.teas.giftPhoneHint} />
+          <span className="text-ink-faint">{dict.checkout.serviceHours}</span>
+        </div>
+      </section>
     </div>
   );
 }
