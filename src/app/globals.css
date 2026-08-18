@@ -166,11 +166,15 @@ h3 {
 
 .tea-dial {
   position: fixed;
-  /* 業主同意盤子可以蓋到內容，所以做大、往畫面內移，只裁掉約四分之一 */
-  right: -10vw;
-  bottom: -10vw;
-  width: 72vw;
-  max-width: 560px;
+
+  /* 【尺寸在 2026-08-18 縮小過。】原本是 72vw／560px，業主看了實機說
+     「感覺太大了、字太小、有點廉價」——【他是對的】。
+     一個佔掉大半個角落的色塊，讀起來像沒做完的佔位圖，不像刻意的裝飾。
+     縮小之後它變成一個「有份量的印記」，而不是「一坨顏色」。 */
+  right: -6vw;
+  bottom: -6vw;
+  width: 46vw;
+  max-width: 372px;
   aspect-ratio: 1;
 
   /* 純指示，不吃任何點擊 */
@@ -193,9 +197,9 @@ h3 {
 
 @media (max-width: 767px) {
   .tea-dial {
-    width: 64vw;
-    right: -12vw;
-    bottom: -12vw;
+    width: 56vw;
+    right: -9vw;
+    bottom: -9vw;
     --tea-opacity: 0.5;
   }
 }
@@ -233,6 +237,20 @@ h3 {
   opacity: var(--tea-opacity, 0.62);
 }
 
+/* 【一圈碗沿。】沒有這一圈，漸層就只是一個邊緣硬切的色塊 ——
+   那正是「廉價」的來源。內縮的暗環讓它看起來像盛在碗裡的液體，
+   最外緣再柔化一點點，不要有刀切般的邊。 */
+.tea-dial__layer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 0 1px rgb(0 0 0 / 0.12),
+    inset 0 6px 22px rgb(0 0 0 / 0.18),
+    inset 0 -10px 30px rgb(255 255 255 / 0.06);
+}
+
 /* 外圈的字。
    作法：每個標籤是一個【和盤子一樣大】的透明方框，整框依角度旋轉，
    字則貼在框的上緣 —— 旋轉之後就落在圓周上對應的位置，
@@ -250,9 +268,13 @@ h3 {
   display: inline-block;
 
   font-family: var(--font-body);
-  font-size: 0.6875rem;
-  letter-spacing: 0.42em;
-  text-indent: 0.42em; /* 補回字距造成的偏移，讓字真的置中 */
+
+  /* 【字放大、字距收窄。】原本是 11px 配 0.42em ——
+     極小又極開的字在小尺寸上不會顯得精緻，只會顯得單薄。
+     字距是用來配「大標題」的，不是用來撐小字的。 */
+  font-size: 0.8125rem;
+  letter-spacing: 0.26em;
+  text-indent: 0.26em; /* 補回字距造成的偏移，讓字真的置中 */
   white-space: nowrap;
 
   /* 不跟著茶湯一起變淡；加一圈與頁面同色的暈影，
