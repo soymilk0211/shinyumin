@@ -99,6 +99,7 @@
     "quantityUnit": "件",
 
     "contactTitle": "收件資料",
+    "prefillNote": "已經帶入您上次的收件資料，每一欄都可以直接改。",
     "name": "收件人姓名",
     "phone": "手機或電話",
     "email": "電子信箱",

@@ -114,6 +114,7 @@
     "quantityUnit": "×",
 
     "contactTitle": "Delivery details",
+    "prefillNote": "We have filled in the details from your last order. Every field can still be changed.",
     "name": "Recipient name",
     "phone": "Phone",
     "email": "Email",

@@ -32,14 +32,28 @@ type Labels = Dictionary["checkout"];
 const SHIPPING_ORDER: ShippingMethod[] = ["tcat", "post", "post_outlying"];
 const PAYMENT_ORDER: PaymentMethod[] = ["transfer", "cod"];
 
+/** 登入者上次填過的資料。沒登入或第一次買就是 null。 */
+export type InitialContact = {
+  name?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  shippingMethod?: string;
+};
+
 export function CheckoutForm({
   catalogue,
   locale,
   labels,
+  initial,
+  prefilled,
 }: {
   catalogue: Record<string, CatalogueEntry>;
   locale: string;
   labels: Labels;
+  initial?: InitialContact | null;
+  /** 有沒有真的從上一張訂單帶入東西。只帶了 email 不算。 */
+  prefilled?: boolean;
 }) {
   const router = useRouter();
 
@@ -47,11 +61,18 @@ export function CheckoutForm({
   const lines = useCart((s) => s.lines);
   const clear = useCart((s) => s.clear);
 
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [shipping, setShipping] = useState<ShippingMethod>("tcat");
+  // 【只當作初始值，之後就歸客人改。】帶入是為了省他打字，
+  // 不是幫他決定 —— 每一欄照樣改得動。
+  const [name, setName] = useState(initial?.name ?? "");
+  const [phone, setPhone] = useState(initial?.phone ?? "");
+  const [email, setEmail] = useState(initial?.email ?? "");
+  const [address, setAddress] = useState(initial?.address ?? "");
+  const [shipping, setShipping] = useState<ShippingMethod>(
+    initial?.shippingMethod === "post" ||
+      initial?.shippingMethod === "post_outlying"
+      ? initial.shippingMethod
+      : "tcat",
+  );
   const [payment, setPayment] = useState<PaymentMethod>("transfer");
   const [taxId, setTaxId] = useState("");
   const [invoiceTitle, setInvoiceTitle] = useState("");
@@ -277,6 +298,13 @@ export function CheckoutForm({
         {/* 收件資料 */}
         <section>
           <h2 className="label text-ink-faint">{labels.contactTitle}</h2>
+
+          {/* 欄位莫名其妙已經填好，客人會嚇一跳。講一句話就不會了。 */}
+          {prefilled && (
+            <p className="mt-4 max-w-[46ch] text-[12px] leading-[2] tracking-[0.06em] text-brand">
+              {labels.prefillNote}
+            </p>
+          )}
 
           <div className="mt-8 space-y-8">
             <Field

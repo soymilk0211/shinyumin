@@ -55,3 +55,47 @@ export async function listMemberOrders(userId: string): Promise<PublicOrder[]> {
     };
   });
 }
+
+/** 結帳時要自動帶入的欄位。只有登入的人才拿得到，而且只拿得到自己的。 */
+export type SavedContact = {
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  shippingMethod: string;
+};
+
+/**
+ * 這個人上一次是寄到哪裡。
+ *
+ * 【不另外開一張「地址簿」。】客人最近一次填的地址，就是最可能再用一次的地址。
+ * 多一張表就多一個要維護、要同步、要在刪帳號時記得清掉的東西。
+ *
+ * 取消的訂單也算 —— 客人取消訂單通常是改變主意不買，不是地址填錯。
+ */
+export async function getSavedContact(
+  userId: string,
+): Promise<SavedContact | null> {
+  const db = getAdminClient();
+  if (!db) return null;
+
+  const { data, error } = await db
+    .from("orders")
+    .select(
+      "customer_name, customer_phone, customer_email, shipping_address, shipping_method",
+    )
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error || !data) return null;
+
+  return {
+    name: String(data.customer_name),
+    phone: String(data.customer_phone),
+    email: String(data.customer_email),
+    address: String(data.shipping_address),
+    shippingMethod: String(data.shipping_method),
+  };
+}
