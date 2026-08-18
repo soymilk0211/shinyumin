@@ -56,9 +56,9 @@ export default async function ProductPage({
             買茶的人真正想看的是葉子長什麼樣子 */}
         <div className="sm:sticky sm:top-28 sm:w-[44%]">
           <ProductPhoto
-            src={photos.main}
+            photo={photos.main}
             alt={product.name}
-            ratio="aspect-[4/5]"
+            placeholderRatio="aspect-[4/5]"
             placeholderLabel={dict.common.imagePending}
             priority
           />
@@ -71,9 +71,8 @@ export default async function ProductPage({
                 {dict.product.dryLeaf}
               </span>
               <ProductPhoto
-                src={photos.leaf}
+                photo={photos.leaf}
                 alt={`${product.name}　${dict.product.dryLeaf}`}
-                ratio="aspect-[4/3]"
                 className="flex-1"
               />
             </div>

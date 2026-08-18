@@ -86,9 +86,9 @@ export default async function TeasPage({ params }: PageProps<"/[locale]/teas">) 
                     aria-hidden="true"
                   >
                     <ProductPhoto
-                      src={getProductImages(product.slug).main}
+                      photo={getProductImages(product.slug).main}
                       alt={product.name}
-                      ratio="aspect-[4/5]"
+                      placeholderRatio="aspect-[4/5]"
                       placeholderLabel={dict.common.imagePending}
                       sizes="(min-width: 640px) 42vw, 100vw"
                     />
