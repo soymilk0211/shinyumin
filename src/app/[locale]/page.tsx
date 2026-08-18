@@ -58,10 +58,10 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           這四筆的順序＝圓周上的順序，也＝頁面由上而下的順序。 */}
       <TeaDial
         sections={[
-          { id: "opening", label: home.heroLabel, tone: "black" },
-          { id: "craft", label: home.craftLabel, tone: "oolong" },
-          { id: "feature", label: home.featureLabel, tone: "black" },
-          { id: "more", label: home.moreLabel, tone: "green" },
+          { id: "opening", label: home.heroLabel, tone: "ruby" },
+          { id: "craft", label: home.craftLabel, tone: "roasted" },
+          { id: "feature", label: home.featureLabel, tone: "ruby" },
+          { id: "more", label: home.moreLabel, tone: "oolong" },
         ]}
       />
 

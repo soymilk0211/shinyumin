@@ -27,15 +27,39 @@ import { useEffect, useState } from "react";
  * 每個字的**底部朝向圓心**，不是全部朝同一個方向。
  * 因此轉到正上方的那個字必然是正的，其餘順著圓周傾斜 —— 像轉盤上的刻度。
  *
- * 照片還沒拍，每一層底下先鋪對應的顏色 —— 圖檔不存在時就是一個純色的圓，
- * 畫面不會破。之後把照片放進 /public/images/decor/（檔名不變）就會自動換上。
+ * ## 為什麼不用照片
+ *
+ * 這個圓原本設計成三張茶湯照。業主 2026-08-18 決定不拍茶湯，
+ * 所以改成【用漸層畫出來】。
+ *
+ * 這不是將就。茶湯照要拍得好其實很難 —— 杯緣會反光、光線一偏色就跑掉、
+ * 而且照片有邊界，疊在文字上會顯得髒。漸層沒有這些問題：
+ * 中心亮、邊緣沉，本來就是液體在碗裡的樣子，而且【永遠不會載入失敗】。
+ *
+ * 顏色取自實際的茶湯：紅玉的琥珀紅、高山烏龍的金黃、焙火的深褐。
+ * 綠色已經拿掉 —— 綠茶不賣了，首頁不該再出現那個顏色。
  */
 
-/** 三種茶湯。顏色是照片到位之前的替身，也是照片載入失敗時的底色。 */
+/**
+ * 三種茶湯，用漸層畫的。
+ *
+ * 每一組的四個色是【由內而外】：受光的亮點、茶湯本身、沉下去的邊、最外的暗環。
+ * 亮點刻意偏左上，像是有一道自然光從窗戶斜進來。
+ */
+function liquor(highlight: string, mid: string, deep: string, rim: string) {
+  return (
+    `radial-gradient(circle at 38% 32%, ${highlight} 0%, ${mid} 34%, ` +
+    `${deep} 68%, ${rim} 100%)`
+  );
+}
+
 const TONE_STYLE = {
-  black: { file: "tea-black.png", color: "#c48770" },
-  green: { file: "tea-green.png", color: "#b9c497" },
-  oolong: { file: "tea-oolong.png", color: "#dcb383" },
+  /** 紅玉紅茶：透光的琥珀紅 */
+  ruby: { gradient: liquor("#eaad86", "#c9613f", "#8f3520", "#5e2214") },
+  /** 高山烏龍：金黃 */
+  oolong: { gradient: liquor("#f2dba7", "#dcae62", "#a97a32", "#6f4d1c") },
+  /** 焙火：沉下去的深褐 */
+  roasted: { gradient: liquor("#d9b18c", "#a9713f", "#6f4423", "#452a15") },
 } as const;
 
 export type TeaTone = keyof typeof TONE_STYLE;
@@ -116,7 +140,7 @@ export function TeaDial({ sections }: { sections: DialSection[] }) {
 
   // 目前這一段的字要轉到正上方，所以整個盤子往回轉同樣的角度
   const angle = -current * step;
-  const tone = sections[current]?.tone ?? "black";
+  const tone = sections[current]?.tone ?? "ruby";
 
   return (
     <div className="tea-dial" data-hidden={hidden || undefined} aria-hidden="true">
@@ -129,10 +153,7 @@ export function TeaDial({ sections }: { sections: DialSection[] }) {
             key={key}
             className="tea-dial__layer"
             data-active={key === tone ? "true" : undefined}
-            style={{
-              backgroundColor: TONE_STYLE[key].color,
-              backgroundImage: `url(/images/decor/${TONE_STYLE[key].file})`,
-            }}
+            style={{ backgroundImage: TONE_STYLE[key].gradient }}
           />
         ))}
 
